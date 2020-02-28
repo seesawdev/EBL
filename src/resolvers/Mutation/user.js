@@ -28,13 +28,13 @@ const user = {
           user1: await context.prisma.updateUser({
             where: { username: currentUsername },
             data: {
-              friends: { connect: [{ userId: fromString(username) }] }
+              friends: { connect: [{ eblID: fromString(username) }] }
             }
           }),
           user2: await context.prisma.updateUser({
             where: { username: username },
             data: {
-              friends: { connect: [{ userId: fromString(currentUsername) }] }
+              friends: { connect: [{ eblID: fromString(currentUsername) }] }
             }
           })
         }
@@ -55,13 +55,13 @@ const user = {
         user1: await context.prisma.updateUser({
           where: { username: args.username1 },
           data: {
-            friends: { disconnect: [{ userId: fromString(args.username2) }] }
+            friends: { disconnect: [{ eblID: fromString(args.username2) }] }
           }
         }),
         user2: await context.prisma.updateUser({
           where: { username: args.username2 },
           data: {
-            friends: { disconnect: [{ userId: fromString(args.username1) }] }
+            friends: { disconnect: [{ eblID: fromString(args.username1) }] }
           }
         })
       }

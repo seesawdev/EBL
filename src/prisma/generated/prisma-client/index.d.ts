@@ -17,6 +17,7 @@ export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
   goal: (where?: GoalWhereInput) => Promise<boolean>;
+  journalEntry: (where?: JournalEntryWhereInput) => Promise<boolean>;
   post: (where?: PostWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
@@ -59,6 +60,27 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => GoalConnectionPromise;
+  journalEntry: (
+    where: JournalEntryWhereUniqueInput
+  ) => JournalEntryNullablePromise;
+  journalEntries: (args?: {
+    where?: JournalEntryWhereInput;
+    orderBy?: JournalEntryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<JournalEntry>;
+  journalEntriesConnection: (args?: {
+    where?: JournalEntryWhereInput;
+    orderBy?: JournalEntryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => JournalEntryConnectionPromise;
   post: (where: PostWhereUniqueInput) => PostNullablePromise;
   posts: (args?: {
     where?: PostWhereInput;
@@ -119,6 +141,26 @@ export interface Prisma {
   }) => GoalPromise;
   deleteGoal: (where: GoalWhereUniqueInput) => GoalPromise;
   deleteManyGoals: (where?: GoalWhereInput) => BatchPayloadPromise;
+  createJournalEntry: (data: JournalEntryCreateInput) => JournalEntryPromise;
+  updateJournalEntry: (args: {
+    data: JournalEntryUpdateInput;
+    where: JournalEntryWhereUniqueInput;
+  }) => JournalEntryPromise;
+  updateManyJournalEntries: (args: {
+    data: JournalEntryUpdateManyMutationInput;
+    where?: JournalEntryWhereInput;
+  }) => BatchPayloadPromise;
+  upsertJournalEntry: (args: {
+    where: JournalEntryWhereUniqueInput;
+    create: JournalEntryCreateInput;
+    update: JournalEntryUpdateInput;
+  }) => JournalEntryPromise;
+  deleteJournalEntry: (
+    where: JournalEntryWhereUniqueInput
+  ) => JournalEntryPromise;
+  deleteManyJournalEntries: (
+    where?: JournalEntryWhereInput
+  ) => BatchPayloadPromise;
   createPost: (data: PostCreateInput) => PostPromise;
   updatePost: (args: {
     data: PostUpdateInput;
@@ -163,6 +205,9 @@ export interface Subscription {
   goal: (
     where?: GoalSubscriptionWhereInput
   ) => GoalSubscriptionPayloadSubscription;
+  journalEntry: (
+    where?: JournalEntrySubscriptionWhereInput
+  ) => JournalEntrySubscriptionPayloadSubscription;
   post: (
     where?: PostSubscriptionWhereInput
   ) => PostSubscriptionPayloadSubscription;
@@ -209,6 +254,18 @@ export type GoalOrderByInput =
   | "description_ASC"
   | "description_DESC";
 
+export type JournalEntryOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "title_ASC"
+  | "title_DESC"
+  | "shared_ASC"
+  | "shared_DESC"
+  | "content_ASC"
+  | "content_DESC";
+
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -242,6 +299,8 @@ export type PostOrderByInput =
   | "published_DESC"
   | "title_ASC"
   | "title_DESC"
+  | "info_ASC"
+  | "info_DESC"
   | "content_ASC"
   | "content_DESC";
 
@@ -440,6 +499,9 @@ export interface UserWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  journal_every?: Maybe<JournalEntryWhereInput>;
+  journal_some?: Maybe<JournalEntryWhereInput>;
+  journal_none?: Maybe<JournalEntryWhereInput>;
   points?: Maybe<Int>;
   points_not?: Maybe<Int>;
   points_in?: Maybe<Int[] | Int>;
@@ -468,6 +530,65 @@ export interface UserWhereInput {
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
+
+export interface JournalEntryWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  shared?: Maybe<Boolean>;
+  shared_not?: Maybe<Boolean>;
+  content?: Maybe<String>;
+  content_not?: Maybe<String>;
+  content_in?: Maybe<String[] | String>;
+  content_not_in?: Maybe<String[] | String>;
+  content_lt?: Maybe<String>;
+  content_lte?: Maybe<String>;
+  content_gt?: Maybe<String>;
+  content_gte?: Maybe<String>;
+  content_contains?: Maybe<String>;
+  content_not_contains?: Maybe<String>;
+  content_starts_with?: Maybe<String>;
+  content_not_starts_with?: Maybe<String>;
+  content_ends_with?: Maybe<String>;
+  content_not_ends_with?: Maybe<String>;
+  author?: Maybe<UserWhereInput>;
+  AND?: Maybe<JournalEntryWhereInput[] | JournalEntryWhereInput>;
+  OR?: Maybe<JournalEntryWhereInput[] | JournalEntryWhereInput>;
+  NOT?: Maybe<JournalEntryWhereInput[] | JournalEntryWhereInput>;
 }
 
 export interface PostWhereInput {
@@ -517,6 +638,20 @@ export interface PostWhereInput {
   title_not_starts_with?: Maybe<String>;
   title_ends_with?: Maybe<String>;
   title_not_ends_with?: Maybe<String>;
+  info?: Maybe<String>;
+  info_not?: Maybe<String>;
+  info_in?: Maybe<String[] | String>;
+  info_not_in?: Maybe<String[] | String>;
+  info_lt?: Maybe<String>;
+  info_lte?: Maybe<String>;
+  info_gt?: Maybe<String>;
+  info_gte?: Maybe<String>;
+  info_contains?: Maybe<String>;
+  info_not_contains?: Maybe<String>;
+  info_starts_with?: Maybe<String>;
+  info_not_starts_with?: Maybe<String>;
+  info_ends_with?: Maybe<String>;
+  info_not_ends_with?: Maybe<String>;
   content?: Maybe<String>;
   content_not?: Maybe<String>;
   content_in?: Maybe<String[] | String>;
@@ -536,6 +671,10 @@ export interface PostWhereInput {
   OR?: Maybe<PostWhereInput[] | PostWhereInput>;
   NOT?: Maybe<PostWhereInput[] | PostWhereInput>;
 }
+
+export type JournalEntryWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
 export type PostWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
@@ -572,12 +711,30 @@ export interface UserCreateWithoutGoalsInput {
   email: String;
   password: String;
   name: String;
+  journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
   posts?: Maybe<PostCreateManyWithoutAuthorInput>;
   following?: Maybe<UserCreateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
+}
+
+export interface JournalEntryCreateManyWithoutAuthorInput {
+  create?: Maybe<
+    | JournalEntryCreateWithoutAuthorInput[]
+    | JournalEntryCreateWithoutAuthorInput
+  >;
+  connect?: Maybe<
+    JournalEntryWhereUniqueInput[] | JournalEntryWhereUniqueInput
+  >;
+}
+
+export interface JournalEntryCreateWithoutAuthorInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  shared?: Maybe<Boolean>;
+  content: String;
 }
 
 export interface UserCreateManyWithoutFriendsInput {
@@ -596,6 +753,7 @@ export interface UserCreateWithoutFriendsInput {
   email: String;
   password: String;
   name: String;
+  journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
   posts?: Maybe<PostCreateManyWithoutAuthorInput>;
@@ -629,6 +787,7 @@ export interface PostCreateWithoutAuthorInput {
   id?: Maybe<ID_Input>;
   published?: Maybe<Boolean>;
   title: String;
+  info: String;
   content: String;
 }
 
@@ -648,6 +807,7 @@ export interface UserCreateWithoutFollowingInput {
   email: String;
   password: String;
   name: String;
+  journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
@@ -681,12 +841,129 @@ export interface UserUpdateWithoutGoalsDataInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
   name?: Maybe<String>;
+  journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
   posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
+}
+
+export interface JournalEntryUpdateManyWithoutAuthorInput {
+  create?: Maybe<
+    | JournalEntryCreateWithoutAuthorInput[]
+    | JournalEntryCreateWithoutAuthorInput
+  >;
+  delete?: Maybe<JournalEntryWhereUniqueInput[] | JournalEntryWhereUniqueInput>;
+  connect?: Maybe<
+    JournalEntryWhereUniqueInput[] | JournalEntryWhereUniqueInput
+  >;
+  set?: Maybe<JournalEntryWhereUniqueInput[] | JournalEntryWhereUniqueInput>;
+  disconnect?: Maybe<
+    JournalEntryWhereUniqueInput[] | JournalEntryWhereUniqueInput
+  >;
+  update?: Maybe<
+    | JournalEntryUpdateWithWhereUniqueWithoutAuthorInput[]
+    | JournalEntryUpdateWithWhereUniqueWithoutAuthorInput
+  >;
+  upsert?: Maybe<
+    | JournalEntryUpsertWithWhereUniqueWithoutAuthorInput[]
+    | JournalEntryUpsertWithWhereUniqueWithoutAuthorInput
+  >;
+  deleteMany?: Maybe<
+    JournalEntryScalarWhereInput[] | JournalEntryScalarWhereInput
+  >;
+  updateMany?: Maybe<
+    | JournalEntryUpdateManyWithWhereNestedInput[]
+    | JournalEntryUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface JournalEntryUpdateWithWhereUniqueWithoutAuthorInput {
+  where: JournalEntryWhereUniqueInput;
+  data: JournalEntryUpdateWithoutAuthorDataInput;
+}
+
+export interface JournalEntryUpdateWithoutAuthorDataInput {
+  title?: Maybe<String>;
+  shared?: Maybe<Boolean>;
+  content?: Maybe<String>;
+}
+
+export interface JournalEntryUpsertWithWhereUniqueWithoutAuthorInput {
+  where: JournalEntryWhereUniqueInput;
+  update: JournalEntryUpdateWithoutAuthorDataInput;
+  create: JournalEntryCreateWithoutAuthorInput;
+}
+
+export interface JournalEntryScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  shared?: Maybe<Boolean>;
+  shared_not?: Maybe<Boolean>;
+  content?: Maybe<String>;
+  content_not?: Maybe<String>;
+  content_in?: Maybe<String[] | String>;
+  content_not_in?: Maybe<String[] | String>;
+  content_lt?: Maybe<String>;
+  content_lte?: Maybe<String>;
+  content_gt?: Maybe<String>;
+  content_gte?: Maybe<String>;
+  content_contains?: Maybe<String>;
+  content_not_contains?: Maybe<String>;
+  content_starts_with?: Maybe<String>;
+  content_not_starts_with?: Maybe<String>;
+  content_ends_with?: Maybe<String>;
+  content_not_ends_with?: Maybe<String>;
+  AND?: Maybe<JournalEntryScalarWhereInput[] | JournalEntryScalarWhereInput>;
+  OR?: Maybe<JournalEntryScalarWhereInput[] | JournalEntryScalarWhereInput>;
+  NOT?: Maybe<JournalEntryScalarWhereInput[] | JournalEntryScalarWhereInput>;
+}
+
+export interface JournalEntryUpdateManyWithWhereNestedInput {
+  where: JournalEntryScalarWhereInput;
+  data: JournalEntryUpdateManyDataInput;
+}
+
+export interface JournalEntryUpdateManyDataInput {
+  title?: Maybe<String>;
+  shared?: Maybe<Boolean>;
+  content?: Maybe<String>;
 }
 
 export interface UserUpdateManyWithoutFriendsInput {
@@ -724,6 +1001,7 @@ export interface UserUpdateWithoutFriendsDataInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
   name?: Maybe<String>;
+  journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
   posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
@@ -913,6 +1191,7 @@ export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
 export interface PostUpdateWithoutAuthorDataInput {
   published?: Maybe<Boolean>;
   title?: Maybe<String>;
+  info?: Maybe<String>;
   content?: Maybe<String>;
 }
 
@@ -969,6 +1248,20 @@ export interface PostScalarWhereInput {
   title_not_starts_with?: Maybe<String>;
   title_ends_with?: Maybe<String>;
   title_not_ends_with?: Maybe<String>;
+  info?: Maybe<String>;
+  info_not?: Maybe<String>;
+  info_in?: Maybe<String[] | String>;
+  info_not_in?: Maybe<String[] | String>;
+  info_lt?: Maybe<String>;
+  info_lte?: Maybe<String>;
+  info_gt?: Maybe<String>;
+  info_gte?: Maybe<String>;
+  info_contains?: Maybe<String>;
+  info_not_contains?: Maybe<String>;
+  info_starts_with?: Maybe<String>;
+  info_not_starts_with?: Maybe<String>;
+  info_ends_with?: Maybe<String>;
+  info_not_ends_with?: Maybe<String>;
   content?: Maybe<String>;
   content_not?: Maybe<String>;
   content_in?: Maybe<String[] | String>;
@@ -996,6 +1289,7 @@ export interface PostUpdateManyWithWhereNestedInput {
 export interface PostUpdateManyDataInput {
   published?: Maybe<Boolean>;
   title?: Maybe<String>;
+  info?: Maybe<String>;
   content?: Maybe<String>;
 }
 
@@ -1034,6 +1328,7 @@ export interface UserUpdateWithoutFollowingDataInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
   name?: Maybe<String>;
+  journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
@@ -1196,10 +1491,82 @@ export interface GoalUpdateManyMutationInput {
   description?: Maybe<String>;
 }
 
+export interface JournalEntryCreateInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  shared?: Maybe<Boolean>;
+  content: String;
+  author: UserCreateOneWithoutJournalInput;
+}
+
+export interface UserCreateOneWithoutJournalInput {
+  create?: Maybe<UserCreateWithoutJournalInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutJournalInput {
+  id?: Maybe<ID_Input>;
+  eblID: String;
+  profileStatus?: Maybe<ProfileStatus>;
+  profilePic: String;
+  goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
+  email: String;
+  password: String;
+  name: String;
+  points?: Maybe<Int>;
+  friends?: Maybe<UserCreateManyWithoutFriendsInput>;
+  status?: Maybe<UserStatus>;
+  posts?: Maybe<PostCreateManyWithoutAuthorInput>;
+  following?: Maybe<UserCreateManyWithoutFollowingInput>;
+  tier?: Maybe<TIER>;
+}
+
+export interface JournalEntryUpdateInput {
+  title?: Maybe<String>;
+  shared?: Maybe<Boolean>;
+  content?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredWithoutJournalInput>;
+}
+
+export interface UserUpdateOneRequiredWithoutJournalInput {
+  create?: Maybe<UserCreateWithoutJournalInput>;
+  update?: Maybe<UserUpdateWithoutJournalDataInput>;
+  upsert?: Maybe<UserUpsertWithoutJournalInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutJournalDataInput {
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  profilePic?: Maybe<String>;
+  goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  name?: Maybe<String>;
+  points?: Maybe<Int>;
+  friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
+  status?: Maybe<UserStatus>;
+  posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
+  following?: Maybe<UserUpdateManyWithoutFollowingInput>;
+  tier?: Maybe<TIER>;
+}
+
+export interface UserUpsertWithoutJournalInput {
+  update: UserUpdateWithoutJournalDataInput;
+  create: UserCreateWithoutJournalInput;
+}
+
+export interface JournalEntryUpdateManyMutationInput {
+  title?: Maybe<String>;
+  shared?: Maybe<Boolean>;
+  content?: Maybe<String>;
+}
+
 export interface PostCreateInput {
   id?: Maybe<ID_Input>;
   published?: Maybe<Boolean>;
   title: String;
+  info: String;
   content: String;
   author: UserCreateOneWithoutPostsInput;
 }
@@ -1218,6 +1585,7 @@ export interface UserCreateWithoutPostsInput {
   email: String;
   password: String;
   name: String;
+  journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
@@ -1228,6 +1596,7 @@ export interface UserCreateWithoutPostsInput {
 export interface PostUpdateInput {
   published?: Maybe<Boolean>;
   title?: Maybe<String>;
+  info?: Maybe<String>;
   content?: Maybe<String>;
   author?: Maybe<UserUpdateOneRequiredWithoutPostsInput>;
 }
@@ -1247,6 +1616,7 @@ export interface UserUpdateWithoutPostsDataInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
   name?: Maybe<String>;
+  journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
@@ -1262,6 +1632,7 @@ export interface UserUpsertWithoutPostsInput {
 export interface PostUpdateManyMutationInput {
   published?: Maybe<Boolean>;
   title?: Maybe<String>;
+  info?: Maybe<String>;
   content?: Maybe<String>;
 }
 
@@ -1274,6 +1645,7 @@ export interface UserCreateInput {
   email: String;
   password: String;
   name: String;
+  journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
@@ -1290,6 +1662,7 @@ export interface UserUpdateInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
   name?: Maybe<String>;
+  journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
@@ -1319,6 +1692,23 @@ export interface GoalSubscriptionWhereInput {
   AND?: Maybe<GoalSubscriptionWhereInput[] | GoalSubscriptionWhereInput>;
   OR?: Maybe<GoalSubscriptionWhereInput[] | GoalSubscriptionWhereInput>;
   NOT?: Maybe<GoalSubscriptionWhereInput[] | GoalSubscriptionWhereInput>;
+}
+
+export interface JournalEntrySubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<JournalEntryWhereInput>;
+  AND?: Maybe<
+    JournalEntrySubscriptionWhereInput[] | JournalEntrySubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    JournalEntrySubscriptionWhereInput[] | JournalEntrySubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    JournalEntrySubscriptionWhereInput[] | JournalEntrySubscriptionWhereInput
+  >;
 }
 
 export interface PostSubscriptionWhereInput {
@@ -1432,6 +1822,15 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   email: () => Promise<String>;
   password: () => Promise<String>;
   name: () => Promise<String>;
+  journal: <T = FragmentableArray<JournalEntry>>(args?: {
+    where?: JournalEntryWhereInput;
+    orderBy?: JournalEntryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   points: () => Promise<Int>;
   friends: <T = FragmentableArray<User>>(args?: {
     where?: UserWhereInput;
@@ -1483,6 +1882,15 @@ export interface UserSubscription
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  journal: <T = Promise<AsyncIterator<JournalEntrySubscription>>>(args?: {
+    where?: JournalEntryWhereInput;
+    orderBy?: JournalEntryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   points: () => Promise<AsyncIterator<Int>>;
   friends: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
     where?: UserWhereInput;
@@ -1534,6 +1942,15 @@ export interface UserNullablePromise
   email: () => Promise<String>;
   password: () => Promise<String>;
   name: () => Promise<String>;
+  journal: <T = FragmentableArray<JournalEntry>>(args?: {
+    where?: JournalEntryWhereInput;
+    orderBy?: JournalEntryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   points: () => Promise<Int>;
   friends: <T = FragmentableArray<User>>(args?: {
     where?: UserWhereInput;
@@ -1566,12 +1983,54 @@ export interface UserNullablePromise
   tier: () => Promise<TIER>;
 }
 
+export interface JournalEntry {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  title: String;
+  shared: Boolean;
+  content: String;
+}
+
+export interface JournalEntryPromise
+  extends Promise<JournalEntry>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  title: () => Promise<String>;
+  shared: () => Promise<Boolean>;
+  content: () => Promise<String>;
+  author: <T = UserPromise>() => T;
+}
+
+export interface JournalEntrySubscription
+  extends Promise<AsyncIterator<JournalEntry>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  title: () => Promise<AsyncIterator<String>>;
+  shared: () => Promise<AsyncIterator<Boolean>>;
+  content: () => Promise<AsyncIterator<String>>;
+  author: <T = UserSubscription>() => T;
+}
+
+export interface JournalEntryNullablePromise
+  extends Promise<JournalEntry | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  title: () => Promise<String>;
+  shared: () => Promise<Boolean>;
+  content: () => Promise<String>;
+  author: <T = UserPromise>() => T;
+}
+
 export interface Post {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
   published: Boolean;
   title: String;
+  info: String;
   content: String;
 }
 
@@ -1581,6 +2040,7 @@ export interface PostPromise extends Promise<Post>, Fragmentable {
   updatedAt: () => Promise<DateTimeOutput>;
   published: () => Promise<Boolean>;
   title: () => Promise<String>;
+  info: () => Promise<String>;
   content: () => Promise<String>;
   author: <T = UserPromise>() => T;
 }
@@ -1593,6 +2053,7 @@ export interface PostSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   published: () => Promise<AsyncIterator<Boolean>>;
   title: () => Promise<AsyncIterator<String>>;
+  info: () => Promise<AsyncIterator<String>>;
   content: () => Promise<AsyncIterator<String>>;
   author: <T = UserSubscription>() => T;
 }
@@ -1605,6 +2066,7 @@ export interface PostNullablePromise
   updatedAt: () => Promise<DateTimeOutput>;
   published: () => Promise<Boolean>;
   title: () => Promise<String>;
+  info: () => Promise<String>;
   content: () => Promise<String>;
   author: <T = UserPromise>() => T;
 }
@@ -1682,6 +2144,62 @@ export interface AggregateGoalPromise
 
 export interface AggregateGoalSubscription
   extends Promise<AsyncIterator<AggregateGoal>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface JournalEntryConnection {
+  pageInfo: PageInfo;
+  edges: JournalEntryEdge[];
+}
+
+export interface JournalEntryConnectionPromise
+  extends Promise<JournalEntryConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<JournalEntryEdge>>() => T;
+  aggregate: <T = AggregateJournalEntryPromise>() => T;
+}
+
+export interface JournalEntryConnectionSubscription
+  extends Promise<AsyncIterator<JournalEntryConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<JournalEntryEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateJournalEntrySubscription>() => T;
+}
+
+export interface JournalEntryEdge {
+  node: JournalEntry;
+  cursor: String;
+}
+
+export interface JournalEntryEdgePromise
+  extends Promise<JournalEntryEdge>,
+    Fragmentable {
+  node: <T = JournalEntryPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface JournalEntryEdgeSubscription
+  extends Promise<AsyncIterator<JournalEntryEdge>>,
+    Fragmentable {
+  node: <T = JournalEntrySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateJournalEntry {
+  count: Int;
+}
+
+export interface AggregateJournalEntryPromise
+  extends Promise<AggregateJournalEntry>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateJournalEntrySubscription
+  extends Promise<AsyncIterator<AggregateJournalEntry>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -1875,6 +2393,59 @@ export interface GoalPreviousValuesSubscription
   description: () => Promise<AsyncIterator<String>>;
 }
 
+export interface JournalEntrySubscriptionPayload {
+  mutation: MutationType;
+  node: JournalEntry;
+  updatedFields: String[];
+  previousValues: JournalEntryPreviousValues;
+}
+
+export interface JournalEntrySubscriptionPayloadPromise
+  extends Promise<JournalEntrySubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = JournalEntryPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = JournalEntryPreviousValuesPromise>() => T;
+}
+
+export interface JournalEntrySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<JournalEntrySubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = JournalEntrySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = JournalEntryPreviousValuesSubscription>() => T;
+}
+
+export interface JournalEntryPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  title: String;
+  shared: Boolean;
+  content: String;
+}
+
+export interface JournalEntryPreviousValuesPromise
+  extends Promise<JournalEntryPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  title: () => Promise<String>;
+  shared: () => Promise<Boolean>;
+  content: () => Promise<String>;
+}
+
+export interface JournalEntryPreviousValuesSubscription
+  extends Promise<AsyncIterator<JournalEntryPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  title: () => Promise<AsyncIterator<String>>;
+  shared: () => Promise<AsyncIterator<Boolean>>;
+  content: () => Promise<AsyncIterator<String>>;
+}
+
 export interface PostSubscriptionPayload {
   mutation: MutationType;
   node: Post;
@@ -1906,6 +2477,7 @@ export interface PostPreviousValues {
   updatedAt: DateTimeOutput;
   published: Boolean;
   title: String;
+  info: String;
   content: String;
 }
 
@@ -1917,6 +2489,7 @@ export interface PostPreviousValuesPromise
   updatedAt: () => Promise<DateTimeOutput>;
   published: () => Promise<Boolean>;
   title: () => Promise<String>;
+  info: () => Promise<String>;
   content: () => Promise<String>;
 }
 
@@ -1928,6 +2501,7 @@ export interface PostPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   published: () => Promise<AsyncIterator<Boolean>>;
   title: () => Promise<AsyncIterator<String>>;
+  info: () => Promise<AsyncIterator<String>>;
   content: () => Promise<AsyncIterator<String>>;
 }
 
@@ -2059,6 +2633,10 @@ export const models: Model[] = [
   },
   {
     name: "ProfileStatus",
+    embedded: false
+  },
+  {
+    name: "JournalEntry",
     embedded: false
   }
 ];

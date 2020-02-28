@@ -58,9 +58,10 @@ enum ProfileStatus {
   DEACTIVATED
 }
 type JournalEntry {
-  id: ID! 
+  id: ID! @id
+  createdAt: DateTime! @createdAt
   title: String!
-  shared: Boolean!
+  shared: Boolean! @default(value: false)
   content: String!
   author: User! @relation(name: "UserJournal", link: INLINE)
 }

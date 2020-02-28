@@ -11,7 +11,7 @@ async function isFriend(parent, args, { prisma, me }) {
       where: {
         AND: [
           { id: me },
-          { friends_some: { userId_in: fromString(args.username) } }
+          { friends_some: { eblID_in: fromString(args.username) } }
         ]
       }
     })

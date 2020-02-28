@@ -9,7 +9,7 @@ const auth = {
     const user = await context.prisma.createUser({ ...args, password })
     const updateUser = await context.prisma.updateUser({
       where: { id: user.id },
-      data: { userId: fromString(user.username) }
+      data: { eblID: fromString(user.username) }
     });
     return {
       token: jwt.sign({ userId: user.id }, `${process.env.APP_SECRET}`),

@@ -7,6 +7,10 @@ module.exports = {
   count: Int!
 }
 
+type AggregateJournalEntry {
+  count: Int!
+}
+
 type AggregatePost {
   count: Int!
 }
@@ -396,6 +400,259 @@ input GoalWhereUniqueInput {
   id: ID
 }
 
+type JournalEntry {
+  id: ID!
+  createdAt: DateTime!
+  title: String!
+  shared: Boolean!
+  content: String!
+  author: User!
+}
+
+type JournalEntryConnection {
+  pageInfo: PageInfo!
+  edges: [JournalEntryEdge]!
+  aggregate: AggregateJournalEntry!
+}
+
+input JournalEntryCreateInput {
+  id: ID
+  title: String!
+  shared: Boolean
+  content: String!
+  author: UserCreateOneWithoutJournalInput!
+}
+
+input JournalEntryCreateManyWithoutAuthorInput {
+  create: [JournalEntryCreateWithoutAuthorInput!]
+  connect: [JournalEntryWhereUniqueInput!]
+}
+
+input JournalEntryCreateWithoutAuthorInput {
+  id: ID
+  title: String!
+  shared: Boolean
+  content: String!
+}
+
+type JournalEntryEdge {
+  node: JournalEntry!
+  cursor: String!
+}
+
+enum JournalEntryOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  title_ASC
+  title_DESC
+  shared_ASC
+  shared_DESC
+  content_ASC
+  content_DESC
+}
+
+type JournalEntryPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  title: String!
+  shared: Boolean!
+  content: String!
+}
+
+input JournalEntryScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  shared: Boolean
+  shared_not: Boolean
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  AND: [JournalEntryScalarWhereInput!]
+  OR: [JournalEntryScalarWhereInput!]
+  NOT: [JournalEntryScalarWhereInput!]
+}
+
+type JournalEntrySubscriptionPayload {
+  mutation: MutationType!
+  node: JournalEntry
+  updatedFields: [String!]
+  previousValues: JournalEntryPreviousValues
+}
+
+input JournalEntrySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: JournalEntryWhereInput
+  AND: [JournalEntrySubscriptionWhereInput!]
+  OR: [JournalEntrySubscriptionWhereInput!]
+  NOT: [JournalEntrySubscriptionWhereInput!]
+}
+
+input JournalEntryUpdateInput {
+  title: String
+  shared: Boolean
+  content: String
+  author: UserUpdateOneRequiredWithoutJournalInput
+}
+
+input JournalEntryUpdateManyDataInput {
+  title: String
+  shared: Boolean
+  content: String
+}
+
+input JournalEntryUpdateManyMutationInput {
+  title: String
+  shared: Boolean
+  content: String
+}
+
+input JournalEntryUpdateManyWithoutAuthorInput {
+  create: [JournalEntryCreateWithoutAuthorInput!]
+  delete: [JournalEntryWhereUniqueInput!]
+  connect: [JournalEntryWhereUniqueInput!]
+  set: [JournalEntryWhereUniqueInput!]
+  disconnect: [JournalEntryWhereUniqueInput!]
+  update: [JournalEntryUpdateWithWhereUniqueWithoutAuthorInput!]
+  upsert: [JournalEntryUpsertWithWhereUniqueWithoutAuthorInput!]
+  deleteMany: [JournalEntryScalarWhereInput!]
+  updateMany: [JournalEntryUpdateManyWithWhereNestedInput!]
+}
+
+input JournalEntryUpdateManyWithWhereNestedInput {
+  where: JournalEntryScalarWhereInput!
+  data: JournalEntryUpdateManyDataInput!
+}
+
+input JournalEntryUpdateWithoutAuthorDataInput {
+  title: String
+  shared: Boolean
+  content: String
+}
+
+input JournalEntryUpdateWithWhereUniqueWithoutAuthorInput {
+  where: JournalEntryWhereUniqueInput!
+  data: JournalEntryUpdateWithoutAuthorDataInput!
+}
+
+input JournalEntryUpsertWithWhereUniqueWithoutAuthorInput {
+  where: JournalEntryWhereUniqueInput!
+  update: JournalEntryUpdateWithoutAuthorDataInput!
+  create: JournalEntryCreateWithoutAuthorInput!
+}
+
+input JournalEntryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  shared: Boolean
+  shared_not: Boolean
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  author: UserWhereInput
+  AND: [JournalEntryWhereInput!]
+  OR: [JournalEntryWhereInput!]
+  NOT: [JournalEntryWhereInput!]
+}
+
+input JournalEntryWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Mutation {
@@ -405,6 +662,12 @@ type Mutation {
   upsertGoal(where: GoalWhereUniqueInput!, create: GoalCreateInput!, update: GoalUpdateInput!): Goal!
   deleteGoal(where: GoalWhereUniqueInput!): Goal
   deleteManyGoals(where: GoalWhereInput): BatchPayload!
+  createJournalEntry(data: JournalEntryCreateInput!): JournalEntry!
+  updateJournalEntry(data: JournalEntryUpdateInput!, where: JournalEntryWhereUniqueInput!): JournalEntry
+  updateManyJournalEntries(data: JournalEntryUpdateManyMutationInput!, where: JournalEntryWhereInput): BatchPayload!
+  upsertJournalEntry(where: JournalEntryWhereUniqueInput!, create: JournalEntryCreateInput!, update: JournalEntryUpdateInput!): JournalEntry!
+  deleteJournalEntry(where: JournalEntryWhereUniqueInput!): JournalEntry
+  deleteManyJournalEntries(where: JournalEntryWhereInput): BatchPayload!
   createPost(data: PostCreateInput!): Post!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateManyPosts(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload!
@@ -442,6 +705,7 @@ type Post {
   updatedAt: DateTime!
   published: Boolean!
   title: String!
+  info: String!
   content: String!
   author: User!
 }
@@ -456,6 +720,7 @@ input PostCreateInput {
   id: ID
   published: Boolean
   title: String!
+  info: String!
   content: String!
   author: UserCreateOneWithoutPostsInput!
 }
@@ -469,6 +734,7 @@ input PostCreateWithoutAuthorInput {
   id: ID
   published: Boolean
   title: String!
+  info: String!
   content: String!
 }
 
@@ -488,6 +754,8 @@ enum PostOrderByInput {
   published_DESC
   title_ASC
   title_DESC
+  info_ASC
+  info_DESC
   content_ASC
   content_DESC
 }
@@ -498,6 +766,7 @@ type PostPreviousValues {
   updatedAt: DateTime!
   published: Boolean!
   title: String!
+  info: String!
   content: String!
 }
 
@@ -548,6 +817,20 @@ input PostScalarWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
+  info: String
+  info_not: String
+  info_in: [String!]
+  info_not_in: [String!]
+  info_lt: String
+  info_lte: String
+  info_gt: String
+  info_gte: String
+  info_contains: String
+  info_not_contains: String
+  info_starts_with: String
+  info_not_starts_with: String
+  info_ends_with: String
+  info_not_ends_with: String
   content: String
   content_not: String
   content_in: [String!]
@@ -588,6 +871,7 @@ input PostSubscriptionWhereInput {
 input PostUpdateInput {
   published: Boolean
   title: String
+  info: String
   content: String
   author: UserUpdateOneRequiredWithoutPostsInput
 }
@@ -595,12 +879,14 @@ input PostUpdateInput {
 input PostUpdateManyDataInput {
   published: Boolean
   title: String
+  info: String
   content: String
 }
 
 input PostUpdateManyMutationInput {
   published: Boolean
   title: String
+  info: String
   content: String
 }
 
@@ -624,6 +910,7 @@ input PostUpdateManyWithWhereNestedInput {
 input PostUpdateWithoutAuthorDataInput {
   published: Boolean
   title: String
+  info: String
   content: String
 }
 
@@ -685,6 +972,20 @@ input PostWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
+  info: String
+  info_not: String
+  info_in: [String!]
+  info_not_in: [String!]
+  info_lt: String
+  info_lte: String
+  info_gt: String
+  info_gte: String
+  info_contains: String
+  info_not_contains: String
+  info_starts_with: String
+  info_not_starts_with: String
+  info_ends_with: String
+  info_not_ends_with: String
   content: String
   content_not: String
   content_in: [String!]
@@ -720,6 +1021,9 @@ type Query {
   goal(where: GoalWhereUniqueInput!): Goal
   goals(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Goal]!
   goalsConnection(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GoalConnection!
+  journalEntry(where: JournalEntryWhereUniqueInput!): JournalEntry
+  journalEntries(where: JournalEntryWhereInput, orderBy: JournalEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JournalEntry]!
+  journalEntriesConnection(where: JournalEntryWhereInput, orderBy: JournalEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JournalEntryConnection!
   post(where: PostWhereUniqueInput!): Post
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
@@ -731,6 +1035,7 @@ type Query {
 
 type Subscription {
   goal(where: GoalSubscriptionWhereInput): GoalSubscriptionPayload
+  journalEntry(where: JournalEntrySubscriptionWhereInput): JournalEntrySubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -750,6 +1055,7 @@ type User {
   email: String!
   password: String!
   name: String!
+  journal(where: JournalEntryWhereInput, orderBy: JournalEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JournalEntry!]
   points: Int!
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   status: UserStatus
@@ -773,6 +1079,7 @@ input UserCreateInput {
   email: String!
   password: String!
   name: String!
+  journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
   status: UserStatus
@@ -796,6 +1103,11 @@ input UserCreateOneWithoutGoalsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutJournalInput {
+  create: UserCreateWithoutJournalInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   connect: UserWhereUniqueInput
@@ -810,6 +1122,7 @@ input UserCreateWithoutFollowingInput {
   email: String!
   password: String!
   name: String!
+  journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
   status: UserStatus
@@ -826,6 +1139,7 @@ input UserCreateWithoutFriendsInput {
   email: String!
   password: String!
   name: String!
+  journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   status: UserStatus
   posts: PostCreateManyWithoutAuthorInput
@@ -838,6 +1152,24 @@ input UserCreateWithoutGoalsInput {
   eblID: String!
   profileStatus: ProfileStatus
   profilePic: String!
+  email: String!
+  password: String!
+  name: String!
+  journal: JournalEntryCreateManyWithoutAuthorInput
+  points: Int
+  friends: UserCreateManyWithoutFriendsInput
+  status: UserStatus
+  posts: PostCreateManyWithoutAuthorInput
+  following: UserCreateManyWithoutFollowingInput
+  tier: TIER
+}
+
+input UserCreateWithoutJournalInput {
+  id: ID
+  eblID: String!
+  profileStatus: ProfileStatus
+  profilePic: String!
+  goals: GoalCreateManyWithoutAuthorInput
   email: String!
   password: String!
   name: String!
@@ -858,6 +1190,7 @@ input UserCreateWithoutPostsInput {
   email: String!
   password: String!
   name: String!
+  journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
   status: UserStatus
@@ -1048,6 +1381,7 @@ input UserUpdateInput {
   email: String
   password: String
   name: String
+  journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
   status: UserStatus
@@ -1116,6 +1450,13 @@ input UserUpdateOneRequiredWithoutGoalsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutJournalInput {
+  create: UserCreateWithoutJournalInput
+  update: UserUpdateWithoutJournalDataInput
+  upsert: UserUpsertWithoutJournalInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   update: UserUpdateWithoutPostsDataInput
@@ -1131,6 +1472,7 @@ input UserUpdateWithoutFollowingDataInput {
   email: String
   password: String
   name: String
+  journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
   status: UserStatus
@@ -1146,6 +1488,7 @@ input UserUpdateWithoutFriendsDataInput {
   email: String
   password: String
   name: String
+  journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   status: UserStatus
   posts: PostUpdateManyWithoutAuthorInput
@@ -1157,6 +1500,23 @@ input UserUpdateWithoutGoalsDataInput {
   eblID: String
   profileStatus: ProfileStatus
   profilePic: String
+  email: String
+  password: String
+  name: String
+  journal: JournalEntryUpdateManyWithoutAuthorInput
+  points: Int
+  friends: UserUpdateManyWithoutFriendsInput
+  status: UserStatus
+  posts: PostUpdateManyWithoutAuthorInput
+  following: UserUpdateManyWithoutFollowingInput
+  tier: TIER
+}
+
+input UserUpdateWithoutJournalDataInput {
+  eblID: String
+  profileStatus: ProfileStatus
+  profilePic: String
+  goals: GoalUpdateManyWithoutAuthorInput
   email: String
   password: String
   name: String
@@ -1176,6 +1536,7 @@ input UserUpdateWithoutPostsDataInput {
   email: String
   password: String
   name: String
+  journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
   status: UserStatus
@@ -1196,6 +1557,11 @@ input UserUpdateWithWhereUniqueWithoutFriendsInput {
 input UserUpsertWithoutGoalsInput {
   update: UserUpdateWithoutGoalsDataInput!
   create: UserCreateWithoutGoalsInput!
+}
+
+input UserUpsertWithoutJournalInput {
+  update: UserUpdateWithoutJournalDataInput!
+  create: UserCreateWithoutJournalInput!
 }
 
 input UserUpsertWithoutPostsInput {
@@ -1307,6 +1673,9 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  journal_every: JournalEntryWhereInput
+  journal_some: JournalEntryWhereInput
+  journal_none: JournalEntryWhereInput
   points: Int
   points_not: Int
   points_in: [Int!]

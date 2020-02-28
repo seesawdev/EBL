@@ -35,13 +35,13 @@ const Query = {
   // returns total number of friend for current user
   async friendCount(parent, args, context, info) {
     const currentUserId = await getUserId(context);
-    const userID = context.prisma.user({ id: currentUserId }).userId;
+    const userID = context.prisma.user({ id: currentUserId }).eblID;
     const friendsOfCurrentUser = await context.prisma
       .usersConnection(
         {
           where: {
             id_not: currentUserId,
-            friends_some: { userId_in: userID }
+            friends_some: { eblID_in: userID }
           }
         },
         info
@@ -68,7 +68,7 @@ const Query = {
   //retrieve a list of a user's friends
   async userFriends(parent, { username }, context, info) {
     const userId = fromString(username);
-    const userFriends = await context.prisma.user({ userId: userId }).friends();
+    const userFriends = await context.prisma.user({ eblID: userId }).friends();
     //  console.log(userFriends)
     return userFriends;
   },
@@ -80,7 +80,7 @@ const Query = {
           where: {
             AND: [
               { id: userId },
-              { friends_some: { userId_in: fromString(args.username) } }
+              { friends_some: { eblID_in: fromString(args.username) } }
             ]
           }
         },
