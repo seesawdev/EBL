@@ -23,11 +23,44 @@ type AuthPayload {
 }
 
 type User {
-  id: ID!
-  email: String!
+  id: ID! 
+  eblID: String!
+  profilePic: String!
+  goals: [Goal] 
+  email: String! 
+  password: String!
   name: String!
+  points: Int! 
+  friends: [User!]! 
+  status: UserStatus  
   posts: [Post!]!
+  following: [User] 
+  tier: TIER! 
 }
+
+enum TIER {
+  FREE
+  CONTRIBUTER
+  PREMIUM
+}
+
+enum UserStatus {
+  ONLINE
+  UNAVAILABLE
+  OFFLINE
+}
+
+type Goal {
+  id: ID! 
+  title: String!
+  startDate: DateTime!
+  projectedCompletionDate: DateTime!
+  actualCompletionDate: DateTime!
+  pointsWorth: Int!
+  pointsEarned: Int!
+  pointsDeducted: Int!
+  description: String!
+  author: User!
 
 type Post {
   id: ID!

@@ -11,12 +11,23 @@ type Post {
 type User {
   id: ID! @id
   eblID: String!
+  profilePic: String!
   goals: [Goal] @relation(name: "UserToGoals")
   email: String! @unique
   password: String!
   name: String!
   points: Int! @default(value: 0)
+  friends: [User!]! @relation(name: "FriendsOfUser", link: TABLE)
+  status: UserStatus @default(value: OFFLINE)  
   posts: [Post!]!
+  following: [User] @relation(name: "FollowingUsers", link: TABLE)
+  tier: TIER! @default(value: FREE)
+}
+
+enum TIER {
+  FREE
+  CONTRIBUTER
+  PREMIUM
 }
 
 type Goal {
@@ -29,5 +40,11 @@ type Goal {
   pointsEarned: Int!
   pointsDeducted: Int!
   description: String!
-  author: User! @relation(name: "UserToGoals")
+  author: User! @relation(name: "UserToGoals", link: INLINE)
+}
+
+enum UserStatus {
+  ONLINE
+  UNAVAILABLE
+  OFFLINE
 }
