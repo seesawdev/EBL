@@ -3,6 +3,9 @@ const { prisma } = require('./generated/prisma-client')
 const jwt = require("jsonwebtoken");
 const resolvers = require('./resolvers')
 
+const options = {
+  port: 5000
+}
 const getMe = async (context) => {
   const Authorization = context.request.get['Authorization']
   if (Authorization) {
@@ -16,19 +19,19 @@ const getMe = async (context) => {
   }
 }
 const server = new GraphQLServer({
-  typeDefs: 'src/schema.graphql',
+  typeDefs: "src/schema.graphql",
   resolvers,
   context: async request => {
     if (request) {
-      const me = await getMe(request)
-    
-    return {
-      ...request,
-      me,
-      prisma,
-    }
-   }
-  },
-})
+      const me = await getMe(request);
 
-server.start(() => console.log('Server is running on http://localhost:4000'))
+      return {
+        ...request,
+        me,
+        prisma
+      };
+    }
+  }
+});
+
+server.start(options, ({ port }) => console.log(`Server is running on http://localhost:${port}`));
