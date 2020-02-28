@@ -21,12 +21,13 @@ const server = new GraphQLServer({
   context: async request => {
     if (request) {
       const me = await getMe(request)
-    }
+    
     return {
       ...request,
       me,
       prisma,
     }
+   }
   },
 })
 

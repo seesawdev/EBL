@@ -37,6 +37,7 @@ type Mutation {
 
 type Subscription {
   feedSubscription: Post
+  userStatusSubscription: User
 }
 
 type AuthPayload {
@@ -81,9 +82,9 @@ enum UserStatus {
 type Goal {
   id: ID! 
   title: String!
-  startDate: DateTime!
-  projectedCompletionDate: DateTime!
-  actualCompletionDate: DateTime!
+  startDate: String!
+  projectedCompletionDate: String!
+  actualCompletionDate: String!
   pointsWorth: Int!
   pointsEarned: Int!
   pointsDeducted: Int!

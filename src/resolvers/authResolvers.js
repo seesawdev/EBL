@@ -3,6 +3,19 @@ const { fromString } = require("uuidv4");
 const { getUserId } = require("../utils");
 
 
+function isAuthenticated(parent, args, context) {
+  const userId = getUserId(context);
+  userId ? skip : new Error("Not authenticated as user.");
+}
+
+async function isOwner(parent, { id }, { prisma, me }) {
+  const movie = await prisma.post({ id }).postedBy();
+  // console.log(movie.id, me)
+  if (post.id !== me) {
+    throw new Error("Not authenticated as owner");
+  }
+  skip;
+}
 //will skip if args.username is not in friend list
 async function isFriend(parent, args, { prisma, me }) {
   // const userId = getUserId(context);
