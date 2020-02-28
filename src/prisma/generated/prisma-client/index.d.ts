@@ -179,6 +179,12 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type ProfileStatus =
+  | "PUBLIC"
+  | "PRIVATE"
+  | "FRIENDSONLY"
+  | "DEACTIVATED";
+
 export type UserStatus = "ONLINE" | "UNAVAILABLE" | "OFFLINE";
 
 export type TIER = "FREE" | "CONTRIBUTER" | "PREMIUM";
@@ -208,6 +214,8 @@ export type UserOrderByInput =
   | "id_DESC"
   | "eblID_ASC"
   | "eblID_DESC"
+  | "profileStatus_ASC"
+  | "profileStatus_DESC"
   | "profilePic_ASC"
   | "profilePic_DESC"
   | "email_ASC"
@@ -369,6 +377,10 @@ export interface UserWhereInput {
   eblID_not_starts_with?: Maybe<String>;
   eblID_ends_with?: Maybe<String>;
   eblID_not_ends_with?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  profileStatus_not?: Maybe<ProfileStatus>;
+  profileStatus_in?: Maybe<ProfileStatus[] | ProfileStatus>;
+  profileStatus_not_in?: Maybe<ProfileStatus[] | ProfileStatus>;
   profilePic?: Maybe<String>;
   profilePic_not?: Maybe<String>;
   profilePic_in?: Maybe<String[] | String>;
@@ -555,6 +567,7 @@ export interface UserCreateOneWithoutGoalsInput {
 export interface UserCreateWithoutGoalsInput {
   id?: Maybe<ID_Input>;
   eblID: String;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic: String;
   email: String;
   password: String;
@@ -577,6 +590,7 @@ export interface UserCreateManyWithoutFriendsInput {
 export interface UserCreateWithoutFriendsInput {
   id?: Maybe<ID_Input>;
   eblID: String;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic: String;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
   email: String;
@@ -628,6 +642,7 @@ export interface UserCreateManyWithoutFollowingInput {
 export interface UserCreateWithoutFollowingInput {
   id?: Maybe<ID_Input>;
   eblID: String;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic: String;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
   email: String;
@@ -661,6 +676,7 @@ export interface UserUpdateOneRequiredWithoutGoalsInput {
 
 export interface UserUpdateWithoutGoalsDataInput {
   eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
@@ -702,6 +718,7 @@ export interface UserUpdateWithWhereUniqueWithoutFriendsInput {
 
 export interface UserUpdateWithoutFriendsDataInput {
   eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
   email?: Maybe<String>;
@@ -1011,6 +1028,7 @@ export interface UserUpdateWithWhereUniqueWithoutFollowingInput {
 
 export interface UserUpdateWithoutFollowingDataInput {
   eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
   email?: Maybe<String>;
@@ -1058,6 +1076,10 @@ export interface UserScalarWhereInput {
   eblID_not_starts_with?: Maybe<String>;
   eblID_ends_with?: Maybe<String>;
   eblID_not_ends_with?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  profileStatus_not?: Maybe<ProfileStatus>;
+  profileStatus_in?: Maybe<ProfileStatus[] | ProfileStatus>;
+  profileStatus_not_in?: Maybe<ProfileStatus[] | ProfileStatus>;
   profilePic?: Maybe<String>;
   profilePic_not?: Maybe<String>;
   profilePic_in?: Maybe<String[] | String>;
@@ -1142,6 +1164,7 @@ export interface UserUpdateManyWithWhereNestedInput {
 
 export interface UserUpdateManyDataInput {
   eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
@@ -1189,6 +1212,7 @@ export interface UserCreateOneWithoutPostsInput {
 export interface UserCreateWithoutPostsInput {
   id?: Maybe<ID_Input>;
   eblID: String;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic: String;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
   email: String;
@@ -1217,6 +1241,7 @@ export interface UserUpdateOneRequiredWithoutPostsInput {
 
 export interface UserUpdateWithoutPostsDataInput {
   eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
   email?: Maybe<String>;
@@ -1243,6 +1268,7 @@ export interface PostUpdateManyMutationInput {
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
   eblID: String;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic: String;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
   email: String;
@@ -1258,6 +1284,7 @@ export interface UserCreateInput {
 
 export interface UserUpdateInput {
   eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
   email?: Maybe<String>;
@@ -1273,6 +1300,7 @@ export interface UserUpdateInput {
 
 export interface UserUpdateManyMutationInput {
   eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
@@ -1377,6 +1405,7 @@ export interface GoalNullablePromise
 export interface User {
   id: ID_Output;
   eblID: String;
+  profileStatus?: ProfileStatus;
   profilePic: String;
   email: String;
   password: String;
@@ -1389,6 +1418,7 @@ export interface User {
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   eblID: () => Promise<String>;
+  profileStatus: () => Promise<ProfileStatus>;
   profilePic: () => Promise<String>;
   goals: <T = FragmentableArray<Goal>>(args?: {
     where?: GoalWhereInput;
@@ -1439,6 +1469,7 @@ export interface UserSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   eblID: () => Promise<AsyncIterator<String>>;
+  profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
   profilePic: () => Promise<AsyncIterator<String>>;
   goals: <T = Promise<AsyncIterator<GoalSubscription>>>(args?: {
     where?: GoalWhereInput;
@@ -1489,6 +1520,7 @@ export interface UserNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   eblID: () => Promise<String>;
+  profileStatus: () => Promise<ProfileStatus>;
   profilePic: () => Promise<String>;
   goals: <T = FragmentableArray<Goal>>(args?: {
     where?: GoalWhereInput;
@@ -1927,6 +1959,7 @@ export interface UserSubscriptionPayloadSubscription
 export interface UserPreviousValues {
   id: ID_Output;
   eblID: String;
+  profileStatus?: ProfileStatus;
   profilePic: String;
   email: String;
   password: String;
@@ -1941,6 +1974,7 @@ export interface UserPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   eblID: () => Promise<String>;
+  profileStatus: () => Promise<ProfileStatus>;
   profilePic: () => Promise<String>;
   email: () => Promise<String>;
   password: () => Promise<String>;
@@ -1955,6 +1989,7 @@ export interface UserPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   eblID: () => Promise<AsyncIterator<String>>;
+  profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
   profilePic: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
@@ -2020,6 +2055,10 @@ export const models: Model[] = [
   },
   {
     name: "UserStatus",
+    embedded: false
+  },
+  {
+    name: "ProfileStatus",
     embedded: false
   }
 ];

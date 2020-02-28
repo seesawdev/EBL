@@ -4,6 +4,7 @@ type Post {
   updatedAt: DateTime! @updatedAt
   published: Boolean! @default(value: false)
   title: String!
+  info: String!
   content: String!
   author: User!
 }
@@ -11,11 +12,13 @@ type Post {
 type User {
   id: ID! @id
   eblID: String!
+  profileStatus: ProfileStatus @default(value: PUBLIC)
   profilePic: String!
   goals: [Goal] @relation(name: "UserToGoals")
   email: String! @unique
   password: String!
   name: String!
+  journal: [JournalEntry] @relation(name: "UserJournal")
   points: Int! @default(value: 0)
   friends: [User!]! @relation(name: "FriendsOfUser", link: TABLE)
   status: UserStatus @default(value: OFFLINE)  
@@ -47,4 +50,17 @@ enum UserStatus {
   ONLINE
   UNAVAILABLE
   OFFLINE
+}
+enum ProfileStatus {
+  PUBLIC
+  PRIVATE
+  FRIENDSONLY
+  DEACTIVATED
+}
+type JournalEntry {
+  id: ID! 
+  title: String!
+  shared: Boolean!
+  content: String!
+  author: User! @relation(name: "UserJournal", link: INLINE)
 }

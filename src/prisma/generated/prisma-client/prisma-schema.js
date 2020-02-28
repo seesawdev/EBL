@@ -709,6 +709,13 @@ input PostWhereUniqueInput {
   id: ID
 }
 
+enum ProfileStatus {
+  PUBLIC
+  PRIVATE
+  FRIENDSONLY
+  DEACTIVATED
+}
+
 type Query {
   goal(where: GoalWhereUniqueInput!): Goal
   goals(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Goal]!
@@ -737,6 +744,7 @@ enum TIER {
 type User {
   id: ID!
   eblID: String!
+  profileStatus: ProfileStatus
   profilePic: String!
   goals(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Goal!]
   email: String!
@@ -759,6 +767,7 @@ type UserConnection {
 input UserCreateInput {
   id: ID
   eblID: String!
+  profileStatus: ProfileStatus
   profilePic: String!
   goals: GoalCreateManyWithoutAuthorInput
   email: String!
@@ -795,6 +804,7 @@ input UserCreateOneWithoutPostsInput {
 input UserCreateWithoutFollowingInput {
   id: ID
   eblID: String!
+  profileStatus: ProfileStatus
   profilePic: String!
   goals: GoalCreateManyWithoutAuthorInput
   email: String!
@@ -810,6 +820,7 @@ input UserCreateWithoutFollowingInput {
 input UserCreateWithoutFriendsInput {
   id: ID
   eblID: String!
+  profileStatus: ProfileStatus
   profilePic: String!
   goals: GoalCreateManyWithoutAuthorInput
   email: String!
@@ -825,6 +836,7 @@ input UserCreateWithoutFriendsInput {
 input UserCreateWithoutGoalsInput {
   id: ID
   eblID: String!
+  profileStatus: ProfileStatus
   profilePic: String!
   email: String!
   password: String!
@@ -840,6 +852,7 @@ input UserCreateWithoutGoalsInput {
 input UserCreateWithoutPostsInput {
   id: ID
   eblID: String!
+  profileStatus: ProfileStatus
   profilePic: String!
   goals: GoalCreateManyWithoutAuthorInput
   email: String!
@@ -862,6 +875,8 @@ enum UserOrderByInput {
   id_DESC
   eblID_ASC
   eblID_DESC
+  profileStatus_ASC
+  profileStatus_DESC
   profilePic_ASC
   profilePic_DESC
   email_ASC
@@ -881,6 +896,7 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   eblID: String!
+  profileStatus: ProfileStatus
   profilePic: String!
   email: String!
   password: String!
@@ -919,6 +935,10 @@ input UserScalarWhereInput {
   eblID_not_starts_with: String
   eblID_ends_with: String
   eblID_not_ends_with: String
+  profileStatus: ProfileStatus
+  profileStatus_not: ProfileStatus
+  profileStatus_in: [ProfileStatus!]
+  profileStatus_not_in: [ProfileStatus!]
   profilePic: String
   profilePic_not: String
   profilePic_in: [String!]
@@ -1022,6 +1042,7 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   eblID: String
+  profileStatus: ProfileStatus
   profilePic: String
   goals: GoalUpdateManyWithoutAuthorInput
   email: String
@@ -1037,6 +1058,7 @@ input UserUpdateInput {
 
 input UserUpdateManyDataInput {
   eblID: String
+  profileStatus: ProfileStatus
   profilePic: String
   email: String
   password: String
@@ -1048,6 +1070,7 @@ input UserUpdateManyDataInput {
 
 input UserUpdateManyMutationInput {
   eblID: String
+  profileStatus: ProfileStatus
   profilePic: String
   email: String
   password: String
@@ -1102,6 +1125,7 @@ input UserUpdateOneRequiredWithoutPostsInput {
 
 input UserUpdateWithoutFollowingDataInput {
   eblID: String
+  profileStatus: ProfileStatus
   profilePic: String
   goals: GoalUpdateManyWithoutAuthorInput
   email: String
@@ -1116,6 +1140,7 @@ input UserUpdateWithoutFollowingDataInput {
 
 input UserUpdateWithoutFriendsDataInput {
   eblID: String
+  profileStatus: ProfileStatus
   profilePic: String
   goals: GoalUpdateManyWithoutAuthorInput
   email: String
@@ -1130,6 +1155,7 @@ input UserUpdateWithoutFriendsDataInput {
 
 input UserUpdateWithoutGoalsDataInput {
   eblID: String
+  profileStatus: ProfileStatus
   profilePic: String
   email: String
   password: String
@@ -1144,6 +1170,7 @@ input UserUpdateWithoutGoalsDataInput {
 
 input UserUpdateWithoutPostsDataInput {
   eblID: String
+  profileStatus: ProfileStatus
   profilePic: String
   goals: GoalUpdateManyWithoutAuthorInput
   email: String
@@ -1217,6 +1244,10 @@ input UserWhereInput {
   eblID_not_starts_with: String
   eblID_ends_with: String
   eblID_not_ends_with: String
+  profileStatus: ProfileStatus
+  profileStatus_not: ProfileStatus
+  profileStatus_in: [ProfileStatus!]
+  profileStatus_not_in: [ProfileStatus!]
   profilePic: String
   profilePic_not: String
   profilePic_in: [String!]

@@ -11,6 +11,20 @@ const Subscription = {
       return payload
     },
   },
+
+  userStatusSubscription: {
+   subscribe: async (parent, args, context) => {
+     return await context.prisma.$subscribe
+      .user({
+        mutation_in: ["UPDATED"],
+      })
+      .node()
+   },
+   resolve: payload => {
+     return payload
+   }
+ }
+
 }
 
 module.exports = { Subscription }
