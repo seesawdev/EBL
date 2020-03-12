@@ -7,11 +7,12 @@ type Query {
   friends(username: String!): String!
   followers: Int
   friendCount: Int
-  """displays friendslist of username passed in as argument"""
+  """
+  displays friendslist of username passed in as argument
+  """
   userFriends(username: String): [User!]!
-  friendExists(username: String): Boolean 
+  friendExists(username: String): Boolean
   getUserStatus(status: UserStatus!): [User!]!
-
 }
 input ProfileInput {
   avatar: String
@@ -22,16 +23,23 @@ input ProfileInput {
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
+  authenticate(idToken: String!): User
   createDraft(title: String!, content: String!): Post!
   publish(id: ID!): Post!
   deletePost(id: ID!): Post!
   setUserStatus(id: ID, input: UserStatus!): User!
   updateProfile(input: ProfileInput): User!
-  """ adds two users to each other's friendlist """
+  """
+   adds two users to each other's friendlist
+  """
   addUserToFriendlist(username: String): String
-  """ removes two users from each other's friendlist """
+  """
+   removes two users from each other's friendlist
+  """
   removeUserFromFriendlist(username1: String, username2: String): String
-  """ follow another user's public account """
+  """
+   follow another user's public account
+  """
   followUser(username: String): User
 }
 
@@ -46,25 +54,24 @@ type AuthPayload {
 }
 
 type User {
-  id: ID! 
+  id: ID!
   eblID: String!
+  identity: String
   profilePic: String!
-  goals: [Goal] 
-  email: String! 
+  goals: [Goal]
   password: String!
-  name: String!
-  points: Int! 
-  friends: [User!]! 
-  status: UserStatus  
+  points: Int!
+  friends: [User!]!
+  status: UserStatus
   posts: [Post!]!
-  following: [User] 
+  following: [User]
   profileStatus: ProfileStatus
-  tier: TIER! 
+  tier: TIER!
 }
 enum ProfileStatus {
-  PUBLIC 
-  PRIVATE 
-  FRIENDS 
+  PUBLIC
+  PRIVATE
+  FRIENDS
 }
 
 enum TIER {
@@ -80,7 +87,7 @@ enum UserStatus {
 }
 
 type Goal {
-  id: ID! 
+  id: ID!
   title: String!
   startDate: String!
   projectedCompletionDate: String!
@@ -101,9 +108,27 @@ type Post {
   author: User!
 }
 type JournalEntry {
-  id: ID! 
+  id: ID!
   title: String!
   shared: Boolean!
   content: String!
   author: User!
+}
+
+type FormData {
+  id: ID! 
+  email: String! 
+  name: String!
+  username: String! 
+  Q1: String
+  Q2: String
+  Q3: String
+  Q4: Question 
+}
+
+enum Question {
+  CHOICE1
+  CHOICE2
+  CHOICE3
+  CHOICE4
 }

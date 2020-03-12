@@ -31,6 +31,14 @@ var models = [
   {
     name: "JournalEntry",
     embedded: false
+  },
+  {
+    name: "FormData",
+    embedded: false
+  },
+  {
+    name: "Question",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({

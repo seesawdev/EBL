@@ -11,13 +11,14 @@ type Post {
 
 type User {
   id: ID! @id
-  eblID: String!
+  startDate: DateTime! @startDate
+  auth0id: String! @unique
+  eblID: String! @unique
   profileStatus: ProfileStatus @default(value: PUBLIC)
-  profilePic: String!
+  profilePic: String
   goals: [Goal] @relation(name: "UserToGoals")
-  email: String! @unique
+  userInfo: FormData! @relation(link: INLINE)
   password: String!
-  name: String!
   journal: [JournalEntry] @relation(name: "UserJournal")
   points: Int! @default(value: 0)
   friends: [User!]! @relation(name: "FriendsOfUser", link: TABLE)
@@ -25,6 +26,7 @@ type User {
   posts: [Post!]!
   following: [User] @relation(name: "FollowingUsers", link: TABLE)
   tier: TIER! @default(value: FREE)
+  
 }
 
 enum TIER {
@@ -64,4 +66,23 @@ type JournalEntry {
   shared: Boolean! @default(value: false)
   content: String!
   author: User! @relation(name: "UserJournal", link: INLINE)
+}
+
+type FormData {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  email: String! @unique
+  name: String! 
+  username: String! @unique
+  Q1: String
+  Q2: String
+  Q3: String
+  Q4: Question @default(value: CHOICE1)
+}
+
+enum Question {
+  CHOICE1
+  CHOICE2
+  CHOICE3
+  CHOICE4
 }

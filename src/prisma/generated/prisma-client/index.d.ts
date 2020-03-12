@@ -16,6 +16,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
+  formData: (where?: FormDataWhereInput) => Promise<boolean>;
   goal: (where?: GoalWhereInput) => Promise<boolean>;
   journalEntry: (where?: JournalEntryWhereInput) => Promise<boolean>;
   post: (where?: PostWhereInput) => Promise<boolean>;
@@ -41,6 +42,25 @@ export interface Prisma {
    * Queries
    */
 
+  formData: (where: FormDataWhereUniqueInput) => FormDataNullablePromise;
+  formDatas: (args?: {
+    where?: FormDataWhereInput;
+    orderBy?: FormDataOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<FormData>;
+  formDatasConnection: (args?: {
+    where?: FormDataWhereInput;
+    orderBy?: FormDataOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FormDataConnectionPromise;
   goal: (where: GoalWhereUniqueInput) => GoalNullablePromise;
   goals: (args?: {
     where?: GoalWhereInput;
@@ -125,6 +145,22 @@ export interface Prisma {
    * Mutations
    */
 
+  createFormData: (data: FormDataCreateInput) => FormDataPromise;
+  updateFormData: (args: {
+    data: FormDataUpdateInput;
+    where: FormDataWhereUniqueInput;
+  }) => FormDataPromise;
+  updateManyFormDatas: (args: {
+    data: FormDataUpdateManyMutationInput;
+    where?: FormDataWhereInput;
+  }) => BatchPayloadPromise;
+  upsertFormData: (args: {
+    where: FormDataWhereUniqueInput;
+    create: FormDataCreateInput;
+    update: FormDataUpdateInput;
+  }) => FormDataPromise;
+  deleteFormData: (where: FormDataWhereUniqueInput) => FormDataPromise;
+  deleteManyFormDatas: (where?: FormDataWhereInput) => BatchPayloadPromise;
   createGoal: (data: GoalCreateInput) => GoalPromise;
   updateGoal: (args: {
     data: GoalUpdateInput;
@@ -202,6 +238,9 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  formData: (
+    where?: FormDataSubscriptionWhereInput
+  ) => FormDataSubscriptionPayloadSubscription;
   goal: (
     where?: GoalSubscriptionWhereInput
   ) => GoalSubscriptionPayloadSubscription;
@@ -223,6 +262,28 @@ export interface ClientConstructor<T> {
 /**
  * Types
  */
+
+export type Question = "CHOICE1" | "CHOICE2" | "CHOICE3" | "CHOICE4";
+
+export type FormDataOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "username_ASC"
+  | "username_DESC"
+  | "Q1_ASC"
+  | "Q1_DESC"
+  | "Q2_ASC"
+  | "Q2_DESC"
+  | "Q3_ASC"
+  | "Q3_DESC"
+  | "Q4_ASC"
+  | "Q4_DESC";
 
 export type ProfileStatus =
   | "PUBLIC"
@@ -269,18 +330,18 @@ export type JournalEntryOrderByInput =
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "startDate_ASC"
+  | "startDate_DESC"
+  | "auth0id_ASC"
+  | "auth0id_DESC"
   | "eblID_ASC"
   | "eblID_DESC"
   | "profileStatus_ASC"
   | "profileStatus_DESC"
   | "profilePic_ASC"
   | "profilePic_DESC"
-  | "email_ASC"
-  | "email_DESC"
   | "password_ASC"
   | "password_DESC"
-  | "name_ASC"
-  | "name_DESC"
   | "points_ASC"
   | "points_DESC"
   | "status_ASC"
@@ -305,6 +366,128 @@ export type PostOrderByInput =
   | "content_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+
+export type FormDataWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+  username?: Maybe<String>;
+}>;
+
+export interface FormDataWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  email?: Maybe<String>;
+  email_not?: Maybe<String>;
+  email_in?: Maybe<String[] | String>;
+  email_not_in?: Maybe<String[] | String>;
+  email_lt?: Maybe<String>;
+  email_lte?: Maybe<String>;
+  email_gt?: Maybe<String>;
+  email_gte?: Maybe<String>;
+  email_contains?: Maybe<String>;
+  email_not_contains?: Maybe<String>;
+  email_starts_with?: Maybe<String>;
+  email_not_starts_with?: Maybe<String>;
+  email_ends_with?: Maybe<String>;
+  email_not_ends_with?: Maybe<String>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  username?: Maybe<String>;
+  username_not?: Maybe<String>;
+  username_in?: Maybe<String[] | String>;
+  username_not_in?: Maybe<String[] | String>;
+  username_lt?: Maybe<String>;
+  username_lte?: Maybe<String>;
+  username_gt?: Maybe<String>;
+  username_gte?: Maybe<String>;
+  username_contains?: Maybe<String>;
+  username_not_contains?: Maybe<String>;
+  username_starts_with?: Maybe<String>;
+  username_not_starts_with?: Maybe<String>;
+  username_ends_with?: Maybe<String>;
+  username_not_ends_with?: Maybe<String>;
+  Q1?: Maybe<String>;
+  Q1_not?: Maybe<String>;
+  Q1_in?: Maybe<String[] | String>;
+  Q1_not_in?: Maybe<String[] | String>;
+  Q1_lt?: Maybe<String>;
+  Q1_lte?: Maybe<String>;
+  Q1_gt?: Maybe<String>;
+  Q1_gte?: Maybe<String>;
+  Q1_contains?: Maybe<String>;
+  Q1_not_contains?: Maybe<String>;
+  Q1_starts_with?: Maybe<String>;
+  Q1_not_starts_with?: Maybe<String>;
+  Q1_ends_with?: Maybe<String>;
+  Q1_not_ends_with?: Maybe<String>;
+  Q2?: Maybe<String>;
+  Q2_not?: Maybe<String>;
+  Q2_in?: Maybe<String[] | String>;
+  Q2_not_in?: Maybe<String[] | String>;
+  Q2_lt?: Maybe<String>;
+  Q2_lte?: Maybe<String>;
+  Q2_gt?: Maybe<String>;
+  Q2_gte?: Maybe<String>;
+  Q2_contains?: Maybe<String>;
+  Q2_not_contains?: Maybe<String>;
+  Q2_starts_with?: Maybe<String>;
+  Q2_not_starts_with?: Maybe<String>;
+  Q2_ends_with?: Maybe<String>;
+  Q2_not_ends_with?: Maybe<String>;
+  Q3?: Maybe<String>;
+  Q3_not?: Maybe<String>;
+  Q3_in?: Maybe<String[] | String>;
+  Q3_not_in?: Maybe<String[] | String>;
+  Q3_lt?: Maybe<String>;
+  Q3_lte?: Maybe<String>;
+  Q3_gt?: Maybe<String>;
+  Q3_gte?: Maybe<String>;
+  Q3_contains?: Maybe<String>;
+  Q3_not_contains?: Maybe<String>;
+  Q3_starts_with?: Maybe<String>;
+  Q3_not_starts_with?: Maybe<String>;
+  Q3_ends_with?: Maybe<String>;
+  Q3_not_ends_with?: Maybe<String>;
+  Q4?: Maybe<Question>;
+  Q4_not?: Maybe<Question>;
+  Q4_in?: Maybe<Question[] | Question>;
+  Q4_not_in?: Maybe<Question[] | Question>;
+  AND?: Maybe<FormDataWhereInput[] | FormDataWhereInput>;
+  OR?: Maybe<FormDataWhereInput[] | FormDataWhereInput>;
+  NOT?: Maybe<FormDataWhereInput[] | FormDataWhereInput>;
+}
 
 export type GoalWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
@@ -422,6 +605,28 @@ export interface UserWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  startDate?: Maybe<DateTimeInput>;
+  startDate_not?: Maybe<DateTimeInput>;
+  startDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  startDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  startDate_lt?: Maybe<DateTimeInput>;
+  startDate_lte?: Maybe<DateTimeInput>;
+  startDate_gt?: Maybe<DateTimeInput>;
+  startDate_gte?: Maybe<DateTimeInput>;
+  auth0id?: Maybe<String>;
+  auth0id_not?: Maybe<String>;
+  auth0id_in?: Maybe<String[] | String>;
+  auth0id_not_in?: Maybe<String[] | String>;
+  auth0id_lt?: Maybe<String>;
+  auth0id_lte?: Maybe<String>;
+  auth0id_gt?: Maybe<String>;
+  auth0id_gte?: Maybe<String>;
+  auth0id_contains?: Maybe<String>;
+  auth0id_not_contains?: Maybe<String>;
+  auth0id_starts_with?: Maybe<String>;
+  auth0id_not_starts_with?: Maybe<String>;
+  auth0id_ends_with?: Maybe<String>;
+  auth0id_not_ends_with?: Maybe<String>;
   eblID?: Maybe<String>;
   eblID_not?: Maybe<String>;
   eblID_in?: Maybe<String[] | String>;
@@ -457,20 +662,7 @@ export interface UserWhereInput {
   goals_every?: Maybe<GoalWhereInput>;
   goals_some?: Maybe<GoalWhereInput>;
   goals_none?: Maybe<GoalWhereInput>;
-  email?: Maybe<String>;
-  email_not?: Maybe<String>;
-  email_in?: Maybe<String[] | String>;
-  email_not_in?: Maybe<String[] | String>;
-  email_lt?: Maybe<String>;
-  email_lte?: Maybe<String>;
-  email_gt?: Maybe<String>;
-  email_gte?: Maybe<String>;
-  email_contains?: Maybe<String>;
-  email_not_contains?: Maybe<String>;
-  email_starts_with?: Maybe<String>;
-  email_not_starts_with?: Maybe<String>;
-  email_ends_with?: Maybe<String>;
-  email_not_ends_with?: Maybe<String>;
+  userInfo?: Maybe<FormDataWhereInput>;
   password?: Maybe<String>;
   password_not?: Maybe<String>;
   password_in?: Maybe<String[] | String>;
@@ -485,20 +677,6 @@ export interface UserWhereInput {
   password_not_starts_with?: Maybe<String>;
   password_ends_with?: Maybe<String>;
   password_not_ends_with?: Maybe<String>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
   journal_every?: Maybe<JournalEntryWhereInput>;
   journal_some?: Maybe<JournalEntryWhereInput>;
   journal_none?: Maybe<JournalEntryWhereInput>;
@@ -682,8 +860,40 @@ export type PostWhereUniqueInput = AtLeastOne<{
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
-  email?: Maybe<String>;
+  auth0id?: Maybe<String>;
+  eblID?: Maybe<String>;
 }>;
+
+export interface FormDataCreateInput {
+  id?: Maybe<ID_Input>;
+  email: String;
+  name: String;
+  username: String;
+  Q1?: Maybe<String>;
+  Q2?: Maybe<String>;
+  Q3?: Maybe<String>;
+  Q4?: Maybe<Question>;
+}
+
+export interface FormDataUpdateInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  username?: Maybe<String>;
+  Q1?: Maybe<String>;
+  Q2?: Maybe<String>;
+  Q3?: Maybe<String>;
+  Q4?: Maybe<Question>;
+}
+
+export interface FormDataUpdateManyMutationInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  username?: Maybe<String>;
+  Q1?: Maybe<String>;
+  Q2?: Maybe<String>;
+  Q3?: Maybe<String>;
+  Q4?: Maybe<Question>;
+}
 
 export interface GoalCreateInput {
   id?: Maybe<ID_Input>;
@@ -705,12 +915,13 @@ export interface UserCreateOneWithoutGoalsInput {
 
 export interface UserCreateWithoutGoalsInput {
   id?: Maybe<ID_Input>;
+  startDate: DateTimeInput;
+  auth0id: String;
   eblID: String;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic: String;
-  email: String;
+  profilePic?: Maybe<String>;
+  userInfo: FormDataCreateOneInput;
   password: String;
-  name: String;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
@@ -718,6 +929,11 @@ export interface UserCreateWithoutGoalsInput {
   posts?: Maybe<PostCreateManyWithoutAuthorInput>;
   following?: Maybe<UserCreateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
+}
+
+export interface FormDataCreateOneInput {
+  create?: Maybe<FormDataCreateInput>;
+  connect?: Maybe<FormDataWhereUniqueInput>;
 }
 
 export interface JournalEntryCreateManyWithoutAuthorInput {
@@ -746,13 +962,14 @@ export interface UserCreateManyWithoutFriendsInput {
 
 export interface UserCreateWithoutFriendsInput {
   id?: Maybe<ID_Input>;
+  startDate: DateTimeInput;
+  auth0id: String;
   eblID: String;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic: String;
+  profilePic?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  email: String;
+  userInfo: FormDataCreateOneInput;
   password: String;
-  name: String;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
@@ -800,13 +1017,14 @@ export interface UserCreateManyWithoutFollowingInput {
 
 export interface UserCreateWithoutFollowingInput {
   id?: Maybe<ID_Input>;
+  startDate: DateTimeInput;
+  auth0id: String;
   eblID: String;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic: String;
+  profilePic?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  email: String;
+  userInfo: FormDataCreateOneInput;
   password: String;
-  name: String;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
@@ -835,12 +1053,13 @@ export interface UserUpdateOneRequiredWithoutGoalsInput {
 }
 
 export interface UserUpdateWithoutGoalsDataInput {
+  startDate?: Maybe<DateTimeInput>;
+  auth0id?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
-  email?: Maybe<String>;
+  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
   password?: Maybe<String>;
-  name?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
@@ -848,6 +1067,28 @@ export interface UserUpdateWithoutGoalsDataInput {
   posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
+}
+
+export interface FormDataUpdateOneRequiredInput {
+  create?: Maybe<FormDataCreateInput>;
+  update?: Maybe<FormDataUpdateDataInput>;
+  upsert?: Maybe<FormDataUpsertNestedInput>;
+  connect?: Maybe<FormDataWhereUniqueInput>;
+}
+
+export interface FormDataUpdateDataInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  username?: Maybe<String>;
+  Q1?: Maybe<String>;
+  Q2?: Maybe<String>;
+  Q3?: Maybe<String>;
+  Q4?: Maybe<Question>;
+}
+
+export interface FormDataUpsertNestedInput {
+  update: FormDataUpdateDataInput;
+  create: FormDataCreateInput;
 }
 
 export interface JournalEntryUpdateManyWithoutAuthorInput {
@@ -994,13 +1235,14 @@ export interface UserUpdateWithWhereUniqueWithoutFriendsInput {
 }
 
 export interface UserUpdateWithoutFriendsDataInput {
+  startDate?: Maybe<DateTimeInput>;
+  auth0id?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
-  email?: Maybe<String>;
+  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
   password?: Maybe<String>;
-  name?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
@@ -1321,13 +1563,14 @@ export interface UserUpdateWithWhereUniqueWithoutFollowingInput {
 }
 
 export interface UserUpdateWithoutFollowingDataInput {
+  startDate?: Maybe<DateTimeInput>;
+  auth0id?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
-  email?: Maybe<String>;
+  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
   password?: Maybe<String>;
-  name?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
@@ -1357,6 +1600,28 @@ export interface UserScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  startDate?: Maybe<DateTimeInput>;
+  startDate_not?: Maybe<DateTimeInput>;
+  startDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  startDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  startDate_lt?: Maybe<DateTimeInput>;
+  startDate_lte?: Maybe<DateTimeInput>;
+  startDate_gt?: Maybe<DateTimeInput>;
+  startDate_gte?: Maybe<DateTimeInput>;
+  auth0id?: Maybe<String>;
+  auth0id_not?: Maybe<String>;
+  auth0id_in?: Maybe<String[] | String>;
+  auth0id_not_in?: Maybe<String[] | String>;
+  auth0id_lt?: Maybe<String>;
+  auth0id_lte?: Maybe<String>;
+  auth0id_gt?: Maybe<String>;
+  auth0id_gte?: Maybe<String>;
+  auth0id_contains?: Maybe<String>;
+  auth0id_not_contains?: Maybe<String>;
+  auth0id_starts_with?: Maybe<String>;
+  auth0id_not_starts_with?: Maybe<String>;
+  auth0id_ends_with?: Maybe<String>;
+  auth0id_not_ends_with?: Maybe<String>;
   eblID?: Maybe<String>;
   eblID_not?: Maybe<String>;
   eblID_in?: Maybe<String[] | String>;
@@ -1389,20 +1654,6 @@ export interface UserScalarWhereInput {
   profilePic_not_starts_with?: Maybe<String>;
   profilePic_ends_with?: Maybe<String>;
   profilePic_not_ends_with?: Maybe<String>;
-  email?: Maybe<String>;
-  email_not?: Maybe<String>;
-  email_in?: Maybe<String[] | String>;
-  email_not_in?: Maybe<String[] | String>;
-  email_lt?: Maybe<String>;
-  email_lte?: Maybe<String>;
-  email_gt?: Maybe<String>;
-  email_gte?: Maybe<String>;
-  email_contains?: Maybe<String>;
-  email_not_contains?: Maybe<String>;
-  email_starts_with?: Maybe<String>;
-  email_not_starts_with?: Maybe<String>;
-  email_ends_with?: Maybe<String>;
-  email_not_ends_with?: Maybe<String>;
   password?: Maybe<String>;
   password_not?: Maybe<String>;
   password_in?: Maybe<String[] | String>;
@@ -1417,20 +1668,6 @@ export interface UserScalarWhereInput {
   password_not_starts_with?: Maybe<String>;
   password_ends_with?: Maybe<String>;
   password_not_ends_with?: Maybe<String>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
   points?: Maybe<Int>;
   points_not?: Maybe<Int>;
   points_in?: Maybe<Int[] | Int>;
@@ -1458,12 +1695,12 @@ export interface UserUpdateManyWithWhereNestedInput {
 }
 
 export interface UserUpdateManyDataInput {
+  startDate?: Maybe<DateTimeInput>;
+  auth0id?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
-  email?: Maybe<String>;
   password?: Maybe<String>;
-  name?: Maybe<String>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
   tier?: Maybe<TIER>;
@@ -1506,13 +1743,14 @@ export interface UserCreateOneWithoutJournalInput {
 
 export interface UserCreateWithoutJournalInput {
   id?: Maybe<ID_Input>;
+  startDate: DateTimeInput;
+  auth0id: String;
   eblID: String;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic: String;
+  profilePic?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  email: String;
+  userInfo: FormDataCreateOneInput;
   password: String;
-  name: String;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
@@ -1536,13 +1774,14 @@ export interface UserUpdateOneRequiredWithoutJournalInput {
 }
 
 export interface UserUpdateWithoutJournalDataInput {
+  startDate?: Maybe<DateTimeInput>;
+  auth0id?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
-  email?: Maybe<String>;
+  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
   password?: Maybe<String>;
-  name?: Maybe<String>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
@@ -1578,13 +1817,14 @@ export interface UserCreateOneWithoutPostsInput {
 
 export interface UserCreateWithoutPostsInput {
   id?: Maybe<ID_Input>;
+  startDate: DateTimeInput;
+  auth0id: String;
   eblID: String;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic: String;
+  profilePic?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  email: String;
+  userInfo: FormDataCreateOneInput;
   password: String;
-  name: String;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
@@ -1609,13 +1849,14 @@ export interface UserUpdateOneRequiredWithoutPostsInput {
 }
 
 export interface UserUpdateWithoutPostsDataInput {
+  startDate?: Maybe<DateTimeInput>;
+  auth0id?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
-  email?: Maybe<String>;
+  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
   password?: Maybe<String>;
-  name?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
@@ -1638,13 +1879,14 @@ export interface PostUpdateManyMutationInput {
 
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
+  startDate: DateTimeInput;
+  auth0id: String;
   eblID: String;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic: String;
+  profilePic?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  email: String;
+  userInfo: FormDataCreateOneInput;
   password: String;
-  name: String;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
@@ -1655,13 +1897,14 @@ export interface UserCreateInput {
 }
 
 export interface UserUpdateInput {
+  startDate?: Maybe<DateTimeInput>;
+  auth0id?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
-  email?: Maybe<String>;
+  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
   password?: Maybe<String>;
-  name?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
@@ -1672,15 +1915,30 @@ export interface UserUpdateInput {
 }
 
 export interface UserUpdateManyMutationInput {
+  startDate?: Maybe<DateTimeInput>;
+  auth0id?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   profilePic?: Maybe<String>;
-  email?: Maybe<String>;
   password?: Maybe<String>;
-  name?: Maybe<String>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
   tier?: Maybe<TIER>;
+}
+
+export interface FormDataSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<FormDataWhereInput>;
+  AND?: Maybe<
+    FormDataSubscriptionWhereInput[] | FormDataSubscriptionWhereInput
+  >;
+  OR?: Maybe<FormDataSubscriptionWhereInput[] | FormDataSubscriptionWhereInput>;
+  NOT?: Maybe<
+    FormDataSubscriptionWhereInput[] | FormDataSubscriptionWhereInput
+  >;
 }
 
 export interface GoalSubscriptionWhereInput {
@@ -1735,6 +1993,137 @@ export interface UserSubscriptionWhereInput {
 
 export interface NodeNode {
   id: ID_Output;
+}
+
+export interface FormData {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  email: String;
+  name: String;
+  username: String;
+  Q1?: String;
+  Q2?: String;
+  Q3?: String;
+  Q4?: Question;
+}
+
+export interface FormDataPromise extends Promise<FormData>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  username: () => Promise<String>;
+  Q1: () => Promise<String>;
+  Q2: () => Promise<String>;
+  Q3: () => Promise<String>;
+  Q4: () => Promise<Question>;
+}
+
+export interface FormDataSubscription
+  extends Promise<AsyncIterator<FormData>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  Q1: () => Promise<AsyncIterator<String>>;
+  Q2: () => Promise<AsyncIterator<String>>;
+  Q3: () => Promise<AsyncIterator<String>>;
+  Q4: () => Promise<AsyncIterator<Question>>;
+}
+
+export interface FormDataNullablePromise
+  extends Promise<FormData | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  username: () => Promise<String>;
+  Q1: () => Promise<String>;
+  Q2: () => Promise<String>;
+  Q3: () => Promise<String>;
+  Q4: () => Promise<Question>;
+}
+
+export interface FormDataConnection {
+  pageInfo: PageInfo;
+  edges: FormDataEdge[];
+}
+
+export interface FormDataConnectionPromise
+  extends Promise<FormDataConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<FormDataEdge>>() => T;
+  aggregate: <T = AggregateFormDataPromise>() => T;
+}
+
+export interface FormDataConnectionSubscription
+  extends Promise<AsyncIterator<FormDataConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FormDataEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFormDataSubscription>() => T;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface FormDataEdge {
+  node: FormData;
+  cursor: String;
+}
+
+export interface FormDataEdgePromise
+  extends Promise<FormDataEdge>,
+    Fragmentable {
+  node: <T = FormDataPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface FormDataEdgeSubscription
+  extends Promise<AsyncIterator<FormDataEdge>>,
+    Fragmentable {
+  node: <T = FormDataSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateFormData {
+  count: Int;
+}
+
+export interface AggregateFormDataPromise
+  extends Promise<AggregateFormData>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateFormDataSubscription
+  extends Promise<AsyncIterator<AggregateFormData>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface Goal {
@@ -1794,12 +2183,12 @@ export interface GoalNullablePromise
 
 export interface User {
   id: ID_Output;
+  startDate: DateTimeOutput;
+  auth0id: String;
   eblID: String;
   profileStatus?: ProfileStatus;
-  profilePic: String;
-  email: String;
+  profilePic?: String;
   password: String;
-  name: String;
   points: Int;
   status?: UserStatus;
   tier: TIER;
@@ -1807,6 +2196,8 @@ export interface User {
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
+  startDate: () => Promise<DateTimeOutput>;
+  auth0id: () => Promise<String>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
   profilePic: () => Promise<String>;
@@ -1819,9 +2210,8 @@ export interface UserPromise extends Promise<User>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
-  email: () => Promise<String>;
+  userInfo: <T = FormDataPromise>() => T;
   password: () => Promise<String>;
-  name: () => Promise<String>;
   journal: <T = FragmentableArray<JournalEntry>>(args?: {
     where?: JournalEntryWhereInput;
     orderBy?: JournalEntryOrderByInput;
@@ -1867,6 +2257,8 @@ export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  auth0id: () => Promise<AsyncIterator<String>>;
   eblID: () => Promise<AsyncIterator<String>>;
   profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
   profilePic: () => Promise<AsyncIterator<String>>;
@@ -1879,9 +2271,8 @@ export interface UserSubscription
     first?: Int;
     last?: Int;
   }) => T;
-  email: () => Promise<AsyncIterator<String>>;
+  userInfo: <T = FormDataSubscription>() => T;
   password: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
   journal: <T = Promise<AsyncIterator<JournalEntrySubscription>>>(args?: {
     where?: JournalEntryWhereInput;
     orderBy?: JournalEntryOrderByInput;
@@ -1927,6 +2318,8 @@ export interface UserNullablePromise
   extends Promise<User | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  startDate: () => Promise<DateTimeOutput>;
+  auth0id: () => Promise<String>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
   profilePic: () => Promise<String>;
@@ -1939,9 +2332,8 @@ export interface UserNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
-  email: () => Promise<String>;
+  userInfo: <T = FormDataPromise>() => T;
   password: () => Promise<String>;
-  name: () => Promise<String>;
   journal: <T = FragmentableArray<JournalEntry>>(args?: {
     where?: JournalEntryWhereInput;
     orderBy?: JournalEntryOrderByInput;
@@ -2090,29 +2482,6 @@ export interface GoalConnectionSubscription
   pageInfo: <T = PageInfoSubscription>() => T;
   edges: <T = Promise<AsyncIterator<GoalEdgeSubscription>>>() => T;
   aggregate: <T = AggregateGoalSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface GoalEdge {
@@ -2328,6 +2697,71 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
+export interface FormDataSubscriptionPayload {
+  mutation: MutationType;
+  node: FormData;
+  updatedFields: String[];
+  previousValues: FormDataPreviousValues;
+}
+
+export interface FormDataSubscriptionPayloadPromise
+  extends Promise<FormDataSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = FormDataPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = FormDataPreviousValuesPromise>() => T;
+}
+
+export interface FormDataSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FormDataSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = FormDataSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = FormDataPreviousValuesSubscription>() => T;
+}
+
+export interface FormDataPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  email: String;
+  name: String;
+  username: String;
+  Q1?: String;
+  Q2?: String;
+  Q3?: String;
+  Q4?: Question;
+}
+
+export interface FormDataPreviousValuesPromise
+  extends Promise<FormDataPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  username: () => Promise<String>;
+  Q1: () => Promise<String>;
+  Q2: () => Promise<String>;
+  Q3: () => Promise<String>;
+  Q4: () => Promise<Question>;
+}
+
+export interface FormDataPreviousValuesSubscription
+  extends Promise<AsyncIterator<FormDataPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  Q1: () => Promise<AsyncIterator<String>>;
+  Q2: () => Promise<AsyncIterator<String>>;
+  Q3: () => Promise<AsyncIterator<String>>;
+  Q4: () => Promise<AsyncIterator<Question>>;
+}
+
 export interface GoalSubscriptionPayload {
   mutation: MutationType;
   node: Goal;
@@ -2532,12 +2966,12 @@ export interface UserSubscriptionPayloadSubscription
 
 export interface UserPreviousValues {
   id: ID_Output;
+  startDate: DateTimeOutput;
+  auth0id: String;
   eblID: String;
   profileStatus?: ProfileStatus;
-  profilePic: String;
-  email: String;
+  profilePic?: String;
   password: String;
-  name: String;
   points: Int;
   status?: UserStatus;
   tier: TIER;
@@ -2547,12 +2981,12 @@ export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  startDate: () => Promise<DateTimeOutput>;
+  auth0id: () => Promise<String>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
   profilePic: () => Promise<String>;
-  email: () => Promise<String>;
   password: () => Promise<String>;
-  name: () => Promise<String>;
   points: () => Promise<Int>;
   status: () => Promise<UserStatus>;
   tier: () => Promise<TIER>;
@@ -2562,12 +2996,12 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  auth0id: () => Promise<AsyncIterator<String>>;
   eblID: () => Promise<AsyncIterator<String>>;
   profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
   profilePic: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
   points: () => Promise<AsyncIterator<Int>>;
   status: () => Promise<AsyncIterator<UserStatus>>;
   tier: () => Promise<AsyncIterator<TIER>>;
@@ -2637,6 +3071,14 @@ export const models: Model[] = [
   },
   {
     name: "JournalEntry",
+    embedded: false
+  },
+  {
+    name: "FormData",
+    embedded: false
+  },
+  {
+    name: "Question",
     embedded: false
   }
 ];
