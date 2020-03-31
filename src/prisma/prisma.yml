@@ -8,10 +8,11 @@ datamodel: datamodel.prisma
 generate:
   - generator: javascript-client
     output: ./generated/prisma-client
-
+  - generator: graphql-schema
+    output: ./generated/prisma-client/prisma-schema.graphql
 # Seed your service with initial data based on `seed.graphql`.
-seed:
-  import: seed.graphql
+# seed:
+#   import: seed.graphql
 
 # Ensures Prisma client is re-generated after a datamodel change.
 hooks:

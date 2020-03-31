@@ -330,16 +330,24 @@ export type JournalEntryOrderByInput =
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "startDate_ASC"
-  | "startDate_DESC"
   | "auth0id_ASC"
   | "auth0id_DESC"
+  | "identity_ASC"
+  | "identity_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "nickname_ASC"
+  | "nickname_DESC"
+  | "profilePic_ASC"
+  | "profilePic_DESC"
   | "eblID_ASC"
   | "eblID_DESC"
   | "profileStatus_ASC"
   | "profileStatus_DESC"
-  | "profilePic_ASC"
-  | "profilePic_DESC"
+  | "avatar_ASC"
+  | "avatar_DESC"
   | "password_ASC"
   | "password_DESC"
   | "points_ASC"
@@ -605,14 +613,6 @@ export interface UserWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  startDate?: Maybe<DateTimeInput>;
-  startDate_not?: Maybe<DateTimeInput>;
-  startDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  startDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  startDate_lt?: Maybe<DateTimeInput>;
-  startDate_lte?: Maybe<DateTimeInput>;
-  startDate_gt?: Maybe<DateTimeInput>;
-  startDate_gte?: Maybe<DateTimeInput>;
   auth0id?: Maybe<String>;
   auth0id_not?: Maybe<String>;
   auth0id_in?: Maybe<String[] | String>;
@@ -627,6 +627,76 @@ export interface UserWhereInput {
   auth0id_not_starts_with?: Maybe<String>;
   auth0id_ends_with?: Maybe<String>;
   auth0id_not_ends_with?: Maybe<String>;
+  identity?: Maybe<String>;
+  identity_not?: Maybe<String>;
+  identity_in?: Maybe<String[] | String>;
+  identity_not_in?: Maybe<String[] | String>;
+  identity_lt?: Maybe<String>;
+  identity_lte?: Maybe<String>;
+  identity_gt?: Maybe<String>;
+  identity_gte?: Maybe<String>;
+  identity_contains?: Maybe<String>;
+  identity_not_contains?: Maybe<String>;
+  identity_starts_with?: Maybe<String>;
+  identity_not_starts_with?: Maybe<String>;
+  identity_ends_with?: Maybe<String>;
+  identity_not_ends_with?: Maybe<String>;
+  email?: Maybe<String>;
+  email_not?: Maybe<String>;
+  email_in?: Maybe<String[] | String>;
+  email_not_in?: Maybe<String[] | String>;
+  email_lt?: Maybe<String>;
+  email_lte?: Maybe<String>;
+  email_gt?: Maybe<String>;
+  email_gte?: Maybe<String>;
+  email_contains?: Maybe<String>;
+  email_not_contains?: Maybe<String>;
+  email_starts_with?: Maybe<String>;
+  email_not_starts_with?: Maybe<String>;
+  email_ends_with?: Maybe<String>;
+  email_not_ends_with?: Maybe<String>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  nickname?: Maybe<String>;
+  nickname_not?: Maybe<String>;
+  nickname_in?: Maybe<String[] | String>;
+  nickname_not_in?: Maybe<String[] | String>;
+  nickname_lt?: Maybe<String>;
+  nickname_lte?: Maybe<String>;
+  nickname_gt?: Maybe<String>;
+  nickname_gte?: Maybe<String>;
+  nickname_contains?: Maybe<String>;
+  nickname_not_contains?: Maybe<String>;
+  nickname_starts_with?: Maybe<String>;
+  nickname_not_starts_with?: Maybe<String>;
+  nickname_ends_with?: Maybe<String>;
+  nickname_not_ends_with?: Maybe<String>;
+  profilePic?: Maybe<String>;
+  profilePic_not?: Maybe<String>;
+  profilePic_in?: Maybe<String[] | String>;
+  profilePic_not_in?: Maybe<String[] | String>;
+  profilePic_lt?: Maybe<String>;
+  profilePic_lte?: Maybe<String>;
+  profilePic_gt?: Maybe<String>;
+  profilePic_gte?: Maybe<String>;
+  profilePic_contains?: Maybe<String>;
+  profilePic_not_contains?: Maybe<String>;
+  profilePic_starts_with?: Maybe<String>;
+  profilePic_not_starts_with?: Maybe<String>;
+  profilePic_ends_with?: Maybe<String>;
+  profilePic_not_ends_with?: Maybe<String>;
   eblID?: Maybe<String>;
   eblID_not?: Maybe<String>;
   eblID_in?: Maybe<String[] | String>;
@@ -645,20 +715,20 @@ export interface UserWhereInput {
   profileStatus_not?: Maybe<ProfileStatus>;
   profileStatus_in?: Maybe<ProfileStatus[] | ProfileStatus>;
   profileStatus_not_in?: Maybe<ProfileStatus[] | ProfileStatus>;
-  profilePic?: Maybe<String>;
-  profilePic_not?: Maybe<String>;
-  profilePic_in?: Maybe<String[] | String>;
-  profilePic_not_in?: Maybe<String[] | String>;
-  profilePic_lt?: Maybe<String>;
-  profilePic_lte?: Maybe<String>;
-  profilePic_gt?: Maybe<String>;
-  profilePic_gte?: Maybe<String>;
-  profilePic_contains?: Maybe<String>;
-  profilePic_not_contains?: Maybe<String>;
-  profilePic_starts_with?: Maybe<String>;
-  profilePic_not_starts_with?: Maybe<String>;
-  profilePic_ends_with?: Maybe<String>;
-  profilePic_not_ends_with?: Maybe<String>;
+  avatar?: Maybe<String>;
+  avatar_not?: Maybe<String>;
+  avatar_in?: Maybe<String[] | String>;
+  avatar_not_in?: Maybe<String[] | String>;
+  avatar_lt?: Maybe<String>;
+  avatar_lte?: Maybe<String>;
+  avatar_gt?: Maybe<String>;
+  avatar_gte?: Maybe<String>;
+  avatar_contains?: Maybe<String>;
+  avatar_not_contains?: Maybe<String>;
+  avatar_starts_with?: Maybe<String>;
+  avatar_not_starts_with?: Maybe<String>;
+  avatar_ends_with?: Maybe<String>;
+  avatar_not_ends_with?: Maybe<String>;
   goals_every?: Maybe<GoalWhereInput>;
   goals_some?: Maybe<GoalWhereInput>;
   goals_none?: Maybe<GoalWhereInput>;
@@ -915,13 +985,17 @@ export interface UserCreateOneWithoutGoalsInput {
 
 export interface UserCreateWithoutGoalsInput {
   id?: Maybe<ID_Input>;
-  startDate: DateTimeInput;
-  auth0id: String;
-  eblID: String;
-  profileStatus?: Maybe<ProfileStatus>;
+  auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
   profilePic?: Maybe<String>;
-  userInfo: FormDataCreateOneInput;
-  password: String;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
+  userInfo?: Maybe<FormDataCreateOneInput>;
+  password?: Maybe<String>;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
@@ -962,14 +1036,18 @@ export interface UserCreateManyWithoutFriendsInput {
 
 export interface UserCreateWithoutFriendsInput {
   id?: Maybe<ID_Input>;
-  startDate: DateTimeInput;
-  auth0id: String;
-  eblID: String;
-  profileStatus?: Maybe<ProfileStatus>;
+  auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
   profilePic?: Maybe<String>;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  userInfo: FormDataCreateOneInput;
-  password: String;
+  userInfo?: Maybe<FormDataCreateOneInput>;
+  password?: Maybe<String>;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
@@ -1017,14 +1095,18 @@ export interface UserCreateManyWithoutFollowingInput {
 
 export interface UserCreateWithoutFollowingInput {
   id?: Maybe<ID_Input>;
-  startDate: DateTimeInput;
-  auth0id: String;
-  eblID: String;
-  profileStatus?: Maybe<ProfileStatus>;
+  auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
   profilePic?: Maybe<String>;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  userInfo: FormDataCreateOneInput;
-  password: String;
+  userInfo?: Maybe<FormDataCreateOneInput>;
+  password?: Maybe<String>;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
@@ -1053,12 +1135,16 @@ export interface UserUpdateOneRequiredWithoutGoalsInput {
 }
 
 export interface UserUpdateWithoutGoalsDataInput {
-  startDate?: Maybe<DateTimeInput>;
   auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  profilePic?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic?: Maybe<String>;
-  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
+  avatar?: Maybe<String>;
+  userInfo?: Maybe<FormDataUpdateOneInput>;
   password?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
@@ -1069,10 +1155,12 @@ export interface UserUpdateWithoutGoalsDataInput {
   tier?: Maybe<TIER>;
 }
 
-export interface FormDataUpdateOneRequiredInput {
+export interface FormDataUpdateOneInput {
   create?: Maybe<FormDataCreateInput>;
   update?: Maybe<FormDataUpdateDataInput>;
   upsert?: Maybe<FormDataUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
   connect?: Maybe<FormDataWhereUniqueInput>;
 }
 
@@ -1235,13 +1323,17 @@ export interface UserUpdateWithWhereUniqueWithoutFriendsInput {
 }
 
 export interface UserUpdateWithoutFriendsDataInput {
-  startDate?: Maybe<DateTimeInput>;
   auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  profilePic?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic?: Maybe<String>;
+  avatar?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
-  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
+  userInfo?: Maybe<FormDataUpdateOneInput>;
   password?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
@@ -1563,13 +1655,17 @@ export interface UserUpdateWithWhereUniqueWithoutFollowingInput {
 }
 
 export interface UserUpdateWithoutFollowingDataInput {
-  startDate?: Maybe<DateTimeInput>;
   auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  profilePic?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic?: Maybe<String>;
+  avatar?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
-  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
+  userInfo?: Maybe<FormDataUpdateOneInput>;
   password?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
@@ -1600,14 +1696,6 @@ export interface UserScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  startDate?: Maybe<DateTimeInput>;
-  startDate_not?: Maybe<DateTimeInput>;
-  startDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  startDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  startDate_lt?: Maybe<DateTimeInput>;
-  startDate_lte?: Maybe<DateTimeInput>;
-  startDate_gt?: Maybe<DateTimeInput>;
-  startDate_gte?: Maybe<DateTimeInput>;
   auth0id?: Maybe<String>;
   auth0id_not?: Maybe<String>;
   auth0id_in?: Maybe<String[] | String>;
@@ -1622,6 +1710,76 @@ export interface UserScalarWhereInput {
   auth0id_not_starts_with?: Maybe<String>;
   auth0id_ends_with?: Maybe<String>;
   auth0id_not_ends_with?: Maybe<String>;
+  identity?: Maybe<String>;
+  identity_not?: Maybe<String>;
+  identity_in?: Maybe<String[] | String>;
+  identity_not_in?: Maybe<String[] | String>;
+  identity_lt?: Maybe<String>;
+  identity_lte?: Maybe<String>;
+  identity_gt?: Maybe<String>;
+  identity_gte?: Maybe<String>;
+  identity_contains?: Maybe<String>;
+  identity_not_contains?: Maybe<String>;
+  identity_starts_with?: Maybe<String>;
+  identity_not_starts_with?: Maybe<String>;
+  identity_ends_with?: Maybe<String>;
+  identity_not_ends_with?: Maybe<String>;
+  email?: Maybe<String>;
+  email_not?: Maybe<String>;
+  email_in?: Maybe<String[] | String>;
+  email_not_in?: Maybe<String[] | String>;
+  email_lt?: Maybe<String>;
+  email_lte?: Maybe<String>;
+  email_gt?: Maybe<String>;
+  email_gte?: Maybe<String>;
+  email_contains?: Maybe<String>;
+  email_not_contains?: Maybe<String>;
+  email_starts_with?: Maybe<String>;
+  email_not_starts_with?: Maybe<String>;
+  email_ends_with?: Maybe<String>;
+  email_not_ends_with?: Maybe<String>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  nickname?: Maybe<String>;
+  nickname_not?: Maybe<String>;
+  nickname_in?: Maybe<String[] | String>;
+  nickname_not_in?: Maybe<String[] | String>;
+  nickname_lt?: Maybe<String>;
+  nickname_lte?: Maybe<String>;
+  nickname_gt?: Maybe<String>;
+  nickname_gte?: Maybe<String>;
+  nickname_contains?: Maybe<String>;
+  nickname_not_contains?: Maybe<String>;
+  nickname_starts_with?: Maybe<String>;
+  nickname_not_starts_with?: Maybe<String>;
+  nickname_ends_with?: Maybe<String>;
+  nickname_not_ends_with?: Maybe<String>;
+  profilePic?: Maybe<String>;
+  profilePic_not?: Maybe<String>;
+  profilePic_in?: Maybe<String[] | String>;
+  profilePic_not_in?: Maybe<String[] | String>;
+  profilePic_lt?: Maybe<String>;
+  profilePic_lte?: Maybe<String>;
+  profilePic_gt?: Maybe<String>;
+  profilePic_gte?: Maybe<String>;
+  profilePic_contains?: Maybe<String>;
+  profilePic_not_contains?: Maybe<String>;
+  profilePic_starts_with?: Maybe<String>;
+  profilePic_not_starts_with?: Maybe<String>;
+  profilePic_ends_with?: Maybe<String>;
+  profilePic_not_ends_with?: Maybe<String>;
   eblID?: Maybe<String>;
   eblID_not?: Maybe<String>;
   eblID_in?: Maybe<String[] | String>;
@@ -1640,20 +1798,20 @@ export interface UserScalarWhereInput {
   profileStatus_not?: Maybe<ProfileStatus>;
   profileStatus_in?: Maybe<ProfileStatus[] | ProfileStatus>;
   profileStatus_not_in?: Maybe<ProfileStatus[] | ProfileStatus>;
-  profilePic?: Maybe<String>;
-  profilePic_not?: Maybe<String>;
-  profilePic_in?: Maybe<String[] | String>;
-  profilePic_not_in?: Maybe<String[] | String>;
-  profilePic_lt?: Maybe<String>;
-  profilePic_lte?: Maybe<String>;
-  profilePic_gt?: Maybe<String>;
-  profilePic_gte?: Maybe<String>;
-  profilePic_contains?: Maybe<String>;
-  profilePic_not_contains?: Maybe<String>;
-  profilePic_starts_with?: Maybe<String>;
-  profilePic_not_starts_with?: Maybe<String>;
-  profilePic_ends_with?: Maybe<String>;
-  profilePic_not_ends_with?: Maybe<String>;
+  avatar?: Maybe<String>;
+  avatar_not?: Maybe<String>;
+  avatar_in?: Maybe<String[] | String>;
+  avatar_not_in?: Maybe<String[] | String>;
+  avatar_lt?: Maybe<String>;
+  avatar_lte?: Maybe<String>;
+  avatar_gt?: Maybe<String>;
+  avatar_gte?: Maybe<String>;
+  avatar_contains?: Maybe<String>;
+  avatar_not_contains?: Maybe<String>;
+  avatar_starts_with?: Maybe<String>;
+  avatar_not_starts_with?: Maybe<String>;
+  avatar_ends_with?: Maybe<String>;
+  avatar_not_ends_with?: Maybe<String>;
   password?: Maybe<String>;
   password_not?: Maybe<String>;
   password_in?: Maybe<String[] | String>;
@@ -1695,11 +1853,15 @@ export interface UserUpdateManyWithWhereNestedInput {
 }
 
 export interface UserUpdateManyDataInput {
-  startDate?: Maybe<DateTimeInput>;
   auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  profilePic?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic?: Maybe<String>;
+  avatar?: Maybe<String>;
   password?: Maybe<String>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
@@ -1743,14 +1905,18 @@ export interface UserCreateOneWithoutJournalInput {
 
 export interface UserCreateWithoutJournalInput {
   id?: Maybe<ID_Input>;
-  startDate: DateTimeInput;
-  auth0id: String;
-  eblID: String;
-  profileStatus?: Maybe<ProfileStatus>;
+  auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
   profilePic?: Maybe<String>;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  userInfo: FormDataCreateOneInput;
-  password: String;
+  userInfo?: Maybe<FormDataCreateOneInput>;
+  password?: Maybe<String>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
@@ -1774,13 +1940,17 @@ export interface UserUpdateOneRequiredWithoutJournalInput {
 }
 
 export interface UserUpdateWithoutJournalDataInput {
-  startDate?: Maybe<DateTimeInput>;
   auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  profilePic?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic?: Maybe<String>;
+  avatar?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
-  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
+  userInfo?: Maybe<FormDataUpdateOneInput>;
   password?: Maybe<String>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
@@ -1807,7 +1977,7 @@ export interface PostCreateInput {
   title: String;
   info: String;
   content: String;
-  author: UserCreateOneWithoutPostsInput;
+  author?: Maybe<UserCreateOneWithoutPostsInput>;
 }
 
 export interface UserCreateOneWithoutPostsInput {
@@ -1817,14 +1987,18 @@ export interface UserCreateOneWithoutPostsInput {
 
 export interface UserCreateWithoutPostsInput {
   id?: Maybe<ID_Input>;
-  startDate: DateTimeInput;
-  auth0id: String;
-  eblID: String;
-  profileStatus?: Maybe<ProfileStatus>;
+  auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
   profilePic?: Maybe<String>;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  userInfo: FormDataCreateOneInput;
-  password: String;
+  userInfo?: Maybe<FormDataCreateOneInput>;
+  password?: Maybe<String>;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
@@ -1838,24 +2012,30 @@ export interface PostUpdateInput {
   title?: Maybe<String>;
   info?: Maybe<String>;
   content?: Maybe<String>;
-  author?: Maybe<UserUpdateOneRequiredWithoutPostsInput>;
+  author?: Maybe<UserUpdateOneWithoutPostsInput>;
 }
 
-export interface UserUpdateOneRequiredWithoutPostsInput {
+export interface UserUpdateOneWithoutPostsInput {
   create?: Maybe<UserCreateWithoutPostsInput>;
   update?: Maybe<UserUpdateWithoutPostsDataInput>;
   upsert?: Maybe<UserUpsertWithoutPostsInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
 export interface UserUpdateWithoutPostsDataInput {
-  startDate?: Maybe<DateTimeInput>;
   auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  profilePic?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic?: Maybe<String>;
+  avatar?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
-  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
+  userInfo?: Maybe<FormDataUpdateOneInput>;
   password?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
@@ -1879,14 +2059,18 @@ export interface PostUpdateManyMutationInput {
 
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
-  startDate: DateTimeInput;
-  auth0id: String;
-  eblID: String;
-  profileStatus?: Maybe<ProfileStatus>;
+  auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
   profilePic?: Maybe<String>;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  userInfo: FormDataCreateOneInput;
-  password: String;
+  userInfo?: Maybe<FormDataCreateOneInput>;
+  password?: Maybe<String>;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
@@ -1897,13 +2081,17 @@ export interface UserCreateInput {
 }
 
 export interface UserUpdateInput {
-  startDate?: Maybe<DateTimeInput>;
   auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  profilePic?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic?: Maybe<String>;
+  avatar?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
-  userInfo?: Maybe<FormDataUpdateOneRequiredInput>;
+  userInfo?: Maybe<FormDataUpdateOneInput>;
   password?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
@@ -1915,11 +2103,15 @@ export interface UserUpdateInput {
 }
 
 export interface UserUpdateManyMutationInput {
-  startDate?: Maybe<DateTimeInput>;
   auth0id?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  profilePic?: Maybe<String>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
-  profilePic?: Maybe<String>;
+  avatar?: Maybe<String>;
   password?: Maybe<String>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
@@ -2183,12 +2375,16 @@ export interface GoalNullablePromise
 
 export interface User {
   id: ID_Output;
-  startDate: DateTimeOutput;
-  auth0id: String;
-  eblID: String;
-  profileStatus?: ProfileStatus;
+  auth0id?: String;
+  identity?: String;
+  email?: String;
+  name?: String;
+  nickname?: String;
   profilePic?: String;
-  password: String;
+  eblID?: String;
+  profileStatus?: ProfileStatus;
+  avatar?: String;
+  password?: String;
   points: Int;
   status?: UserStatus;
   tier: TIER;
@@ -2196,11 +2392,15 @@ export interface User {
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
-  startDate: () => Promise<DateTimeOutput>;
   auth0id: () => Promise<String>;
+  identity: () => Promise<String>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  nickname: () => Promise<String>;
+  profilePic: () => Promise<String>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
-  profilePic: () => Promise<String>;
+  avatar: () => Promise<String>;
   goals: <T = FragmentableArray<Goal>>(args?: {
     where?: GoalWhereInput;
     orderBy?: GoalOrderByInput;
@@ -2257,11 +2457,15 @@ export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
   auth0id: () => Promise<AsyncIterator<String>>;
+  identity: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  nickname: () => Promise<AsyncIterator<String>>;
+  profilePic: () => Promise<AsyncIterator<String>>;
   eblID: () => Promise<AsyncIterator<String>>;
   profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
-  profilePic: () => Promise<AsyncIterator<String>>;
+  avatar: () => Promise<AsyncIterator<String>>;
   goals: <T = Promise<AsyncIterator<GoalSubscription>>>(args?: {
     where?: GoalWhereInput;
     orderBy?: GoalOrderByInput;
@@ -2318,11 +2522,15 @@ export interface UserNullablePromise
   extends Promise<User | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  startDate: () => Promise<DateTimeOutput>;
   auth0id: () => Promise<String>;
+  identity: () => Promise<String>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  nickname: () => Promise<String>;
+  profilePic: () => Promise<String>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
-  profilePic: () => Promise<String>;
+  avatar: () => Promise<String>;
   goals: <T = FragmentableArray<Goal>>(args?: {
     where?: GoalWhereInput;
     orderBy?: GoalOrderByInput;
@@ -2966,12 +3174,16 @@ export interface UserSubscriptionPayloadSubscription
 
 export interface UserPreviousValues {
   id: ID_Output;
-  startDate: DateTimeOutput;
-  auth0id: String;
-  eblID: String;
-  profileStatus?: ProfileStatus;
+  auth0id?: String;
+  identity?: String;
+  email?: String;
+  name?: String;
+  nickname?: String;
   profilePic?: String;
-  password: String;
+  eblID?: String;
+  profileStatus?: ProfileStatus;
+  avatar?: String;
+  password?: String;
   points: Int;
   status?: UserStatus;
   tier: TIER;
@@ -2981,11 +3193,15 @@ export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  startDate: () => Promise<DateTimeOutput>;
   auth0id: () => Promise<String>;
+  identity: () => Promise<String>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  nickname: () => Promise<String>;
+  profilePic: () => Promise<String>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
-  profilePic: () => Promise<String>;
+  avatar: () => Promise<String>;
   password: () => Promise<String>;
   points: () => Promise<Int>;
   status: () => Promise<UserStatus>;
@@ -2996,11 +3212,15 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
   auth0id: () => Promise<AsyncIterator<String>>;
+  identity: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  nickname: () => Promise<AsyncIterator<String>>;
+  profilePic: () => Promise<AsyncIterator<String>>;
   eblID: () => Promise<AsyncIterator<String>>;
   profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
-  profilePic: () => Promise<AsyncIterator<String>>;
+  avatar: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   points: () => Promise<AsyncIterator<Int>>;
   status: () => Promise<AsyncIterator<UserStatus>>;

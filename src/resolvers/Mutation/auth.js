@@ -1,18 +1,28 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { signJwt } = require('../../middleware/jwt')
 const { fromString } = require("uuidv4");
 const validateAndParseIdToken = require("../../helpers/validateAndParseIdToken");
 
 
-async function createPrismaUser(ctx, idToken) {
-  const user = await ctx.db.mutation.createUser({
-    data: {
-      identity: idToken.sub.split(`|`)[0],
-      auth0id: idToken.sub.split(`|`)[1],
-      name: idToken.name,
-      email: idToken.email,
-      avatar: idToken.picture
-    }
+async function createPrismaUser(context, idToken) {
+  let data;
+  data = {
+    auth0id: idToken.sub.split(`|`)[1],
+    identity: idToken.sub.split(`|`)[0],
+    eblID: fromString(idToken.sub.split(`|`)[0]),
+    avatar: idToken.picture,
+    name: idToken.name,
+    email: idToken.email
+  };
+  console.log(data)
+  const user = await context.prisma.createUser({ ...data   
+      // auth0id: idToken.sub.split(`|`)[1],
+      // identity: idToken.sub.split(`|`)[0],
+      // avatar: idToken.picture,
+      // name: idToken.name,
+      // email: idToken.email,
+    
   });
   return user;
 }
@@ -66,11 +76,13 @@ const auth = {
       throw new Error(err.message);
     }
     const auth0id = userToken.sub.split("|")[1];
-    let user = await context.prisma.query.user({ where: { auth0id } }, info);
+    let user = await context.prisma.user({ auth0id } , info);
     if (!user) {
       user = createPrismaUser(context, userToken);
     }
-    return user;
+    return 
+    
+    user
   }
 };
 

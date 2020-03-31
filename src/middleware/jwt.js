@@ -10,15 +10,15 @@ const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
     rateLimit: true,
-    jwksRequestsPerMinute: 1,
-    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://everybodyleave.auth0.com/.well-known/jwks.json`
   }),
 
   // Validate the audience and the issuer.
   credentialsRequired: false,
-  audience: process.env.AUTH0_AUDIENCE,
-  issuer: process.env.AUTH0_ISSUER,
-  algorithms: [`RS256`]
-})
+  audience: "https://everybodyleave.auth0.com/api/v2/",
+  issuer: "https://everybodyleave.auth0.com",
+  algorithms: ["RS256"]
+});
 
 module.exports = { checkJwt }

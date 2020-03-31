@@ -149,10 +149,12 @@ input FormDataUpdateManyMutationInput {
   Q4: Question
 }
 
-input FormDataUpdateOneRequiredInput {
+input FormDataUpdateOneInput {
   create: FormDataCreateInput
   update: FormDataUpdateDataInput
   upsert: FormDataUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
   connect: FormDataWhereUniqueInput
 }
 
@@ -971,7 +973,7 @@ type Post {
   title: String!
   info: String!
   content: String!
-  author: User!
+  author: User
 }
 
 type PostConnection {
@@ -986,7 +988,7 @@ input PostCreateInput {
   title: String!
   info: String!
   content: String!
-  author: UserCreateOneWithoutPostsInput!
+  author: UserCreateOneWithoutPostsInput
 }
 
 input PostCreateManyWithoutAuthorInput {
@@ -1137,7 +1139,7 @@ input PostUpdateInput {
   title: String
   info: String
   content: String
-  author: UserUpdateOneRequiredWithoutPostsInput
+  author: UserUpdateOneWithoutPostsInput
 }
 
 input PostUpdateManyDataInput {
@@ -1323,14 +1325,18 @@ enum TIER {
 
 type User {
   id: ID!
-  startDate: DateTime!
-  auth0id: String!
-  eblID: String!
-  profileStatus: ProfileStatus
+  auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
   profilePic: String
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
   goals(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Goal!]
-  userInfo: FormData!
-  password: String!
+  userInfo: FormData
+  password: String
   journal(where: JournalEntryWhereInput, orderBy: JournalEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JournalEntry!]
   points: Int!
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -1348,14 +1354,18 @@ type UserConnection {
 
 input UserCreateInput {
   id: ID
-  startDate: DateTime!
-  auth0id: String!
-  eblID: String!
-  profileStatus: ProfileStatus
+  auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
   profilePic: String
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
   goals: GoalCreateManyWithoutAuthorInput
-  userInfo: FormDataCreateOneInput!
-  password: String!
+  userInfo: FormDataCreateOneInput
+  password: String
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
@@ -1392,14 +1402,18 @@ input UserCreateOneWithoutPostsInput {
 
 input UserCreateWithoutFollowingInput {
   id: ID
-  startDate: DateTime!
-  auth0id: String!
-  eblID: String!
-  profileStatus: ProfileStatus
+  auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
   profilePic: String
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
   goals: GoalCreateManyWithoutAuthorInput
-  userInfo: FormDataCreateOneInput!
-  password: String!
+  userInfo: FormDataCreateOneInput
+  password: String
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
@@ -1410,14 +1424,18 @@ input UserCreateWithoutFollowingInput {
 
 input UserCreateWithoutFriendsInput {
   id: ID
-  startDate: DateTime!
-  auth0id: String!
-  eblID: String!
-  profileStatus: ProfileStatus
+  auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
   profilePic: String
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
   goals: GoalCreateManyWithoutAuthorInput
-  userInfo: FormDataCreateOneInput!
-  password: String!
+  userInfo: FormDataCreateOneInput
+  password: String
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   status: UserStatus
@@ -1428,13 +1446,17 @@ input UserCreateWithoutFriendsInput {
 
 input UserCreateWithoutGoalsInput {
   id: ID
-  startDate: DateTime!
-  auth0id: String!
-  eblID: String!
-  profileStatus: ProfileStatus
+  auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
   profilePic: String
-  userInfo: FormDataCreateOneInput!
-  password: String!
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
+  userInfo: FormDataCreateOneInput
+  password: String
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
@@ -1446,14 +1468,18 @@ input UserCreateWithoutGoalsInput {
 
 input UserCreateWithoutJournalInput {
   id: ID
-  startDate: DateTime!
-  auth0id: String!
-  eblID: String!
-  profileStatus: ProfileStatus
+  auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
   profilePic: String
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
   goals: GoalCreateManyWithoutAuthorInput
-  userInfo: FormDataCreateOneInput!
-  password: String!
+  userInfo: FormDataCreateOneInput
+  password: String
   points: Int
   friends: UserCreateManyWithoutFriendsInput
   status: UserStatus
@@ -1464,14 +1490,18 @@ input UserCreateWithoutJournalInput {
 
 input UserCreateWithoutPostsInput {
   id: ID
-  startDate: DateTime!
-  auth0id: String!
-  eblID: String!
-  profileStatus: ProfileStatus
+  auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
   profilePic: String
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
   goals: GoalCreateManyWithoutAuthorInput
-  userInfo: FormDataCreateOneInput!
-  password: String!
+  userInfo: FormDataCreateOneInput
+  password: String
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
@@ -1488,16 +1518,24 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
-  startDate_ASC
-  startDate_DESC
   auth0id_ASC
   auth0id_DESC
+  identity_ASC
+  identity_DESC
+  email_ASC
+  email_DESC
+  name_ASC
+  name_DESC
+  nickname_ASC
+  nickname_DESC
+  profilePic_ASC
+  profilePic_DESC
   eblID_ASC
   eblID_DESC
   profileStatus_ASC
   profileStatus_DESC
-  profilePic_ASC
-  profilePic_DESC
+  avatar_ASC
+  avatar_DESC
   password_ASC
   password_DESC
   points_ASC
@@ -1510,12 +1548,16 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
-  startDate: DateTime!
-  auth0id: String!
-  eblID: String!
-  profileStatus: ProfileStatus
+  auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
   profilePic: String
-  password: String!
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
+  password: String
   points: Int!
   status: UserStatus
   tier: TIER!
@@ -1536,14 +1578,6 @@ input UserScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  startDate: DateTime
-  startDate_not: DateTime
-  startDate_in: [DateTime!]
-  startDate_not_in: [DateTime!]
-  startDate_lt: DateTime
-  startDate_lte: DateTime
-  startDate_gt: DateTime
-  startDate_gte: DateTime
   auth0id: String
   auth0id_not: String
   auth0id_in: [String!]
@@ -1558,6 +1592,76 @@ input UserScalarWhereInput {
   auth0id_not_starts_with: String
   auth0id_ends_with: String
   auth0id_not_ends_with: String
+  identity: String
+  identity_not: String
+  identity_in: [String!]
+  identity_not_in: [String!]
+  identity_lt: String
+  identity_lte: String
+  identity_gt: String
+  identity_gte: String
+  identity_contains: String
+  identity_not_contains: String
+  identity_starts_with: String
+  identity_not_starts_with: String
+  identity_ends_with: String
+  identity_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  nickname: String
+  nickname_not: String
+  nickname_in: [String!]
+  nickname_not_in: [String!]
+  nickname_lt: String
+  nickname_lte: String
+  nickname_gt: String
+  nickname_gte: String
+  nickname_contains: String
+  nickname_not_contains: String
+  nickname_starts_with: String
+  nickname_not_starts_with: String
+  nickname_ends_with: String
+  nickname_not_ends_with: String
+  profilePic: String
+  profilePic_not: String
+  profilePic_in: [String!]
+  profilePic_not_in: [String!]
+  profilePic_lt: String
+  profilePic_lte: String
+  profilePic_gt: String
+  profilePic_gte: String
+  profilePic_contains: String
+  profilePic_not_contains: String
+  profilePic_starts_with: String
+  profilePic_not_starts_with: String
+  profilePic_ends_with: String
+  profilePic_not_ends_with: String
   eblID: String
   eblID_not: String
   eblID_in: [String!]
@@ -1576,20 +1680,20 @@ input UserScalarWhereInput {
   profileStatus_not: ProfileStatus
   profileStatus_in: [ProfileStatus!]
   profileStatus_not_in: [ProfileStatus!]
-  profilePic: String
-  profilePic_not: String
-  profilePic_in: [String!]
-  profilePic_not_in: [String!]
-  profilePic_lt: String
-  profilePic_lte: String
-  profilePic_gt: String
-  profilePic_gte: String
-  profilePic_contains: String
-  profilePic_not_contains: String
-  profilePic_starts_with: String
-  profilePic_not_starts_with: String
-  profilePic_ends_with: String
-  profilePic_not_ends_with: String
+  avatar: String
+  avatar_not: String
+  avatar_in: [String!]
+  avatar_not_in: [String!]
+  avatar_lt: String
+  avatar_lte: String
+  avatar_gt: String
+  avatar_gte: String
+  avatar_contains: String
+  avatar_not_contains: String
+  avatar_starts_with: String
+  avatar_not_starts_with: String
+  avatar_ends_with: String
+  avatar_not_ends_with: String
   password: String
   password_not: String
   password_in: [String!]
@@ -1650,13 +1754,17 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
-  startDate: DateTime
   auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
+  profilePic: String
   eblID: String
   profileStatus: ProfileStatus
-  profilePic: String
+  avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneRequiredInput
+  userInfo: FormDataUpdateOneInput
   password: String
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
@@ -1668,11 +1776,15 @@ input UserUpdateInput {
 }
 
 input UserUpdateManyDataInput {
-  startDate: DateTime
   auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
+  profilePic: String
   eblID: String
   profileStatus: ProfileStatus
-  profilePic: String
+  avatar: String
   password: String
   points: Int
   status: UserStatus
@@ -1680,11 +1792,15 @@ input UserUpdateManyDataInput {
 }
 
 input UserUpdateManyMutationInput {
-  startDate: DateTime
   auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
+  profilePic: String
   eblID: String
   profileStatus: ProfileStatus
-  profilePic: String
+  avatar: String
   password: String
   points: Int
   status: UserStatus
@@ -1734,21 +1850,27 @@ input UserUpdateOneRequiredWithoutJournalInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneRequiredWithoutPostsInput {
+input UserUpdateOneWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   update: UserUpdateWithoutPostsDataInput
   upsert: UserUpsertWithoutPostsInput
+  delete: Boolean
+  disconnect: Boolean
   connect: UserWhereUniqueInput
 }
 
 input UserUpdateWithoutFollowingDataInput {
-  startDate: DateTime
   auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
+  profilePic: String
   eblID: String
   profileStatus: ProfileStatus
-  profilePic: String
+  avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneRequiredInput
+  userInfo: FormDataUpdateOneInput
   password: String
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
@@ -1759,13 +1881,17 @@ input UserUpdateWithoutFollowingDataInput {
 }
 
 input UserUpdateWithoutFriendsDataInput {
-  startDate: DateTime
   auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
+  profilePic: String
   eblID: String
   profileStatus: ProfileStatus
-  profilePic: String
+  avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneRequiredInput
+  userInfo: FormDataUpdateOneInput
   password: String
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
@@ -1776,12 +1902,16 @@ input UserUpdateWithoutFriendsDataInput {
 }
 
 input UserUpdateWithoutGoalsDataInput {
-  startDate: DateTime
   auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
+  profilePic: String
   eblID: String
   profileStatus: ProfileStatus
-  profilePic: String
-  userInfo: FormDataUpdateOneRequiredInput
+  avatar: String
+  userInfo: FormDataUpdateOneInput
   password: String
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
@@ -1793,13 +1923,17 @@ input UserUpdateWithoutGoalsDataInput {
 }
 
 input UserUpdateWithoutJournalDataInput {
-  startDate: DateTime
   auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
+  profilePic: String
   eblID: String
   profileStatus: ProfileStatus
-  profilePic: String
+  avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneRequiredInput
+  userInfo: FormDataUpdateOneInput
   password: String
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
@@ -1810,13 +1944,17 @@ input UserUpdateWithoutJournalDataInput {
 }
 
 input UserUpdateWithoutPostsDataInput {
-  startDate: DateTime
   auth0id: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
+  profilePic: String
   eblID: String
   profileStatus: ProfileStatus
-  profilePic: String
+  avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneRequiredInput
+  userInfo: FormDataUpdateOneInput
   password: String
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
@@ -1878,14 +2016,6 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  startDate: DateTime
-  startDate_not: DateTime
-  startDate_in: [DateTime!]
-  startDate_not_in: [DateTime!]
-  startDate_lt: DateTime
-  startDate_lte: DateTime
-  startDate_gt: DateTime
-  startDate_gte: DateTime
   auth0id: String
   auth0id_not: String
   auth0id_in: [String!]
@@ -1900,6 +2030,76 @@ input UserWhereInput {
   auth0id_not_starts_with: String
   auth0id_ends_with: String
   auth0id_not_ends_with: String
+  identity: String
+  identity_not: String
+  identity_in: [String!]
+  identity_not_in: [String!]
+  identity_lt: String
+  identity_lte: String
+  identity_gt: String
+  identity_gte: String
+  identity_contains: String
+  identity_not_contains: String
+  identity_starts_with: String
+  identity_not_starts_with: String
+  identity_ends_with: String
+  identity_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  nickname: String
+  nickname_not: String
+  nickname_in: [String!]
+  nickname_not_in: [String!]
+  nickname_lt: String
+  nickname_lte: String
+  nickname_gt: String
+  nickname_gte: String
+  nickname_contains: String
+  nickname_not_contains: String
+  nickname_starts_with: String
+  nickname_not_starts_with: String
+  nickname_ends_with: String
+  nickname_not_ends_with: String
+  profilePic: String
+  profilePic_not: String
+  profilePic_in: [String!]
+  profilePic_not_in: [String!]
+  profilePic_lt: String
+  profilePic_lte: String
+  profilePic_gt: String
+  profilePic_gte: String
+  profilePic_contains: String
+  profilePic_not_contains: String
+  profilePic_starts_with: String
+  profilePic_not_starts_with: String
+  profilePic_ends_with: String
+  profilePic_not_ends_with: String
   eblID: String
   eblID_not: String
   eblID_in: [String!]
@@ -1918,20 +2118,20 @@ input UserWhereInput {
   profileStatus_not: ProfileStatus
   profileStatus_in: [ProfileStatus!]
   profileStatus_not_in: [ProfileStatus!]
-  profilePic: String
-  profilePic_not: String
-  profilePic_in: [String!]
-  profilePic_not_in: [String!]
-  profilePic_lt: String
-  profilePic_lte: String
-  profilePic_gt: String
-  profilePic_gte: String
-  profilePic_contains: String
-  profilePic_not_contains: String
-  profilePic_starts_with: String
-  profilePic_not_starts_with: String
-  profilePic_ends_with: String
-  profilePic_not_ends_with: String
+  avatar: String
+  avatar_not: String
+  avatar_in: [String!]
+  avatar_not_in: [String!]
+  avatar_lt: String
+  avatar_lte: String
+  avatar_gt: String
+  avatar_gte: String
+  avatar_contains: String
+  avatar_not_contains: String
+  avatar_starts_with: String
+  avatar_not_starts_with: String
+  avatar_ends_with: String
+  avatar_not_ends_with: String
   goals_every: GoalWhereInput
   goals_some: GoalWhereInput
   goals_none: GoalWhereInput

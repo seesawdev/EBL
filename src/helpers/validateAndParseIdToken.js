@@ -1,10 +1,12 @@
 const jwksClient = require('jwks-rsa')
 const jwt = require('jsonwebtoken')
+
+
 const jwks = jwksClient({
   cache: true,
   rateLimit: true,
-  jwksRequestsPerMinute: 1,
-  jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
+  jwksRequestsPerMinute: 5,
+  jwksUri: `https://everybodyleave.auth0.com/.well-known/jwks.json`
 })
 
 const validateAndParseIdToken = (idToken) => new Promise((resolve, reject) => {
