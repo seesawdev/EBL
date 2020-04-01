@@ -1330,7 +1330,7 @@ type User {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1359,7 +1359,7 @@ input UserCreateInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1407,7 +1407,7 @@ input UserCreateWithoutFollowingInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1429,7 +1429,7 @@ input UserCreateWithoutFriendsInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1451,7 +1451,7 @@ input UserCreateWithoutGoalsInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1473,7 +1473,7 @@ input UserCreateWithoutJournalInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1495,7 +1495,7 @@ input UserCreateWithoutPostsInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1528,8 +1528,8 @@ enum UserOrderByInput {
   name_DESC
   nickname_ASC
   nickname_DESC
-  profilePic_ASC
-  profilePic_DESC
+  guestCheckIns_ASC
+  guestCheckIns_DESC
   eblID_ASC
   eblID_DESC
   profileStatus_ASC
@@ -1553,7 +1553,7 @@ type UserPreviousValues {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1648,20 +1648,14 @@ input UserScalarWhereInput {
   nickname_not_starts_with: String
   nickname_ends_with: String
   nickname_not_ends_with: String
-  profilePic: String
-  profilePic_not: String
-  profilePic_in: [String!]
-  profilePic_not_in: [String!]
-  profilePic_lt: String
-  profilePic_lte: String
-  profilePic_gt: String
-  profilePic_gte: String
-  profilePic_contains: String
-  profilePic_not_contains: String
-  profilePic_starts_with: String
-  profilePic_not_starts_with: String
-  profilePic_ends_with: String
-  profilePic_not_ends_with: String
+  guestCheckIns: Int
+  guestCheckIns_not: Int
+  guestCheckIns_in: [Int!]
+  guestCheckIns_not_in: [Int!]
+  guestCheckIns_lt: Int
+  guestCheckIns_lte: Int
+  guestCheckIns_gt: Int
+  guestCheckIns_gte: Int
   eblID: String
   eblID_not: String
   eblID_in: [String!]
@@ -1759,7 +1753,7 @@ input UserUpdateInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1781,7 +1775,7 @@ input UserUpdateManyDataInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1797,7 +1791,7 @@ input UserUpdateManyMutationInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1865,7 +1859,7 @@ input UserUpdateWithoutFollowingDataInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1886,7 +1880,7 @@ input UserUpdateWithoutFriendsDataInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1907,7 +1901,7 @@ input UserUpdateWithoutGoalsDataInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1928,7 +1922,7 @@ input UserUpdateWithoutJournalDataInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -1949,7 +1943,7 @@ input UserUpdateWithoutPostsDataInput {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
@@ -2086,20 +2080,14 @@ input UserWhereInput {
   nickname_not_starts_with: String
   nickname_ends_with: String
   nickname_not_ends_with: String
-  profilePic: String
-  profilePic_not: String
-  profilePic_in: [String!]
-  profilePic_not_in: [String!]
-  profilePic_lt: String
-  profilePic_lte: String
-  profilePic_gt: String
-  profilePic_gte: String
-  profilePic_contains: String
-  profilePic_not_contains: String
-  profilePic_starts_with: String
-  profilePic_not_starts_with: String
-  profilePic_ends_with: String
-  profilePic_not_ends_with: String
+  guestCheckIns: Int
+  guestCheckIns_not: Int
+  guestCheckIns_in: [Int!]
+  guestCheckIns_not_in: [Int!]
+  guestCheckIns_lt: Int
+  guestCheckIns_lte: Int
+  guestCheckIns_gt: Int
+  guestCheckIns_gte: Int
   eblID: String
   eblID_not: String
   eblID_in: [String!]

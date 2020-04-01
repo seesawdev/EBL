@@ -340,8 +340,8 @@ export type UserOrderByInput =
   | "name_DESC"
   | "nickname_ASC"
   | "nickname_DESC"
-  | "profilePic_ASC"
-  | "profilePic_DESC"
+  | "guestCheckIns_ASC"
+  | "guestCheckIns_DESC"
   | "eblID_ASC"
   | "eblID_DESC"
   | "profileStatus_ASC"
@@ -683,20 +683,14 @@ export interface UserWhereInput {
   nickname_not_starts_with?: Maybe<String>;
   nickname_ends_with?: Maybe<String>;
   nickname_not_ends_with?: Maybe<String>;
-  profilePic?: Maybe<String>;
-  profilePic_not?: Maybe<String>;
-  profilePic_in?: Maybe<String[] | String>;
-  profilePic_not_in?: Maybe<String[] | String>;
-  profilePic_lt?: Maybe<String>;
-  profilePic_lte?: Maybe<String>;
-  profilePic_gt?: Maybe<String>;
-  profilePic_gte?: Maybe<String>;
-  profilePic_contains?: Maybe<String>;
-  profilePic_not_contains?: Maybe<String>;
-  profilePic_starts_with?: Maybe<String>;
-  profilePic_not_starts_with?: Maybe<String>;
-  profilePic_ends_with?: Maybe<String>;
-  profilePic_not_ends_with?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
+  guestCheckIns_not?: Maybe<Int>;
+  guestCheckIns_in?: Maybe<Int[] | Int>;
+  guestCheckIns_not_in?: Maybe<Int[] | Int>;
+  guestCheckIns_lt?: Maybe<Int>;
+  guestCheckIns_lte?: Maybe<Int>;
+  guestCheckIns_gt?: Maybe<Int>;
+  guestCheckIns_gte?: Maybe<Int>;
   eblID?: Maybe<String>;
   eblID_not?: Maybe<String>;
   eblID_in?: Maybe<String[] | String>;
@@ -990,7 +984,7 @@ export interface UserCreateWithoutGoalsInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -1041,7 +1035,7 @@ export interface UserCreateWithoutFriendsInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -1100,7 +1094,7 @@ export interface UserCreateWithoutFollowingInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -1140,7 +1134,7 @@ export interface UserUpdateWithoutGoalsDataInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -1328,7 +1322,7 @@ export interface UserUpdateWithoutFriendsDataInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -1660,7 +1654,7 @@ export interface UserUpdateWithoutFollowingDataInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -1766,20 +1760,14 @@ export interface UserScalarWhereInput {
   nickname_not_starts_with?: Maybe<String>;
   nickname_ends_with?: Maybe<String>;
   nickname_not_ends_with?: Maybe<String>;
-  profilePic?: Maybe<String>;
-  profilePic_not?: Maybe<String>;
-  profilePic_in?: Maybe<String[] | String>;
-  profilePic_not_in?: Maybe<String[] | String>;
-  profilePic_lt?: Maybe<String>;
-  profilePic_lte?: Maybe<String>;
-  profilePic_gt?: Maybe<String>;
-  profilePic_gte?: Maybe<String>;
-  profilePic_contains?: Maybe<String>;
-  profilePic_not_contains?: Maybe<String>;
-  profilePic_starts_with?: Maybe<String>;
-  profilePic_not_starts_with?: Maybe<String>;
-  profilePic_ends_with?: Maybe<String>;
-  profilePic_not_ends_with?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
+  guestCheckIns_not?: Maybe<Int>;
+  guestCheckIns_in?: Maybe<Int[] | Int>;
+  guestCheckIns_not_in?: Maybe<Int[] | Int>;
+  guestCheckIns_lt?: Maybe<Int>;
+  guestCheckIns_lte?: Maybe<Int>;
+  guestCheckIns_gt?: Maybe<Int>;
+  guestCheckIns_gte?: Maybe<Int>;
   eblID?: Maybe<String>;
   eblID_not?: Maybe<String>;
   eblID_in?: Maybe<String[] | String>;
@@ -1858,7 +1846,7 @@ export interface UserUpdateManyDataInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -1910,7 +1898,7 @@ export interface UserCreateWithoutJournalInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -1945,7 +1933,7 @@ export interface UserUpdateWithoutJournalDataInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -1992,7 +1980,7 @@ export interface UserCreateWithoutPostsInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -2030,7 +2018,7 @@ export interface UserUpdateWithoutPostsDataInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -2064,7 +2052,7 @@ export interface UserCreateInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -2086,7 +2074,7 @@ export interface UserUpdateInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -2108,7 +2096,7 @@ export interface UserUpdateManyMutationInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
   nickname?: Maybe<String>;
-  profilePic?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
@@ -2380,7 +2368,7 @@ export interface User {
   email?: String;
   name?: String;
   nickname?: String;
-  profilePic?: String;
+  guestCheckIns?: Int;
   eblID?: String;
   profileStatus?: ProfileStatus;
   avatar?: String;
@@ -2397,7 +2385,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   email: () => Promise<String>;
   name: () => Promise<String>;
   nickname: () => Promise<String>;
-  profilePic: () => Promise<String>;
+  guestCheckIns: () => Promise<Int>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
   avatar: () => Promise<String>;
@@ -2462,7 +2450,7 @@ export interface UserSubscription
   email: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   nickname: () => Promise<AsyncIterator<String>>;
-  profilePic: () => Promise<AsyncIterator<String>>;
+  guestCheckIns: () => Promise<AsyncIterator<Int>>;
   eblID: () => Promise<AsyncIterator<String>>;
   profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
   avatar: () => Promise<AsyncIterator<String>>;
@@ -2527,7 +2515,7 @@ export interface UserNullablePromise
   email: () => Promise<String>;
   name: () => Promise<String>;
   nickname: () => Promise<String>;
-  profilePic: () => Promise<String>;
+  guestCheckIns: () => Promise<Int>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
   avatar: () => Promise<String>;
@@ -3179,7 +3167,7 @@ export interface UserPreviousValues {
   email?: String;
   name?: String;
   nickname?: String;
-  profilePic?: String;
+  guestCheckIns?: Int;
   eblID?: String;
   profileStatus?: ProfileStatus;
   avatar?: String;
@@ -3198,7 +3186,7 @@ export interface UserPreviousValuesPromise
   email: () => Promise<String>;
   name: () => Promise<String>;
   nickname: () => Promise<String>;
-  profilePic: () => Promise<String>;
+  guestCheckIns: () => Promise<Int>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
   avatar: () => Promise<String>;
@@ -3217,7 +3205,7 @@ export interface UserPreviousValuesSubscription
   email: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   nickname: () => Promise<AsyncIterator<String>>;
-  profilePic: () => Promise<AsyncIterator<String>>;
+  guestCheckIns: () => Promise<AsyncIterator<Int>>;
   eblID: () => Promise<AsyncIterator<String>>;
   profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
   avatar: () => Promise<AsyncIterator<String>>;

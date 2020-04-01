@@ -64,13 +64,12 @@ type User {
   id: ID!
   eblID: String
   identity: String
-  profilePic: String
   avatar: String
   email: String
   name: String
   nickname: String
+  guestCheckIns: Int
   goals: [Goal]
-  password: String!
   points: Int!
   friends: [User!]!
   status: UserStatus

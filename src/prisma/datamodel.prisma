@@ -16,7 +16,7 @@ type User {
   email: String
   name: String
   nickname: String
-  profilePic: String
+  guestCheckIns: Int @default(value: 0)
   eblID: String @unique
   profileStatus: ProfileStatus @default(value: PUBLIC)
   avatar: String
