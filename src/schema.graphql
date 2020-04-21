@@ -1,15 +1,15 @@
 #import Query.users, Post from './prisma/generated/prisma-client/prisma-schema.graphql'
 
-directive @isAuthenticated on QUERY | FIELD | MUTATION
-directive @hasRole(roles: [String]) on QUERY | FIELD | MUTATION
-directive @isOwner(type: String) on QUERY | MUTATION
-directive @isOwnerOrHasRole(type: String, roles: [String]) on QUERY | MUTATION
+directive @isAuthenticated on OBJECT | QUERY | MUTATION | FIELD_DEFINITION
+directive @hasRole(roles: [String]) on QUERY | MUTATION | FIELD_DEFINITION
+directive @isOwner(type: String) on QUERY | MUTATION | FIELD_DEFINITION
+directive @isOwnerOrHasRole(type: String, roles: [String]) on QUERY | MUTATION | FIELD_DEFINITION
 
 type Query {
   feed(filter: String): [Post!]!
-  drafts: [Post!]!
-  post(id: ID!): Post
-  me: User
+  drafts: [Post!]! @isAuthenticated
+  post(id: ID!): Post @isOwnerOrHasRole(type: "Post", roles: ["ADMIN"] )
+  me: User @isAuthenticated
   users(id: ID, username: String): [User!]!
   friends(username: String!): String!
   followers: Int
@@ -30,10 +30,10 @@ input ProfileInput {
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
-  authenticate(idToken: String!): User
-  createDraft(title: String!, content: String!): Post!
-  publish(id: ID!): Post!
-  deletePost(id: ID!): Post!
+  authenticate(idToken: String!): AuthPayload!
+  createDraft(title: String!, content: String!): Post @isAuthenticated
+  publish(id: ID!): Post! @isOwner(type: "Post")
+  deletePost(id: ID!): Post! @isOwnerOrHasRole(type: "Post", roles:["ADMIN"])
   setUserStatus(id: ID, input: UserStatus!): User!
   updateProfile(input: ProfileInput): User!
   """
@@ -62,10 +62,10 @@ type AuthPayload {
 
 type User {
   id: ID!
-  eblID: String
-  identity: String
+  eblID: String!
+  identity: String!
   avatar: String
-  email: String
+  email: String @isOwner(type: "User")
   name: String
   nickname: String
   guestCheckIns: Int

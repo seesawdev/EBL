@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateFormData {
+/* GraphQL */ `type AggregateAuthPayload {
+  count: Int!
+}
+
+type AggregateFormData {
   count: Int!
 }
 
@@ -21,6 +25,107 @@ type AggregatePost {
 
 type AggregateUser {
   count: Int!
+}
+
+type AuthPayload {
+  id: ID!
+  token: String!
+  user: User!
+}
+
+type AuthPayloadConnection {
+  pageInfo: PageInfo!
+  edges: [AuthPayloadEdge]!
+  aggregate: AggregateAuthPayload!
+}
+
+input AuthPayloadCreateInput {
+  id: ID
+  token: String!
+  user: UserCreateOneInput!
+}
+
+type AuthPayloadEdge {
+  node: AuthPayload!
+  cursor: String!
+}
+
+enum AuthPayloadOrderByInput {
+  id_ASC
+  id_DESC
+  token_ASC
+  token_DESC
+}
+
+type AuthPayloadPreviousValues {
+  id: ID!
+  token: String!
+}
+
+type AuthPayloadSubscriptionPayload {
+  mutation: MutationType!
+  node: AuthPayload
+  updatedFields: [String!]
+  previousValues: AuthPayloadPreviousValues
+}
+
+input AuthPayloadSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: AuthPayloadWhereInput
+  AND: [AuthPayloadSubscriptionWhereInput!]
+  OR: [AuthPayloadSubscriptionWhereInput!]
+  NOT: [AuthPayloadSubscriptionWhereInput!]
+}
+
+input AuthPayloadUpdateInput {
+  token: String
+  user: UserUpdateOneRequiredInput
+}
+
+input AuthPayloadUpdateManyMutationInput {
+  token: String
+}
+
+input AuthPayloadWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  token: String
+  token_not: String
+  token_in: [String!]
+  token_not_in: [String!]
+  token_lt: String
+  token_lte: String
+  token_gt: String
+  token_gte: String
+  token_contains: String
+  token_not_contains: String
+  token_starts_with: String
+  token_not_starts_with: String
+  token_ends_with: String
+  token_not_ends_with: String
+  user: UserWhereInput
+  AND: [AuthPayloadWhereInput!]
+  OR: [AuthPayloadWhereInput!]
+  NOT: [AuthPayloadWhereInput!]
+}
+
+input AuthPayloadWhereUniqueInput {
+  id: ID
 }
 
 type BatchPayload {
@@ -916,6 +1021,12 @@ input JournalEntryWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createAuthPayload(data: AuthPayloadCreateInput!): AuthPayload!
+  updateAuthPayload(data: AuthPayloadUpdateInput!, where: AuthPayloadWhereUniqueInput!): AuthPayload
+  updateManyAuthPayloads(data: AuthPayloadUpdateManyMutationInput!, where: AuthPayloadWhereInput): BatchPayload!
+  upsertAuthPayload(where: AuthPayloadWhereUniqueInput!, create: AuthPayloadCreateInput!, update: AuthPayloadUpdateInput!): AuthPayload!
+  deleteAuthPayload(where: AuthPayloadWhereUniqueInput!): AuthPayload
+  deleteManyAuthPayloads(where: AuthPayloadWhereInput): BatchPayload!
   createFormData(data: FormDataCreateInput!): FormData!
   updateFormData(data: FormDataUpdateInput!, where: FormDataWhereUniqueInput!): FormData
   updateManyFormDatas(data: FormDataUpdateManyMutationInput!, where: FormDataWhereInput): BatchPayload!
@@ -1284,6 +1395,9 @@ enum ProfileStatus {
 }
 
 type Query {
+  authPayload(where: AuthPayloadWhereUniqueInput!): AuthPayload
+  authPayloads(where: AuthPayloadWhereInput, orderBy: AuthPayloadOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AuthPayload]!
+  authPayloadsConnection(where: AuthPayloadWhereInput, orderBy: AuthPayloadOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AuthPayloadConnection!
   formData(where: FormDataWhereUniqueInput!): FormData
   formDatas(where: FormDataWhereInput, orderBy: FormDataOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FormData]!
   formDatasConnection(where: FormDataWhereInput, orderBy: FormDataOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FormDataConnection!
@@ -1309,7 +1423,13 @@ enum Question {
   CHOICE4
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 type Subscription {
+  authPayload(where: AuthPayloadSubscriptionWhereInput): AuthPayloadSubscriptionPayload
   formData(where: FormDataSubscriptionWhereInput): FormDataSubscriptionPayload
   goal(where: GoalSubscriptionWhereInput): GoalSubscriptionPayload
   journalEntry(where: JournalEntrySubscriptionWhereInput): JournalEntrySubscriptionPayload
@@ -1326,6 +1446,7 @@ enum TIER {
 type User {
   id: ID!
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1336,7 +1457,6 @@ type User {
   avatar: String
   goals(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Goal!]
   userInfo: FormData
-  password: String
   journal(where: JournalEntryWhereInput, orderBy: JournalEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JournalEntry!]
   points: Int!
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -1344,6 +1464,7 @@ type User {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   following(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   tier: TIER!
+  role: Role
 }
 
 type UserConnection {
@@ -1355,6 +1476,7 @@ type UserConnection {
 input UserCreateInput {
   id: ID
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1365,7 +1487,6 @@ input UserCreateInput {
   avatar: String
   goals: GoalCreateManyWithoutAuthorInput
   userInfo: FormDataCreateOneInput
-  password: String
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
@@ -1373,6 +1494,7 @@ input UserCreateInput {
   posts: PostCreateManyWithoutAuthorInput
   following: UserCreateManyWithoutFollowingInput
   tier: TIER
+  role: Role
 }
 
 input UserCreateManyWithoutFollowingInput {
@@ -1383,6 +1505,11 @@ input UserCreateManyWithoutFollowingInput {
 input UserCreateManyWithoutFriendsInput {
   create: [UserCreateWithoutFriendsInput!]
   connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutGoalsInput {
@@ -1403,6 +1530,7 @@ input UserCreateOneWithoutPostsInput {
 input UserCreateWithoutFollowingInput {
   id: ID
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1413,18 +1541,19 @@ input UserCreateWithoutFollowingInput {
   avatar: String
   goals: GoalCreateManyWithoutAuthorInput
   userInfo: FormDataCreateOneInput
-  password: String
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
   status: UserStatus
   posts: PostCreateManyWithoutAuthorInput
   tier: TIER
+  role: Role
 }
 
 input UserCreateWithoutFriendsInput {
   id: ID
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1435,18 +1564,19 @@ input UserCreateWithoutFriendsInput {
   avatar: String
   goals: GoalCreateManyWithoutAuthorInput
   userInfo: FormDataCreateOneInput
-  password: String
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   status: UserStatus
   posts: PostCreateManyWithoutAuthorInput
   following: UserCreateManyWithoutFollowingInput
   tier: TIER
+  role: Role
 }
 
 input UserCreateWithoutGoalsInput {
   id: ID
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1456,7 +1586,6 @@ input UserCreateWithoutGoalsInput {
   profileStatus: ProfileStatus
   avatar: String
   userInfo: FormDataCreateOneInput
-  password: String
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
@@ -1464,11 +1593,13 @@ input UserCreateWithoutGoalsInput {
   posts: PostCreateManyWithoutAuthorInput
   following: UserCreateManyWithoutFollowingInput
   tier: TIER
+  role: Role
 }
 
 input UserCreateWithoutJournalInput {
   id: ID
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1479,18 +1610,19 @@ input UserCreateWithoutJournalInput {
   avatar: String
   goals: GoalCreateManyWithoutAuthorInput
   userInfo: FormDataCreateOneInput
-  password: String
   points: Int
   friends: UserCreateManyWithoutFriendsInput
   status: UserStatus
   posts: PostCreateManyWithoutAuthorInput
   following: UserCreateManyWithoutFollowingInput
   tier: TIER
+  role: Role
 }
 
 input UserCreateWithoutPostsInput {
   id: ID
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1501,13 +1633,13 @@ input UserCreateWithoutPostsInput {
   avatar: String
   goals: GoalCreateManyWithoutAuthorInput
   userInfo: FormDataCreateOneInput
-  password: String
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
   status: UserStatus
   following: UserCreateManyWithoutFollowingInput
   tier: TIER
+  role: Role
 }
 
 type UserEdge {
@@ -1520,6 +1652,8 @@ enum UserOrderByInput {
   id_DESC
   auth0id_ASC
   auth0id_DESC
+  metaData_ASC
+  metaData_DESC
   identity_ASC
   identity_DESC
   email_ASC
@@ -1536,19 +1670,20 @@ enum UserOrderByInput {
   profileStatus_DESC
   avatar_ASC
   avatar_DESC
-  password_ASC
-  password_DESC
   points_ASC
   points_DESC
   status_ASC
   status_DESC
   tier_ASC
   tier_DESC
+  role_ASC
+  role_DESC
 }
 
 type UserPreviousValues {
   id: ID!
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1557,10 +1692,10 @@ type UserPreviousValues {
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
-  password: String
   points: Int!
   status: UserStatus
   tier: TIER!
+  role: Role
 }
 
 input UserScalarWhereInput {
@@ -1592,6 +1727,20 @@ input UserScalarWhereInput {
   auth0id_not_starts_with: String
   auth0id_ends_with: String
   auth0id_not_ends_with: String
+  metaData: String
+  metaData_not: String
+  metaData_in: [String!]
+  metaData_not_in: [String!]
+  metaData_lt: String
+  metaData_lte: String
+  metaData_gt: String
+  metaData_gte: String
+  metaData_contains: String
+  metaData_not_contains: String
+  metaData_starts_with: String
+  metaData_not_starts_with: String
+  metaData_ends_with: String
+  metaData_not_ends_with: String
   identity: String
   identity_not: String
   identity_in: [String!]
@@ -1688,20 +1837,6 @@ input UserScalarWhereInput {
   avatar_not_starts_with: String
   avatar_ends_with: String
   avatar_not_ends_with: String
-  password: String
-  password_not: String
-  password_in: [String!]
-  password_not_in: [String!]
-  password_lt: String
-  password_lte: String
-  password_gt: String
-  password_gte: String
-  password_contains: String
-  password_not_contains: String
-  password_starts_with: String
-  password_not_starts_with: String
-  password_ends_with: String
-  password_not_ends_with: String
   points: Int
   points_not: Int
   points_in: [Int!]
@@ -1718,6 +1853,10 @@ input UserScalarWhereInput {
   tier_not: TIER
   tier_in: [TIER!]
   tier_not_in: [TIER!]
+  role: Role
+  role_not: Role
+  role_in: [Role!]
+  role_not_in: [Role!]
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -1747,8 +1886,9 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
-input UserUpdateInput {
+input UserUpdateDataInput {
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1759,7 +1899,6 @@ input UserUpdateInput {
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
   userInfo: FormDataUpdateOneInput
-  password: String
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
@@ -1767,10 +1906,35 @@ input UserUpdateInput {
   posts: PostUpdateManyWithoutAuthorInput
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
+  role: Role
+}
+
+input UserUpdateInput {
+  auth0id: String
+  metaData: String
+  identity: String
+  email: String
+  name: String
+  nickname: String
+  guestCheckIns: Int
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
+  goals: GoalUpdateManyWithoutAuthorInput
+  userInfo: FormDataUpdateOneInput
+  journal: JournalEntryUpdateManyWithoutAuthorInput
+  points: Int
+  friends: UserUpdateManyWithoutFriendsInput
+  status: UserStatus
+  posts: PostUpdateManyWithoutAuthorInput
+  following: UserUpdateManyWithoutFollowingInput
+  tier: TIER
+  role: Role
 }
 
 input UserUpdateManyDataInput {
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1779,14 +1943,15 @@ input UserUpdateManyDataInput {
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
-  password: String
   points: Int
   status: UserStatus
   tier: TIER
+  role: Role
 }
 
 input UserUpdateManyMutationInput {
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1795,10 +1960,10 @@ input UserUpdateManyMutationInput {
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
-  password: String
   points: Int
   status: UserStatus
   tier: TIER
+  role: Role
 }
 
 input UserUpdateManyWithoutFollowingInput {
@@ -1830,6 +1995,13 @@ input UserUpdateManyWithWhereNestedInput {
   data: UserUpdateManyDataInput!
 }
 
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutGoalsInput {
   create: UserCreateWithoutGoalsInput
   update: UserUpdateWithoutGoalsDataInput
@@ -1855,6 +2027,7 @@ input UserUpdateOneWithoutPostsInput {
 
 input UserUpdateWithoutFollowingDataInput {
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1865,17 +2038,18 @@ input UserUpdateWithoutFollowingDataInput {
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
   userInfo: FormDataUpdateOneInput
-  password: String
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
   status: UserStatus
   posts: PostUpdateManyWithoutAuthorInput
   tier: TIER
+  role: Role
 }
 
 input UserUpdateWithoutFriendsDataInput {
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1886,17 +2060,18 @@ input UserUpdateWithoutFriendsDataInput {
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
   userInfo: FormDataUpdateOneInput
-  password: String
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   status: UserStatus
   posts: PostUpdateManyWithoutAuthorInput
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
+  role: Role
 }
 
 input UserUpdateWithoutGoalsDataInput {
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1906,7 +2081,6 @@ input UserUpdateWithoutGoalsDataInput {
   profileStatus: ProfileStatus
   avatar: String
   userInfo: FormDataUpdateOneInput
-  password: String
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
@@ -1914,10 +2088,12 @@ input UserUpdateWithoutGoalsDataInput {
   posts: PostUpdateManyWithoutAuthorInput
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
+  role: Role
 }
 
 input UserUpdateWithoutJournalDataInput {
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1928,17 +2104,18 @@ input UserUpdateWithoutJournalDataInput {
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
   userInfo: FormDataUpdateOneInput
-  password: String
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
   status: UserStatus
   posts: PostUpdateManyWithoutAuthorInput
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
+  role: Role
 }
 
 input UserUpdateWithoutPostsDataInput {
   auth0id: String
+  metaData: String
   identity: String
   email: String
   name: String
@@ -1949,13 +2126,13 @@ input UserUpdateWithoutPostsDataInput {
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
   userInfo: FormDataUpdateOneInput
-  password: String
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
   status: UserStatus
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
+  role: Role
 }
 
 input UserUpdateWithWhereUniqueWithoutFollowingInput {
@@ -1966,6 +2143,11 @@ input UserUpdateWithWhereUniqueWithoutFollowingInput {
 input UserUpdateWithWhereUniqueWithoutFriendsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutFriendsDataInput!
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithoutGoalsInput {
@@ -2024,6 +2206,20 @@ input UserWhereInput {
   auth0id_not_starts_with: String
   auth0id_ends_with: String
   auth0id_not_ends_with: String
+  metaData: String
+  metaData_not: String
+  metaData_in: [String!]
+  metaData_not_in: [String!]
+  metaData_lt: String
+  metaData_lte: String
+  metaData_gt: String
+  metaData_gte: String
+  metaData_contains: String
+  metaData_not_contains: String
+  metaData_starts_with: String
+  metaData_not_starts_with: String
+  metaData_ends_with: String
+  metaData_not_ends_with: String
   identity: String
   identity_not: String
   identity_in: [String!]
@@ -2124,20 +2320,6 @@ input UserWhereInput {
   goals_some: GoalWhereInput
   goals_none: GoalWhereInput
   userInfo: FormDataWhereInput
-  password: String
-  password_not: String
-  password_in: [String!]
-  password_not_in: [String!]
-  password_lt: String
-  password_lte: String
-  password_gt: String
-  password_gte: String
-  password_contains: String
-  password_not_contains: String
-  password_starts_with: String
-  password_not_starts_with: String
-  password_ends_with: String
-  password_not_ends_with: String
   journal_every: JournalEntryWhereInput
   journal_some: JournalEntryWhereInput
   journal_none: JournalEntryWhereInput
@@ -2166,6 +2348,10 @@ input UserWhereInput {
   tier_not: TIER
   tier_in: [TIER!]
   tier_not_in: [TIER!]
+  role: Role
+  role_not: Role
+  role_in: [Role!]
+  role_not_in: [Role!]
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -2174,7 +2360,6 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   auth0id: String
-  eblID: String
 }
 `
       }

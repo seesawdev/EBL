@@ -11,18 +11,18 @@ type Post {
 
 type User {
   id: ID! @id
-  auth0id: String @unique
+  auth0id: String @unique @auth0id
+  metaData: String
   identity: String
   email: String
   name: String
   nickname: String
   guestCheckIns: Int @default(value: 0)
-  eblID: String @unique
+  eblID: String 
   profileStatus: ProfileStatus @default(value: PUBLIC)
   avatar: String
   goals: [Goal] @relation(name: "UserToGoals")
   userInfo: FormData @relation(link: INLINE)
-  password: String
   journal: [JournalEntry] @relation(name: "UserJournal")
   points: Int! @default(value: 0)
   friends: [User!]! @relation(name: "FriendsOfUser", link: TABLE)
@@ -30,8 +30,9 @@ type User {
   posts: [Post!]! @relation(name: "UserPosts")
   following: [User] @relation(name: "FollowingUsers", link: TABLE)
   tier: TIER! @default(value: FREE)
-  
+  role: Role @default(value: USER)
 }
+
 
 enum TIER {
   FREE
@@ -72,6 +73,11 @@ type JournalEntry {
   author: User! @relation(name: "UserJournal", link: INLINE)
 }
 
+type AuthPayload {
+  id: ID! @id
+  token: String!
+  user: User!
+}
 type FormData {
   id: ID! @id
   createdAt: DateTime! @createdAt
@@ -89,4 +95,9 @@ enum Question {
   CHOICE2
   CHOICE3
   CHOICE4
+}
+
+enum Role {
+  ADMIN
+  USER
 }

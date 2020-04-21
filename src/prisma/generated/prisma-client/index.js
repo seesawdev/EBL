@@ -33,17 +33,26 @@ var models = [
     embedded: false
   },
   {
+    name: "AuthPayload",
+    embedded: false
+  },
+  {
     name: "FormData",
     embedded: false
   },
   {
     name: "Question",
     embedded: false
+  },
+  {
+    name: "Role",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `https://us1.prisma.sh/public-shadowpirate-309/everybodyleave/dev`
+  endpoint: `https://us1.prisma.sh/public-shadowpirate-309/everybodyleave/dev`,
+  secret: `${process.env["PRISMA_SECRET"]}`
 });
 exports.prisma = new exports.Prisma();

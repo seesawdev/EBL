@@ -15,19 +15,19 @@ const isRequestingUserAlsoOwner = ({ context, userId, type, typeId }) =>
 const isRequestingUser = ({ context, userId }) =>
   context.prisma.exists.User({ id: userId });
 
-const directiveResolvers = {
-  isAuthenticated: (parent, args, context) => {
+const authDirectiveResolvers = {
+  isAuthenticated: (next, parent, args, context) => {
     isLoggedIn(context);
-    return skip;
+    return next()
   },
-  hasRole: (parent, { roles }, context) => {
+  hasRole: (next, parent, { roles }, context) => {
     const { role } = isLoggedIn(context);
     if (roles.includes(role)) {
-      return skip;
+      return next();
     }
     throw new Error(`Unauthorized, incorrect role`);
   },
-  isOwner: async (parent, { type }, context) => {
+  isOwner: async (next, parent, { type }, context) => {
     const { id: typeId } =
       parent && parent.id
         ? parent
@@ -40,14 +40,14 @@ const directiveResolvers = {
         ? userId === typeId
         : await isRequestingUserAlsoOwner({ context, userId, type, typeId });
     if (isOwner) {
-      return skip;
+      return next();
     }
     throw new Error(`Unauthorized, must be owner`);
   },
-  isOwnerOrHasRole: async (parent, { roles, type }, context, ...p) => {
+  isOwnerOrHasRole: async (next, parent, { roles, type }, context, ...p) => {
     const { id: userId, role } = isLoggedIn(context);
     if (roles.includes(role)) {
-      return skip;
+      return next();
     }
 
     const { id: typeId } = context.request.body.variables;
@@ -59,10 +59,10 @@ const directiveResolvers = {
     });
 
     if (isOwner) {
-      return skip;
+      return next();
     }
     throw new Error(`Unauthorized, not owner or incorrect role`);
   }
 };
 
-module.exports = { directiveResolvers };
+module.exports = { authDirectiveResolvers };

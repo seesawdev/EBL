@@ -16,6 +16,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
+  authPayload: (where?: AuthPayloadWhereInput) => Promise<boolean>;
   formData: (where?: FormDataWhereInput) => Promise<boolean>;
   goal: (where?: GoalWhereInput) => Promise<boolean>;
   journalEntry: (where?: JournalEntryWhereInput) => Promise<boolean>;
@@ -42,6 +43,27 @@ export interface Prisma {
    * Queries
    */
 
+  authPayload: (
+    where: AuthPayloadWhereUniqueInput
+  ) => AuthPayloadNullablePromise;
+  authPayloads: (args?: {
+    where?: AuthPayloadWhereInput;
+    orderBy?: AuthPayloadOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<AuthPayload>;
+  authPayloadsConnection: (args?: {
+    where?: AuthPayloadWhereInput;
+    orderBy?: AuthPayloadOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => AuthPayloadConnectionPromise;
   formData: (where: FormDataWhereUniqueInput) => FormDataNullablePromise;
   formDatas: (args?: {
     where?: FormDataWhereInput;
@@ -145,6 +167,24 @@ export interface Prisma {
    * Mutations
    */
 
+  createAuthPayload: (data: AuthPayloadCreateInput) => AuthPayloadPromise;
+  updateAuthPayload: (args: {
+    data: AuthPayloadUpdateInput;
+    where: AuthPayloadWhereUniqueInput;
+  }) => AuthPayloadPromise;
+  updateManyAuthPayloads: (args: {
+    data: AuthPayloadUpdateManyMutationInput;
+    where?: AuthPayloadWhereInput;
+  }) => BatchPayloadPromise;
+  upsertAuthPayload: (args: {
+    where: AuthPayloadWhereUniqueInput;
+    create: AuthPayloadCreateInput;
+    update: AuthPayloadUpdateInput;
+  }) => AuthPayloadPromise;
+  deleteAuthPayload: (where: AuthPayloadWhereUniqueInput) => AuthPayloadPromise;
+  deleteManyAuthPayloads: (
+    where?: AuthPayloadWhereInput
+  ) => BatchPayloadPromise;
   createFormData: (data: FormDataCreateInput) => FormDataPromise;
   updateFormData: (args: {
     data: FormDataUpdateInput;
@@ -238,6 +278,9 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  authPayload: (
+    where?: AuthPayloadSubscriptionWhereInput
+  ) => AuthPayloadSubscriptionPayloadSubscription;
   formData: (
     where?: FormDataSubscriptionWhereInput
   ) => FormDataSubscriptionPayloadSubscription;
@@ -263,37 +306,19 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type Question = "CHOICE1" | "CHOICE2" | "CHOICE3" | "CHOICE4";
-
-export type FormDataOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "username_ASC"
-  | "username_DESC"
-  | "Q1_ASC"
-  | "Q1_DESC"
-  | "Q2_ASC"
-  | "Q2_DESC"
-  | "Q3_ASC"
-  | "Q3_DESC"
-  | "Q4_ASC"
-  | "Q4_DESC";
-
 export type ProfileStatus =
   | "PUBLIC"
   | "PRIVATE"
   | "FRIENDSONLY"
   | "DEACTIVATED";
 
+export type Question = "CHOICE1" | "CHOICE2" | "CHOICE3" | "CHOICE4";
+
 export type UserStatus = "ONLINE" | "UNAVAILABLE" | "OFFLINE";
 
 export type TIER = "FREE" | "CONTRIBUTER" | "PREMIUM";
+
+export type Role = "ADMIN" | "USER";
 
 export type GoalOrderByInput =
   | "id_ASC"
@@ -332,6 +357,8 @@ export type UserOrderByInput =
   | "id_DESC"
   | "auth0id_ASC"
   | "auth0id_DESC"
+  | "metaData_ASC"
+  | "metaData_DESC"
   | "identity_ASC"
   | "identity_DESC"
   | "email_ASC"
@@ -348,14 +375,14 @@ export type UserOrderByInput =
   | "profileStatus_DESC"
   | "avatar_ASC"
   | "avatar_DESC"
-  | "password_ASC"
-  | "password_DESC"
   | "points_ASC"
   | "points_DESC"
   | "status_ASC"
   | "status_DESC"
   | "tier_ASC"
-  | "tier_DESC";
+  | "tier_DESC"
+  | "role_ASC"
+  | "role_DESC";
 
 export type PostOrderByInput =
   | "id_ASC"
@@ -373,131 +400,35 @@ export type PostOrderByInput =
   | "content_ASC"
   | "content_DESC";
 
+export type AuthPayloadOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "token_ASC"
+  | "token_DESC";
+
+export type FormDataOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "username_ASC"
+  | "username_DESC"
+  | "Q1_ASC"
+  | "Q1_DESC"
+  | "Q2_ASC"
+  | "Q2_DESC"
+  | "Q3_ASC"
+  | "Q3_DESC"
+  | "Q4_ASC"
+  | "Q4_DESC";
+
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type FormDataWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-  username?: Maybe<String>;
-}>;
-
-export interface FormDataWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  email?: Maybe<String>;
-  email_not?: Maybe<String>;
-  email_in?: Maybe<String[] | String>;
-  email_not_in?: Maybe<String[] | String>;
-  email_lt?: Maybe<String>;
-  email_lte?: Maybe<String>;
-  email_gt?: Maybe<String>;
-  email_gte?: Maybe<String>;
-  email_contains?: Maybe<String>;
-  email_not_contains?: Maybe<String>;
-  email_starts_with?: Maybe<String>;
-  email_not_starts_with?: Maybe<String>;
-  email_ends_with?: Maybe<String>;
-  email_not_ends_with?: Maybe<String>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  username?: Maybe<String>;
-  username_not?: Maybe<String>;
-  username_in?: Maybe<String[] | String>;
-  username_not_in?: Maybe<String[] | String>;
-  username_lt?: Maybe<String>;
-  username_lte?: Maybe<String>;
-  username_gt?: Maybe<String>;
-  username_gte?: Maybe<String>;
-  username_contains?: Maybe<String>;
-  username_not_contains?: Maybe<String>;
-  username_starts_with?: Maybe<String>;
-  username_not_starts_with?: Maybe<String>;
-  username_ends_with?: Maybe<String>;
-  username_not_ends_with?: Maybe<String>;
-  Q1?: Maybe<String>;
-  Q1_not?: Maybe<String>;
-  Q1_in?: Maybe<String[] | String>;
-  Q1_not_in?: Maybe<String[] | String>;
-  Q1_lt?: Maybe<String>;
-  Q1_lte?: Maybe<String>;
-  Q1_gt?: Maybe<String>;
-  Q1_gte?: Maybe<String>;
-  Q1_contains?: Maybe<String>;
-  Q1_not_contains?: Maybe<String>;
-  Q1_starts_with?: Maybe<String>;
-  Q1_not_starts_with?: Maybe<String>;
-  Q1_ends_with?: Maybe<String>;
-  Q1_not_ends_with?: Maybe<String>;
-  Q2?: Maybe<String>;
-  Q2_not?: Maybe<String>;
-  Q2_in?: Maybe<String[] | String>;
-  Q2_not_in?: Maybe<String[] | String>;
-  Q2_lt?: Maybe<String>;
-  Q2_lte?: Maybe<String>;
-  Q2_gt?: Maybe<String>;
-  Q2_gte?: Maybe<String>;
-  Q2_contains?: Maybe<String>;
-  Q2_not_contains?: Maybe<String>;
-  Q2_starts_with?: Maybe<String>;
-  Q2_not_starts_with?: Maybe<String>;
-  Q2_ends_with?: Maybe<String>;
-  Q2_not_ends_with?: Maybe<String>;
-  Q3?: Maybe<String>;
-  Q3_not?: Maybe<String>;
-  Q3_in?: Maybe<String[] | String>;
-  Q3_not_in?: Maybe<String[] | String>;
-  Q3_lt?: Maybe<String>;
-  Q3_lte?: Maybe<String>;
-  Q3_gt?: Maybe<String>;
-  Q3_gte?: Maybe<String>;
-  Q3_contains?: Maybe<String>;
-  Q3_not_contains?: Maybe<String>;
-  Q3_starts_with?: Maybe<String>;
-  Q3_not_starts_with?: Maybe<String>;
-  Q3_ends_with?: Maybe<String>;
-  Q3_not_ends_with?: Maybe<String>;
-  Q4?: Maybe<Question>;
-  Q4_not?: Maybe<Question>;
-  Q4_in?: Maybe<Question[] | Question>;
-  Q4_not_in?: Maybe<Question[] | Question>;
-  AND?: Maybe<FormDataWhereInput[] | FormDataWhereInput>;
-  OR?: Maybe<FormDataWhereInput[] | FormDataWhereInput>;
-  NOT?: Maybe<FormDataWhereInput[] | FormDataWhereInput>;
-}
-
-export type GoalWhereUniqueInput = AtLeastOne<{
+export type AuthPayloadWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
@@ -627,6 +558,20 @@ export interface UserWhereInput {
   auth0id_not_starts_with?: Maybe<String>;
   auth0id_ends_with?: Maybe<String>;
   auth0id_not_ends_with?: Maybe<String>;
+  metaData?: Maybe<String>;
+  metaData_not?: Maybe<String>;
+  metaData_in?: Maybe<String[] | String>;
+  metaData_not_in?: Maybe<String[] | String>;
+  metaData_lt?: Maybe<String>;
+  metaData_lte?: Maybe<String>;
+  metaData_gt?: Maybe<String>;
+  metaData_gte?: Maybe<String>;
+  metaData_contains?: Maybe<String>;
+  metaData_not_contains?: Maybe<String>;
+  metaData_starts_with?: Maybe<String>;
+  metaData_not_starts_with?: Maybe<String>;
+  metaData_ends_with?: Maybe<String>;
+  metaData_not_ends_with?: Maybe<String>;
   identity?: Maybe<String>;
   identity_not?: Maybe<String>;
   identity_in?: Maybe<String[] | String>;
@@ -727,20 +672,6 @@ export interface UserWhereInput {
   goals_some?: Maybe<GoalWhereInput>;
   goals_none?: Maybe<GoalWhereInput>;
   userInfo?: Maybe<FormDataWhereInput>;
-  password?: Maybe<String>;
-  password_not?: Maybe<String>;
-  password_in?: Maybe<String[] | String>;
-  password_not_in?: Maybe<String[] | String>;
-  password_lt?: Maybe<String>;
-  password_lte?: Maybe<String>;
-  password_gt?: Maybe<String>;
-  password_gte?: Maybe<String>;
-  password_contains?: Maybe<String>;
-  password_not_contains?: Maybe<String>;
-  password_starts_with?: Maybe<String>;
-  password_not_starts_with?: Maybe<String>;
-  password_ends_with?: Maybe<String>;
-  password_not_ends_with?: Maybe<String>;
   journal_every?: Maybe<JournalEntryWhereInput>;
   journal_some?: Maybe<JournalEntryWhereInput>;
   journal_none?: Maybe<JournalEntryWhereInput>;
@@ -769,9 +700,129 @@ export interface UserWhereInput {
   tier_not?: Maybe<TIER>;
   tier_in?: Maybe<TIER[] | TIER>;
   tier_not_in?: Maybe<TIER[] | TIER>;
+  role?: Maybe<Role>;
+  role_not?: Maybe<Role>;
+  role_in?: Maybe<Role[] | Role>;
+  role_not_in?: Maybe<Role[] | Role>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
+
+export interface FormDataWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  email?: Maybe<String>;
+  email_not?: Maybe<String>;
+  email_in?: Maybe<String[] | String>;
+  email_not_in?: Maybe<String[] | String>;
+  email_lt?: Maybe<String>;
+  email_lte?: Maybe<String>;
+  email_gt?: Maybe<String>;
+  email_gte?: Maybe<String>;
+  email_contains?: Maybe<String>;
+  email_not_contains?: Maybe<String>;
+  email_starts_with?: Maybe<String>;
+  email_not_starts_with?: Maybe<String>;
+  email_ends_with?: Maybe<String>;
+  email_not_ends_with?: Maybe<String>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  username?: Maybe<String>;
+  username_not?: Maybe<String>;
+  username_in?: Maybe<String[] | String>;
+  username_not_in?: Maybe<String[] | String>;
+  username_lt?: Maybe<String>;
+  username_lte?: Maybe<String>;
+  username_gt?: Maybe<String>;
+  username_gte?: Maybe<String>;
+  username_contains?: Maybe<String>;
+  username_not_contains?: Maybe<String>;
+  username_starts_with?: Maybe<String>;
+  username_not_starts_with?: Maybe<String>;
+  username_ends_with?: Maybe<String>;
+  username_not_ends_with?: Maybe<String>;
+  Q1?: Maybe<String>;
+  Q1_not?: Maybe<String>;
+  Q1_in?: Maybe<String[] | String>;
+  Q1_not_in?: Maybe<String[] | String>;
+  Q1_lt?: Maybe<String>;
+  Q1_lte?: Maybe<String>;
+  Q1_gt?: Maybe<String>;
+  Q1_gte?: Maybe<String>;
+  Q1_contains?: Maybe<String>;
+  Q1_not_contains?: Maybe<String>;
+  Q1_starts_with?: Maybe<String>;
+  Q1_not_starts_with?: Maybe<String>;
+  Q1_ends_with?: Maybe<String>;
+  Q1_not_ends_with?: Maybe<String>;
+  Q2?: Maybe<String>;
+  Q2_not?: Maybe<String>;
+  Q2_in?: Maybe<String[] | String>;
+  Q2_not_in?: Maybe<String[] | String>;
+  Q2_lt?: Maybe<String>;
+  Q2_lte?: Maybe<String>;
+  Q2_gt?: Maybe<String>;
+  Q2_gte?: Maybe<String>;
+  Q2_contains?: Maybe<String>;
+  Q2_not_contains?: Maybe<String>;
+  Q2_starts_with?: Maybe<String>;
+  Q2_not_starts_with?: Maybe<String>;
+  Q2_ends_with?: Maybe<String>;
+  Q2_not_ends_with?: Maybe<String>;
+  Q3?: Maybe<String>;
+  Q3_not?: Maybe<String>;
+  Q3_in?: Maybe<String[] | String>;
+  Q3_not_in?: Maybe<String[] | String>;
+  Q3_lt?: Maybe<String>;
+  Q3_lte?: Maybe<String>;
+  Q3_gt?: Maybe<String>;
+  Q3_gte?: Maybe<String>;
+  Q3_contains?: Maybe<String>;
+  Q3_not_contains?: Maybe<String>;
+  Q3_starts_with?: Maybe<String>;
+  Q3_not_starts_with?: Maybe<String>;
+  Q3_ends_with?: Maybe<String>;
+  Q3_not_ends_with?: Maybe<String>;
+  Q4?: Maybe<Question>;
+  Q4_not?: Maybe<Question>;
+  Q4_in?: Maybe<Question[] | Question>;
+  Q4_not_in?: Maybe<Question[] | Question>;
+  AND?: Maybe<FormDataWhereInput[] | FormDataWhereInput>;
+  OR?: Maybe<FormDataWhereInput[] | FormDataWhereInput>;
+  NOT?: Maybe<FormDataWhereInput[] | FormDataWhereInput>;
 }
 
 export interface JournalEntryWhereInput {
@@ -914,6 +965,51 @@ export interface PostWhereInput {
   NOT?: Maybe<PostWhereInput[] | PostWhereInput>;
 }
 
+export interface AuthPayloadWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  token?: Maybe<String>;
+  token_not?: Maybe<String>;
+  token_in?: Maybe<String[] | String>;
+  token_not_in?: Maybe<String[] | String>;
+  token_lt?: Maybe<String>;
+  token_lte?: Maybe<String>;
+  token_gt?: Maybe<String>;
+  token_gte?: Maybe<String>;
+  token_contains?: Maybe<String>;
+  token_not_contains?: Maybe<String>;
+  token_starts_with?: Maybe<String>;
+  token_not_starts_with?: Maybe<String>;
+  token_ends_with?: Maybe<String>;
+  token_not_ends_with?: Maybe<String>;
+  user?: Maybe<UserWhereInput>;
+  AND?: Maybe<AuthPayloadWhereInput[] | AuthPayloadWhereInput>;
+  OR?: Maybe<AuthPayloadWhereInput[] | AuthPayloadWhereInput>;
+  NOT?: Maybe<AuthPayloadWhereInput[] | AuthPayloadWhereInput>;
+}
+
+export type FormDataWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+  username?: Maybe<String>;
+}>;
+
+export type GoalWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
 export type JournalEntryWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
@@ -925,8 +1021,64 @@ export type PostWhereUniqueInput = AtLeastOne<{
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   auth0id?: Maybe<String>;
-  eblID?: Maybe<String>;
 }>;
+
+export interface AuthPayloadCreateInput {
+  id?: Maybe<ID_Input>;
+  token: String;
+  user: UserCreateOneInput;
+}
+
+export interface UserCreateOneInput {
+  create?: Maybe<UserCreateInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
+  goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
+  userInfo?: Maybe<FormDataCreateOneInput>;
+  journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
+  points?: Maybe<Int>;
+  friends?: Maybe<UserCreateManyWithoutFriendsInput>;
+  status?: Maybe<UserStatus>;
+  posts?: Maybe<PostCreateManyWithoutAuthorInput>;
+  following?: Maybe<UserCreateManyWithoutFollowingInput>;
+  tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
+}
+
+export interface GoalCreateManyWithoutAuthorInput {
+  create?: Maybe<GoalCreateWithoutAuthorInput[] | GoalCreateWithoutAuthorInput>;
+  connect?: Maybe<GoalWhereUniqueInput[] | GoalWhereUniqueInput>;
+}
+
+export interface GoalCreateWithoutAuthorInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  startDate: DateTimeInput;
+  projectedCompletionDate: DateTimeInput;
+  actualCompletionDate: DateTimeInput;
+  pointsWorth: Int;
+  pointsEarned: Int;
+  pointsDeducted: Int;
+  description: String;
+}
+
+export interface FormDataCreateOneInput {
+  create?: Maybe<FormDataCreateInput>;
+  connect?: Maybe<FormDataWhereUniqueInput>;
+}
 
 export interface FormDataCreateInput {
   id?: Maybe<ID_Input>;
@@ -937,71 +1089,6 @@ export interface FormDataCreateInput {
   Q2?: Maybe<String>;
   Q3?: Maybe<String>;
   Q4?: Maybe<Question>;
-}
-
-export interface FormDataUpdateInput {
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  username?: Maybe<String>;
-  Q1?: Maybe<String>;
-  Q2?: Maybe<String>;
-  Q3?: Maybe<String>;
-  Q4?: Maybe<Question>;
-}
-
-export interface FormDataUpdateManyMutationInput {
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  username?: Maybe<String>;
-  Q1?: Maybe<String>;
-  Q2?: Maybe<String>;
-  Q3?: Maybe<String>;
-  Q4?: Maybe<Question>;
-}
-
-export interface GoalCreateInput {
-  id?: Maybe<ID_Input>;
-  title: String;
-  startDate: DateTimeInput;
-  projectedCompletionDate: DateTimeInput;
-  actualCompletionDate: DateTimeInput;
-  pointsWorth: Int;
-  pointsEarned: Int;
-  pointsDeducted: Int;
-  description: String;
-  author: UserCreateOneWithoutGoalsInput;
-}
-
-export interface UserCreateOneWithoutGoalsInput {
-  create?: Maybe<UserCreateWithoutGoalsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface UserCreateWithoutGoalsInput {
-  id?: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
-  identity?: Maybe<String>;
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  nickname?: Maybe<String>;
-  guestCheckIns?: Maybe<Int>;
-  eblID?: Maybe<String>;
-  profileStatus?: Maybe<ProfileStatus>;
-  avatar?: Maybe<String>;
-  userInfo?: Maybe<FormDataCreateOneInput>;
-  password?: Maybe<String>;
-  journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
-  points?: Maybe<Int>;
-  friends?: Maybe<UserCreateManyWithoutFriendsInput>;
-  status?: Maybe<UserStatus>;
-  posts?: Maybe<PostCreateManyWithoutAuthorInput>;
-  following?: Maybe<UserCreateManyWithoutFollowingInput>;
-  tier?: Maybe<TIER>;
-}
-
-export interface FormDataCreateOneInput {
-  create?: Maybe<FormDataCreateInput>;
-  connect?: Maybe<FormDataWhereUniqueInput>;
 }
 
 export interface JournalEntryCreateManyWithoutAuthorInput {
@@ -1031,6 +1118,7 @@ export interface UserCreateManyWithoutFriendsInput {
 export interface UserCreateWithoutFriendsInput {
   id?: Maybe<ID_Input>;
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -1041,30 +1129,13 @@ export interface UserCreateWithoutFriendsInput {
   avatar?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
   userInfo?: Maybe<FormDataCreateOneInput>;
-  password?: Maybe<String>;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
   posts?: Maybe<PostCreateManyWithoutAuthorInput>;
   following?: Maybe<UserCreateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
-}
-
-export interface GoalCreateManyWithoutAuthorInput {
-  create?: Maybe<GoalCreateWithoutAuthorInput[] | GoalCreateWithoutAuthorInput>;
-  connect?: Maybe<GoalWhereUniqueInput[] | GoalWhereUniqueInput>;
-}
-
-export interface GoalCreateWithoutAuthorInput {
-  id?: Maybe<ID_Input>;
-  title: String;
-  startDate: DateTimeInput;
-  projectedCompletionDate: DateTimeInput;
-  actualCompletionDate: DateTimeInput;
-  pointsWorth: Int;
-  pointsEarned: Int;
-  pointsDeducted: Int;
-  description: String;
+  role?: Maybe<Role>;
 }
 
 export interface PostCreateManyWithoutAuthorInput {
@@ -1090,6 +1161,7 @@ export interface UserCreateManyWithoutFollowingInput {
 export interface UserCreateWithoutFollowingInput {
   id?: Maybe<ID_Input>;
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -1100,36 +1172,30 @@ export interface UserCreateWithoutFollowingInput {
   avatar?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
   userInfo?: Maybe<FormDataCreateOneInput>;
-  password?: Maybe<String>;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
   posts?: Maybe<PostCreateManyWithoutAuthorInput>;
   tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
 }
 
-export interface GoalUpdateInput {
-  title?: Maybe<String>;
-  startDate?: Maybe<DateTimeInput>;
-  projectedCompletionDate?: Maybe<DateTimeInput>;
-  actualCompletionDate?: Maybe<DateTimeInput>;
-  pointsWorth?: Maybe<Int>;
-  pointsEarned?: Maybe<Int>;
-  pointsDeducted?: Maybe<Int>;
-  description?: Maybe<String>;
-  author?: Maybe<UserUpdateOneRequiredWithoutGoalsInput>;
+export interface AuthPayloadUpdateInput {
+  token?: Maybe<String>;
+  user?: Maybe<UserUpdateOneRequiredInput>;
 }
 
-export interface UserUpdateOneRequiredWithoutGoalsInput {
-  create?: Maybe<UserCreateWithoutGoalsInput>;
-  update?: Maybe<UserUpdateWithoutGoalsDataInput>;
-  upsert?: Maybe<UserUpsertWithoutGoalsInput>;
+export interface UserUpdateOneRequiredInput {
+  create?: Maybe<UserCreateInput>;
+  update?: Maybe<UserUpdateDataInput>;
+  upsert?: Maybe<UserUpsertNestedInput>;
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface UserUpdateWithoutGoalsDataInput {
+export interface UserUpdateDataInput {
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -1138,8 +1204,8 @@ export interface UserUpdateWithoutGoalsDataInput {
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
+  goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
   userInfo?: Maybe<FormDataUpdateOneInput>;
-  password?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
@@ -1147,6 +1213,161 @@ export interface UserUpdateWithoutGoalsDataInput {
   posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
+}
+
+export interface GoalUpdateManyWithoutAuthorInput {
+  create?: Maybe<GoalCreateWithoutAuthorInput[] | GoalCreateWithoutAuthorInput>;
+  delete?: Maybe<GoalWhereUniqueInput[] | GoalWhereUniqueInput>;
+  connect?: Maybe<GoalWhereUniqueInput[] | GoalWhereUniqueInput>;
+  set?: Maybe<GoalWhereUniqueInput[] | GoalWhereUniqueInput>;
+  disconnect?: Maybe<GoalWhereUniqueInput[] | GoalWhereUniqueInput>;
+  update?: Maybe<
+    | GoalUpdateWithWhereUniqueWithoutAuthorInput[]
+    | GoalUpdateWithWhereUniqueWithoutAuthorInput
+  >;
+  upsert?: Maybe<
+    | GoalUpsertWithWhereUniqueWithoutAuthorInput[]
+    | GoalUpsertWithWhereUniqueWithoutAuthorInput
+  >;
+  deleteMany?: Maybe<GoalScalarWhereInput[] | GoalScalarWhereInput>;
+  updateMany?: Maybe<
+    GoalUpdateManyWithWhereNestedInput[] | GoalUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface GoalUpdateWithWhereUniqueWithoutAuthorInput {
+  where: GoalWhereUniqueInput;
+  data: GoalUpdateWithoutAuthorDataInput;
+}
+
+export interface GoalUpdateWithoutAuthorDataInput {
+  title?: Maybe<String>;
+  startDate?: Maybe<DateTimeInput>;
+  projectedCompletionDate?: Maybe<DateTimeInput>;
+  actualCompletionDate?: Maybe<DateTimeInput>;
+  pointsWorth?: Maybe<Int>;
+  pointsEarned?: Maybe<Int>;
+  pointsDeducted?: Maybe<Int>;
+  description?: Maybe<String>;
+}
+
+export interface GoalUpsertWithWhereUniqueWithoutAuthorInput {
+  where: GoalWhereUniqueInput;
+  update: GoalUpdateWithoutAuthorDataInput;
+  create: GoalCreateWithoutAuthorInput;
+}
+
+export interface GoalScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  startDate?: Maybe<DateTimeInput>;
+  startDate_not?: Maybe<DateTimeInput>;
+  startDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  startDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  startDate_lt?: Maybe<DateTimeInput>;
+  startDate_lte?: Maybe<DateTimeInput>;
+  startDate_gt?: Maybe<DateTimeInput>;
+  startDate_gte?: Maybe<DateTimeInput>;
+  projectedCompletionDate?: Maybe<DateTimeInput>;
+  projectedCompletionDate_not?: Maybe<DateTimeInput>;
+  projectedCompletionDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  projectedCompletionDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  projectedCompletionDate_lt?: Maybe<DateTimeInput>;
+  projectedCompletionDate_lte?: Maybe<DateTimeInput>;
+  projectedCompletionDate_gt?: Maybe<DateTimeInput>;
+  projectedCompletionDate_gte?: Maybe<DateTimeInput>;
+  actualCompletionDate?: Maybe<DateTimeInput>;
+  actualCompletionDate_not?: Maybe<DateTimeInput>;
+  actualCompletionDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  actualCompletionDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  actualCompletionDate_lt?: Maybe<DateTimeInput>;
+  actualCompletionDate_lte?: Maybe<DateTimeInput>;
+  actualCompletionDate_gt?: Maybe<DateTimeInput>;
+  actualCompletionDate_gte?: Maybe<DateTimeInput>;
+  pointsWorth?: Maybe<Int>;
+  pointsWorth_not?: Maybe<Int>;
+  pointsWorth_in?: Maybe<Int[] | Int>;
+  pointsWorth_not_in?: Maybe<Int[] | Int>;
+  pointsWorth_lt?: Maybe<Int>;
+  pointsWorth_lte?: Maybe<Int>;
+  pointsWorth_gt?: Maybe<Int>;
+  pointsWorth_gte?: Maybe<Int>;
+  pointsEarned?: Maybe<Int>;
+  pointsEarned_not?: Maybe<Int>;
+  pointsEarned_in?: Maybe<Int[] | Int>;
+  pointsEarned_not_in?: Maybe<Int[] | Int>;
+  pointsEarned_lt?: Maybe<Int>;
+  pointsEarned_lte?: Maybe<Int>;
+  pointsEarned_gt?: Maybe<Int>;
+  pointsEarned_gte?: Maybe<Int>;
+  pointsDeducted?: Maybe<Int>;
+  pointsDeducted_not?: Maybe<Int>;
+  pointsDeducted_in?: Maybe<Int[] | Int>;
+  pointsDeducted_not_in?: Maybe<Int[] | Int>;
+  pointsDeducted_lt?: Maybe<Int>;
+  pointsDeducted_lte?: Maybe<Int>;
+  pointsDeducted_gt?: Maybe<Int>;
+  pointsDeducted_gte?: Maybe<Int>;
+  description?: Maybe<String>;
+  description_not?: Maybe<String>;
+  description_in?: Maybe<String[] | String>;
+  description_not_in?: Maybe<String[] | String>;
+  description_lt?: Maybe<String>;
+  description_lte?: Maybe<String>;
+  description_gt?: Maybe<String>;
+  description_gte?: Maybe<String>;
+  description_contains?: Maybe<String>;
+  description_not_contains?: Maybe<String>;
+  description_starts_with?: Maybe<String>;
+  description_not_starts_with?: Maybe<String>;
+  description_ends_with?: Maybe<String>;
+  description_not_ends_with?: Maybe<String>;
+  AND?: Maybe<GoalScalarWhereInput[] | GoalScalarWhereInput>;
+  OR?: Maybe<GoalScalarWhereInput[] | GoalScalarWhereInput>;
+  NOT?: Maybe<GoalScalarWhereInput[] | GoalScalarWhereInput>;
+}
+
+export interface GoalUpdateManyWithWhereNestedInput {
+  where: GoalScalarWhereInput;
+  data: GoalUpdateManyDataInput;
+}
+
+export interface GoalUpdateManyDataInput {
+  title?: Maybe<String>;
+  startDate?: Maybe<DateTimeInput>;
+  projectedCompletionDate?: Maybe<DateTimeInput>;
+  actualCompletionDate?: Maybe<DateTimeInput>;
+  pointsWorth?: Maybe<Int>;
+  pointsEarned?: Maybe<Int>;
+  pointsDeducted?: Maybe<Int>;
+  description?: Maybe<String>;
 }
 
 export interface FormDataUpdateOneInput {
@@ -1318,6 +1539,7 @@ export interface UserUpdateWithWhereUniqueWithoutFriendsInput {
 
 export interface UserUpdateWithoutFriendsDataInput {
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -1328,167 +1550,13 @@ export interface UserUpdateWithoutFriendsDataInput {
   avatar?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
   userInfo?: Maybe<FormDataUpdateOneInput>;
-  password?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
   posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
-}
-
-export interface GoalUpdateManyWithoutAuthorInput {
-  create?: Maybe<GoalCreateWithoutAuthorInput[] | GoalCreateWithoutAuthorInput>;
-  delete?: Maybe<GoalWhereUniqueInput[] | GoalWhereUniqueInput>;
-  connect?: Maybe<GoalWhereUniqueInput[] | GoalWhereUniqueInput>;
-  set?: Maybe<GoalWhereUniqueInput[] | GoalWhereUniqueInput>;
-  disconnect?: Maybe<GoalWhereUniqueInput[] | GoalWhereUniqueInput>;
-  update?: Maybe<
-    | GoalUpdateWithWhereUniqueWithoutAuthorInput[]
-    | GoalUpdateWithWhereUniqueWithoutAuthorInput
-  >;
-  upsert?: Maybe<
-    | GoalUpsertWithWhereUniqueWithoutAuthorInput[]
-    | GoalUpsertWithWhereUniqueWithoutAuthorInput
-  >;
-  deleteMany?: Maybe<GoalScalarWhereInput[] | GoalScalarWhereInput>;
-  updateMany?: Maybe<
-    GoalUpdateManyWithWhereNestedInput[] | GoalUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface GoalUpdateWithWhereUniqueWithoutAuthorInput {
-  where: GoalWhereUniqueInput;
-  data: GoalUpdateWithoutAuthorDataInput;
-}
-
-export interface GoalUpdateWithoutAuthorDataInput {
-  title?: Maybe<String>;
-  startDate?: Maybe<DateTimeInput>;
-  projectedCompletionDate?: Maybe<DateTimeInput>;
-  actualCompletionDate?: Maybe<DateTimeInput>;
-  pointsWorth?: Maybe<Int>;
-  pointsEarned?: Maybe<Int>;
-  pointsDeducted?: Maybe<Int>;
-  description?: Maybe<String>;
-}
-
-export interface GoalUpsertWithWhereUniqueWithoutAuthorInput {
-  where: GoalWhereUniqueInput;
-  update: GoalUpdateWithoutAuthorDataInput;
-  create: GoalCreateWithoutAuthorInput;
-}
-
-export interface GoalScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  title?: Maybe<String>;
-  title_not?: Maybe<String>;
-  title_in?: Maybe<String[] | String>;
-  title_not_in?: Maybe<String[] | String>;
-  title_lt?: Maybe<String>;
-  title_lte?: Maybe<String>;
-  title_gt?: Maybe<String>;
-  title_gte?: Maybe<String>;
-  title_contains?: Maybe<String>;
-  title_not_contains?: Maybe<String>;
-  title_starts_with?: Maybe<String>;
-  title_not_starts_with?: Maybe<String>;
-  title_ends_with?: Maybe<String>;
-  title_not_ends_with?: Maybe<String>;
-  startDate?: Maybe<DateTimeInput>;
-  startDate_not?: Maybe<DateTimeInput>;
-  startDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  startDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  startDate_lt?: Maybe<DateTimeInput>;
-  startDate_lte?: Maybe<DateTimeInput>;
-  startDate_gt?: Maybe<DateTimeInput>;
-  startDate_gte?: Maybe<DateTimeInput>;
-  projectedCompletionDate?: Maybe<DateTimeInput>;
-  projectedCompletionDate_not?: Maybe<DateTimeInput>;
-  projectedCompletionDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  projectedCompletionDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  projectedCompletionDate_lt?: Maybe<DateTimeInput>;
-  projectedCompletionDate_lte?: Maybe<DateTimeInput>;
-  projectedCompletionDate_gt?: Maybe<DateTimeInput>;
-  projectedCompletionDate_gte?: Maybe<DateTimeInput>;
-  actualCompletionDate?: Maybe<DateTimeInput>;
-  actualCompletionDate_not?: Maybe<DateTimeInput>;
-  actualCompletionDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  actualCompletionDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  actualCompletionDate_lt?: Maybe<DateTimeInput>;
-  actualCompletionDate_lte?: Maybe<DateTimeInput>;
-  actualCompletionDate_gt?: Maybe<DateTimeInput>;
-  actualCompletionDate_gte?: Maybe<DateTimeInput>;
-  pointsWorth?: Maybe<Int>;
-  pointsWorth_not?: Maybe<Int>;
-  pointsWorth_in?: Maybe<Int[] | Int>;
-  pointsWorth_not_in?: Maybe<Int[] | Int>;
-  pointsWorth_lt?: Maybe<Int>;
-  pointsWorth_lte?: Maybe<Int>;
-  pointsWorth_gt?: Maybe<Int>;
-  pointsWorth_gte?: Maybe<Int>;
-  pointsEarned?: Maybe<Int>;
-  pointsEarned_not?: Maybe<Int>;
-  pointsEarned_in?: Maybe<Int[] | Int>;
-  pointsEarned_not_in?: Maybe<Int[] | Int>;
-  pointsEarned_lt?: Maybe<Int>;
-  pointsEarned_lte?: Maybe<Int>;
-  pointsEarned_gt?: Maybe<Int>;
-  pointsEarned_gte?: Maybe<Int>;
-  pointsDeducted?: Maybe<Int>;
-  pointsDeducted_not?: Maybe<Int>;
-  pointsDeducted_in?: Maybe<Int[] | Int>;
-  pointsDeducted_not_in?: Maybe<Int[] | Int>;
-  pointsDeducted_lt?: Maybe<Int>;
-  pointsDeducted_lte?: Maybe<Int>;
-  pointsDeducted_gt?: Maybe<Int>;
-  pointsDeducted_gte?: Maybe<Int>;
-  description?: Maybe<String>;
-  description_not?: Maybe<String>;
-  description_in?: Maybe<String[] | String>;
-  description_not_in?: Maybe<String[] | String>;
-  description_lt?: Maybe<String>;
-  description_lte?: Maybe<String>;
-  description_gt?: Maybe<String>;
-  description_gte?: Maybe<String>;
-  description_contains?: Maybe<String>;
-  description_not_contains?: Maybe<String>;
-  description_starts_with?: Maybe<String>;
-  description_not_starts_with?: Maybe<String>;
-  description_ends_with?: Maybe<String>;
-  description_not_ends_with?: Maybe<String>;
-  AND?: Maybe<GoalScalarWhereInput[] | GoalScalarWhereInput>;
-  OR?: Maybe<GoalScalarWhereInput[] | GoalScalarWhereInput>;
-  NOT?: Maybe<GoalScalarWhereInput[] | GoalScalarWhereInput>;
-}
-
-export interface GoalUpdateManyWithWhereNestedInput {
-  where: GoalScalarWhereInput;
-  data: GoalUpdateManyDataInput;
-}
-
-export interface GoalUpdateManyDataInput {
-  title?: Maybe<String>;
-  startDate?: Maybe<DateTimeInput>;
-  projectedCompletionDate?: Maybe<DateTimeInput>;
-  actualCompletionDate?: Maybe<DateTimeInput>;
-  pointsWorth?: Maybe<Int>;
-  pointsEarned?: Maybe<Int>;
-  pointsDeducted?: Maybe<Int>;
-  description?: Maybe<String>;
+  role?: Maybe<Role>;
 }
 
 export interface PostUpdateManyWithoutAuthorInput {
@@ -1650,6 +1718,7 @@ export interface UserUpdateWithWhereUniqueWithoutFollowingInput {
 
 export interface UserUpdateWithoutFollowingDataInput {
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -1660,13 +1729,13 @@ export interface UserUpdateWithoutFollowingDataInput {
   avatar?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
   userInfo?: Maybe<FormDataUpdateOneInput>;
-  password?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
   posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
   tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutFollowingInput {
@@ -1704,6 +1773,20 @@ export interface UserScalarWhereInput {
   auth0id_not_starts_with?: Maybe<String>;
   auth0id_ends_with?: Maybe<String>;
   auth0id_not_ends_with?: Maybe<String>;
+  metaData?: Maybe<String>;
+  metaData_not?: Maybe<String>;
+  metaData_in?: Maybe<String[] | String>;
+  metaData_not_in?: Maybe<String[] | String>;
+  metaData_lt?: Maybe<String>;
+  metaData_lte?: Maybe<String>;
+  metaData_gt?: Maybe<String>;
+  metaData_gte?: Maybe<String>;
+  metaData_contains?: Maybe<String>;
+  metaData_not_contains?: Maybe<String>;
+  metaData_starts_with?: Maybe<String>;
+  metaData_not_starts_with?: Maybe<String>;
+  metaData_ends_with?: Maybe<String>;
+  metaData_not_ends_with?: Maybe<String>;
   identity?: Maybe<String>;
   identity_not?: Maybe<String>;
   identity_in?: Maybe<String[] | String>;
@@ -1800,20 +1883,6 @@ export interface UserScalarWhereInput {
   avatar_not_starts_with?: Maybe<String>;
   avatar_ends_with?: Maybe<String>;
   avatar_not_ends_with?: Maybe<String>;
-  password?: Maybe<String>;
-  password_not?: Maybe<String>;
-  password_in?: Maybe<String[] | String>;
-  password_not_in?: Maybe<String[] | String>;
-  password_lt?: Maybe<String>;
-  password_lte?: Maybe<String>;
-  password_gt?: Maybe<String>;
-  password_gte?: Maybe<String>;
-  password_contains?: Maybe<String>;
-  password_not_contains?: Maybe<String>;
-  password_starts_with?: Maybe<String>;
-  password_not_starts_with?: Maybe<String>;
-  password_ends_with?: Maybe<String>;
-  password_not_ends_with?: Maybe<String>;
   points?: Maybe<Int>;
   points_not?: Maybe<Int>;
   points_in?: Maybe<Int[] | Int>;
@@ -1830,6 +1899,10 @@ export interface UserScalarWhereInput {
   tier_not?: Maybe<TIER>;
   tier_in?: Maybe<TIER[] | TIER>;
   tier_not_in?: Maybe<TIER[] | TIER>;
+  role?: Maybe<Role>;
+  role_not?: Maybe<Role>;
+  role_in?: Maybe<Role[] | Role>;
+  role_not_in?: Maybe<Role[] | Role>;
   AND?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
   OR?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
   NOT?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
@@ -1842,6 +1915,7 @@ export interface UserUpdateManyWithWhereNestedInput {
 
 export interface UserUpdateManyDataInput {
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -1850,16 +1924,127 @@ export interface UserUpdateManyDataInput {
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
-  password?: Maybe<String>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
   tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutFriendsInput {
   where: UserWhereUniqueInput;
   update: UserUpdateWithoutFriendsDataInput;
   create: UserCreateWithoutFriendsInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface AuthPayloadUpdateManyMutationInput {
+  token?: Maybe<String>;
+}
+
+export interface FormDataUpdateInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  username?: Maybe<String>;
+  Q1?: Maybe<String>;
+  Q2?: Maybe<String>;
+  Q3?: Maybe<String>;
+  Q4?: Maybe<Question>;
+}
+
+export interface FormDataUpdateManyMutationInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  username?: Maybe<String>;
+  Q1?: Maybe<String>;
+  Q2?: Maybe<String>;
+  Q3?: Maybe<String>;
+  Q4?: Maybe<Question>;
+}
+
+export interface GoalCreateInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  startDate: DateTimeInput;
+  projectedCompletionDate: DateTimeInput;
+  actualCompletionDate: DateTimeInput;
+  pointsWorth: Int;
+  pointsEarned: Int;
+  pointsDeducted: Int;
+  description: String;
+  author: UserCreateOneWithoutGoalsInput;
+}
+
+export interface UserCreateOneWithoutGoalsInput {
+  create?: Maybe<UserCreateWithoutGoalsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutGoalsInput {
+  id?: Maybe<ID_Input>;
+  auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
+  userInfo?: Maybe<FormDataCreateOneInput>;
+  journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
+  points?: Maybe<Int>;
+  friends?: Maybe<UserCreateManyWithoutFriendsInput>;
+  status?: Maybe<UserStatus>;
+  posts?: Maybe<PostCreateManyWithoutAuthorInput>;
+  following?: Maybe<UserCreateManyWithoutFollowingInput>;
+  tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
+}
+
+export interface GoalUpdateInput {
+  title?: Maybe<String>;
+  startDate?: Maybe<DateTimeInput>;
+  projectedCompletionDate?: Maybe<DateTimeInput>;
+  actualCompletionDate?: Maybe<DateTimeInput>;
+  pointsWorth?: Maybe<Int>;
+  pointsEarned?: Maybe<Int>;
+  pointsDeducted?: Maybe<Int>;
+  description?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredWithoutGoalsInput>;
+}
+
+export interface UserUpdateOneRequiredWithoutGoalsInput {
+  create?: Maybe<UserCreateWithoutGoalsInput>;
+  update?: Maybe<UserUpdateWithoutGoalsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutGoalsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutGoalsDataInput {
+  auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  nickname?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
+  userInfo?: Maybe<FormDataUpdateOneInput>;
+  journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
+  points?: Maybe<Int>;
+  friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
+  status?: Maybe<UserStatus>;
+  posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
+  following?: Maybe<UserUpdateManyWithoutFollowingInput>;
+  tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
 }
 
 export interface UserUpsertWithoutGoalsInput {
@@ -1894,6 +2079,7 @@ export interface UserCreateOneWithoutJournalInput {
 export interface UserCreateWithoutJournalInput {
   id?: Maybe<ID_Input>;
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -1904,13 +2090,13 @@ export interface UserCreateWithoutJournalInput {
   avatar?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
   userInfo?: Maybe<FormDataCreateOneInput>;
-  password?: Maybe<String>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
   posts?: Maybe<PostCreateManyWithoutAuthorInput>;
   following?: Maybe<UserCreateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
 }
 
 export interface JournalEntryUpdateInput {
@@ -1929,6 +2115,7 @@ export interface UserUpdateOneRequiredWithoutJournalInput {
 
 export interface UserUpdateWithoutJournalDataInput {
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -1939,13 +2126,13 @@ export interface UserUpdateWithoutJournalDataInput {
   avatar?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
   userInfo?: Maybe<FormDataUpdateOneInput>;
-  password?: Maybe<String>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
   posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
 }
 
 export interface UserUpsertWithoutJournalInput {
@@ -1976,6 +2163,7 @@ export interface UserCreateOneWithoutPostsInput {
 export interface UserCreateWithoutPostsInput {
   id?: Maybe<ID_Input>;
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -1986,13 +2174,13 @@ export interface UserCreateWithoutPostsInput {
   avatar?: Maybe<String>;
   goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
   userInfo?: Maybe<FormDataCreateOneInput>;
-  password?: Maybe<String>;
   journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserCreateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
   following?: Maybe<UserCreateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
 }
 
 export interface PostUpdateInput {
@@ -2014,6 +2202,7 @@ export interface UserUpdateOneWithoutPostsInput {
 
 export interface UserUpdateWithoutPostsDataInput {
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -2024,13 +2213,13 @@ export interface UserUpdateWithoutPostsDataInput {
   avatar?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
   userInfo?: Maybe<FormDataUpdateOneInput>;
-  password?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
   status?: Maybe<UserStatus>;
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
 }
 
 export interface UserUpsertWithoutPostsInput {
@@ -2045,31 +2234,9 @@ export interface PostUpdateManyMutationInput {
   content?: Maybe<String>;
 }
 
-export interface UserCreateInput {
-  id?: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
-  identity?: Maybe<String>;
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-  nickname?: Maybe<String>;
-  guestCheckIns?: Maybe<Int>;
-  eblID?: Maybe<String>;
-  profileStatus?: Maybe<ProfileStatus>;
-  avatar?: Maybe<String>;
-  goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
-  userInfo?: Maybe<FormDataCreateOneInput>;
-  password?: Maybe<String>;
-  journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
-  points?: Maybe<Int>;
-  friends?: Maybe<UserCreateManyWithoutFriendsInput>;
-  status?: Maybe<UserStatus>;
-  posts?: Maybe<PostCreateManyWithoutAuthorInput>;
-  following?: Maybe<UserCreateManyWithoutFollowingInput>;
-  tier?: Maybe<TIER>;
-}
-
 export interface UserUpdateInput {
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -2080,7 +2247,6 @@ export interface UserUpdateInput {
   avatar?: Maybe<String>;
   goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
   userInfo?: Maybe<FormDataUpdateOneInput>;
-  password?: Maybe<String>;
   journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
   points?: Maybe<Int>;
   friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
@@ -2088,10 +2254,12 @@ export interface UserUpdateInput {
   posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
 }
 
 export interface UserUpdateManyMutationInput {
   auth0id?: Maybe<String>;
+  metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
   name?: Maybe<String>;
@@ -2100,10 +2268,27 @@ export interface UserUpdateManyMutationInput {
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
   avatar?: Maybe<String>;
-  password?: Maybe<String>;
   points?: Maybe<Int>;
   status?: Maybe<UserStatus>;
   tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
+}
+
+export interface AuthPayloadSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<AuthPayloadWhereInput>;
+  AND?: Maybe<
+    AuthPayloadSubscriptionWhereInput[] | AuthPayloadSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    AuthPayloadSubscriptionWhereInput[] | AuthPayloadSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    AuthPayloadSubscriptionWhereInput[] | AuthPayloadSubscriptionWhereInput
+  >;
 }
 
 export interface FormDataSubscriptionWhereInput {
@@ -2175,135 +2360,245 @@ export interface NodeNode {
   id: ID_Output;
 }
 
-export interface FormData {
+export interface AuthPayload {
   id: ID_Output;
-  createdAt: DateTimeOutput;
-  email: String;
-  name: String;
-  username: String;
-  Q1?: String;
-  Q2?: String;
-  Q3?: String;
-  Q4?: Question;
+  token: String;
 }
 
-export interface FormDataPromise extends Promise<FormData>, Fragmentable {
+export interface AuthPayloadPromise extends Promise<AuthPayload>, Fragmentable {
   id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  email: () => Promise<String>;
-  name: () => Promise<String>;
-  username: () => Promise<String>;
-  Q1: () => Promise<String>;
-  Q2: () => Promise<String>;
-  Q3: () => Promise<String>;
-  Q4: () => Promise<Question>;
+  token: () => Promise<String>;
+  user: <T = UserPromise>() => T;
 }
 
-export interface FormDataSubscription
-  extends Promise<AsyncIterator<FormData>>,
+export interface AuthPayloadSubscription
+  extends Promise<AsyncIterator<AuthPayload>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  email: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  username: () => Promise<AsyncIterator<String>>;
-  Q1: () => Promise<AsyncIterator<String>>;
-  Q2: () => Promise<AsyncIterator<String>>;
-  Q3: () => Promise<AsyncIterator<String>>;
-  Q4: () => Promise<AsyncIterator<Question>>;
+  token: () => Promise<AsyncIterator<String>>;
+  user: <T = UserSubscription>() => T;
 }
 
-export interface FormDataNullablePromise
-  extends Promise<FormData | null>,
+export interface AuthPayloadNullablePromise
+  extends Promise<AuthPayload | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
+  token: () => Promise<String>;
+  user: <T = UserPromise>() => T;
+}
+
+export interface User {
+  id: ID_Output;
+  auth0id?: String;
+  metaData?: String;
+  identity?: String;
+  email?: String;
+  name?: String;
+  nickname?: String;
+  guestCheckIns?: Int;
+  eblID?: String;
+  profileStatus?: ProfileStatus;
+  avatar?: String;
+  points: Int;
+  status?: UserStatus;
+  tier: TIER;
+  role?: Role;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  auth0id: () => Promise<String>;
+  metaData: () => Promise<String>;
+  identity: () => Promise<String>;
   email: () => Promise<String>;
   name: () => Promise<String>;
-  username: () => Promise<String>;
-  Q1: () => Promise<String>;
-  Q2: () => Promise<String>;
-  Q3: () => Promise<String>;
-  Q4: () => Promise<Question>;
+  nickname: () => Promise<String>;
+  guestCheckIns: () => Promise<Int>;
+  eblID: () => Promise<String>;
+  profileStatus: () => Promise<ProfileStatus>;
+  avatar: () => Promise<String>;
+  goals: <T = FragmentableArray<Goal>>(args?: {
+    where?: GoalWhereInput;
+    orderBy?: GoalOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  userInfo: <T = FormDataPromise>() => T;
+  journal: <T = FragmentableArray<JournalEntry>>(args?: {
+    where?: JournalEntryWhereInput;
+    orderBy?: JournalEntryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  points: () => Promise<Int>;
+  friends: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  status: () => Promise<UserStatus>;
+  posts: <T = FragmentableArray<Post>>(args?: {
+    where?: PostWhereInput;
+    orderBy?: PostOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  following: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  tier: () => Promise<TIER>;
+  role: () => Promise<Role>;
 }
 
-export interface FormDataConnection {
-  pageInfo: PageInfo;
-  edges: FormDataEdge[];
-}
-
-export interface FormDataConnectionPromise
-  extends Promise<FormDataConnection>,
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<FormDataEdge>>() => T;
-  aggregate: <T = AggregateFormDataPromise>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  auth0id: () => Promise<AsyncIterator<String>>;
+  metaData: () => Promise<AsyncIterator<String>>;
+  identity: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  nickname: () => Promise<AsyncIterator<String>>;
+  guestCheckIns: () => Promise<AsyncIterator<Int>>;
+  eblID: () => Promise<AsyncIterator<String>>;
+  profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
+  avatar: () => Promise<AsyncIterator<String>>;
+  goals: <T = Promise<AsyncIterator<GoalSubscription>>>(args?: {
+    where?: GoalWhereInput;
+    orderBy?: GoalOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  userInfo: <T = FormDataSubscription>() => T;
+  journal: <T = Promise<AsyncIterator<JournalEntrySubscription>>>(args?: {
+    where?: JournalEntryWhereInput;
+    orderBy?: JournalEntryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  points: () => Promise<AsyncIterator<Int>>;
+  friends: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  status: () => Promise<AsyncIterator<UserStatus>>;
+  posts: <T = Promise<AsyncIterator<PostSubscription>>>(args?: {
+    where?: PostWhereInput;
+    orderBy?: PostOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  following: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  tier: () => Promise<AsyncIterator<TIER>>;
+  role: () => Promise<AsyncIterator<Role>>;
 }
 
-export interface FormDataConnectionSubscription
-  extends Promise<AsyncIterator<FormDataConnection>>,
+export interface UserNullablePromise
+  extends Promise<User | null>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<FormDataEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateFormDataSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface FormDataEdge {
-  node: FormData;
-  cursor: String;
-}
-
-export interface FormDataEdgePromise
-  extends Promise<FormDataEdge>,
-    Fragmentable {
-  node: <T = FormDataPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface FormDataEdgeSubscription
-  extends Promise<AsyncIterator<FormDataEdge>>,
-    Fragmentable {
-  node: <T = FormDataSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateFormData {
-  count: Int;
-}
-
-export interface AggregateFormDataPromise
-  extends Promise<AggregateFormData>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateFormDataSubscription
-  extends Promise<AsyncIterator<AggregateFormData>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  id: () => Promise<ID_Output>;
+  auth0id: () => Promise<String>;
+  metaData: () => Promise<String>;
+  identity: () => Promise<String>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  nickname: () => Promise<String>;
+  guestCheckIns: () => Promise<Int>;
+  eblID: () => Promise<String>;
+  profileStatus: () => Promise<ProfileStatus>;
+  avatar: () => Promise<String>;
+  goals: <T = FragmentableArray<Goal>>(args?: {
+    where?: GoalWhereInput;
+    orderBy?: GoalOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  userInfo: <T = FormDataPromise>() => T;
+  journal: <T = FragmentableArray<JournalEntry>>(args?: {
+    where?: JournalEntryWhereInput;
+    orderBy?: JournalEntryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  points: () => Promise<Int>;
+  friends: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  status: () => Promise<UserStatus>;
+  posts: <T = FragmentableArray<Post>>(args?: {
+    where?: PostWhereInput;
+    orderBy?: PostOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  following: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  tier: () => Promise<TIER>;
+  role: () => Promise<Role>;
 }
 
 export interface Goal {
@@ -2361,214 +2656,56 @@ export interface GoalNullablePromise
   author: <T = UserPromise>() => T;
 }
 
-export interface User {
+export interface FormData {
   id: ID_Output;
-  auth0id?: String;
-  identity?: String;
-  email?: String;
-  name?: String;
-  nickname?: String;
-  guestCheckIns?: Int;
-  eblID?: String;
-  profileStatus?: ProfileStatus;
-  avatar?: String;
-  password?: String;
-  points: Int;
-  status?: UserStatus;
-  tier: TIER;
+  createdAt: DateTimeOutput;
+  email: String;
+  name: String;
+  username: String;
+  Q1?: String;
+  Q2?: String;
+  Q3?: String;
+  Q4?: Question;
 }
 
-export interface UserPromise extends Promise<User>, Fragmentable {
+export interface FormDataPromise extends Promise<FormData>, Fragmentable {
   id: () => Promise<ID_Output>;
-  auth0id: () => Promise<String>;
-  identity: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
   email: () => Promise<String>;
   name: () => Promise<String>;
-  nickname: () => Promise<String>;
-  guestCheckIns: () => Promise<Int>;
-  eblID: () => Promise<String>;
-  profileStatus: () => Promise<ProfileStatus>;
-  avatar: () => Promise<String>;
-  goals: <T = FragmentableArray<Goal>>(args?: {
-    where?: GoalWhereInput;
-    orderBy?: GoalOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  userInfo: <T = FormDataPromise>() => T;
-  password: () => Promise<String>;
-  journal: <T = FragmentableArray<JournalEntry>>(args?: {
-    where?: JournalEntryWhereInput;
-    orderBy?: JournalEntryOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  points: () => Promise<Int>;
-  friends: <T = FragmentableArray<User>>(args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  status: () => Promise<UserStatus>;
-  posts: <T = FragmentableArray<Post>>(args?: {
-    where?: PostWhereInput;
-    orderBy?: PostOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  following: <T = FragmentableArray<User>>(args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  tier: () => Promise<TIER>;
+  username: () => Promise<String>;
+  Q1: () => Promise<String>;
+  Q2: () => Promise<String>;
+  Q3: () => Promise<String>;
+  Q4: () => Promise<Question>;
 }
 
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
+export interface FormDataSubscription
+  extends Promise<AsyncIterator<FormData>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  auth0id: () => Promise<AsyncIterator<String>>;
-  identity: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   email: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
-  nickname: () => Promise<AsyncIterator<String>>;
-  guestCheckIns: () => Promise<AsyncIterator<Int>>;
-  eblID: () => Promise<AsyncIterator<String>>;
-  profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
-  avatar: () => Promise<AsyncIterator<String>>;
-  goals: <T = Promise<AsyncIterator<GoalSubscription>>>(args?: {
-    where?: GoalWhereInput;
-    orderBy?: GoalOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  userInfo: <T = FormDataSubscription>() => T;
-  password: () => Promise<AsyncIterator<String>>;
-  journal: <T = Promise<AsyncIterator<JournalEntrySubscription>>>(args?: {
-    where?: JournalEntryWhereInput;
-    orderBy?: JournalEntryOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  points: () => Promise<AsyncIterator<Int>>;
-  friends: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  status: () => Promise<AsyncIterator<UserStatus>>;
-  posts: <T = Promise<AsyncIterator<PostSubscription>>>(args?: {
-    where?: PostWhereInput;
-    orderBy?: PostOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  following: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  tier: () => Promise<AsyncIterator<TIER>>;
+  username: () => Promise<AsyncIterator<String>>;
+  Q1: () => Promise<AsyncIterator<String>>;
+  Q2: () => Promise<AsyncIterator<String>>;
+  Q3: () => Promise<AsyncIterator<String>>;
+  Q4: () => Promise<AsyncIterator<Question>>;
 }
 
-export interface UserNullablePromise
-  extends Promise<User | null>,
+export interface FormDataNullablePromise
+  extends Promise<FormData | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  auth0id: () => Promise<String>;
-  identity: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
   email: () => Promise<String>;
   name: () => Promise<String>;
-  nickname: () => Promise<String>;
-  guestCheckIns: () => Promise<Int>;
-  eblID: () => Promise<String>;
-  profileStatus: () => Promise<ProfileStatus>;
-  avatar: () => Promise<String>;
-  goals: <T = FragmentableArray<Goal>>(args?: {
-    where?: GoalWhereInput;
-    orderBy?: GoalOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  userInfo: <T = FormDataPromise>() => T;
-  password: () => Promise<String>;
-  journal: <T = FragmentableArray<JournalEntry>>(args?: {
-    where?: JournalEntryWhereInput;
-    orderBy?: JournalEntryOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  points: () => Promise<Int>;
-  friends: <T = FragmentableArray<User>>(args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  status: () => Promise<UserStatus>;
-  posts: <T = FragmentableArray<Post>>(args?: {
-    where?: PostWhereInput;
-    orderBy?: PostOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  following: <T = FragmentableArray<User>>(args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  tier: () => Promise<TIER>;
+  username: () => Promise<String>;
+  Q1: () => Promise<String>;
+  Q2: () => Promise<String>;
+  Q3: () => Promise<String>;
+  Q4: () => Promise<Question>;
 }
 
 export interface JournalEntry {
@@ -2657,6 +2794,141 @@ export interface PostNullablePromise
   info: () => Promise<String>;
   content: () => Promise<String>;
   author: <T = UserPromise>() => T;
+}
+
+export interface AuthPayloadConnection {
+  pageInfo: PageInfo;
+  edges: AuthPayloadEdge[];
+}
+
+export interface AuthPayloadConnectionPromise
+  extends Promise<AuthPayloadConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<AuthPayloadEdge>>() => T;
+  aggregate: <T = AggregateAuthPayloadPromise>() => T;
+}
+
+export interface AuthPayloadConnectionSubscription
+  extends Promise<AsyncIterator<AuthPayloadConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<AuthPayloadEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateAuthPayloadSubscription>() => T;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AuthPayloadEdge {
+  node: AuthPayload;
+  cursor: String;
+}
+
+export interface AuthPayloadEdgePromise
+  extends Promise<AuthPayloadEdge>,
+    Fragmentable {
+  node: <T = AuthPayloadPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface AuthPayloadEdgeSubscription
+  extends Promise<AsyncIterator<AuthPayloadEdge>>,
+    Fragmentable {
+  node: <T = AuthPayloadSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateAuthPayload {
+  count: Int;
+}
+
+export interface AggregateAuthPayloadPromise
+  extends Promise<AggregateAuthPayload>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateAuthPayloadSubscription
+  extends Promise<AsyncIterator<AggregateAuthPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface FormDataConnection {
+  pageInfo: PageInfo;
+  edges: FormDataEdge[];
+}
+
+export interface FormDataConnectionPromise
+  extends Promise<FormDataConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<FormDataEdge>>() => T;
+  aggregate: <T = AggregateFormDataPromise>() => T;
+}
+
+export interface FormDataConnectionSubscription
+  extends Promise<AsyncIterator<FormDataConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FormDataEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFormDataSubscription>() => T;
+}
+
+export interface FormDataEdge {
+  node: FormData;
+  cursor: String;
+}
+
+export interface FormDataEdgePromise
+  extends Promise<FormDataEdge>,
+    Fragmentable {
+  node: <T = FormDataPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface FormDataEdgeSubscription
+  extends Promise<AsyncIterator<FormDataEdge>>,
+    Fragmentable {
+  node: <T = FormDataSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateFormData {
+  count: Int;
+}
+
+export interface AggregateFormDataPromise
+  extends Promise<AggregateFormData>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateFormDataSubscription
+  extends Promise<AsyncIterator<AggregateFormData>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface GoalConnection {
@@ -2891,6 +3163,50 @@ export interface BatchPayloadSubscription
   extends Promise<AsyncIterator<BatchPayload>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface AuthPayloadSubscriptionPayload {
+  mutation: MutationType;
+  node: AuthPayload;
+  updatedFields: String[];
+  previousValues: AuthPayloadPreviousValues;
+}
+
+export interface AuthPayloadSubscriptionPayloadPromise
+  extends Promise<AuthPayloadSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = AuthPayloadPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = AuthPayloadPreviousValuesPromise>() => T;
+}
+
+export interface AuthPayloadSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<AuthPayloadSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = AuthPayloadSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = AuthPayloadPreviousValuesSubscription>() => T;
+}
+
+export interface AuthPayloadPreviousValues {
+  id: ID_Output;
+  token: String;
+}
+
+export interface AuthPayloadPreviousValuesPromise
+  extends Promise<AuthPayloadPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  token: () => Promise<String>;
+}
+
+export interface AuthPayloadPreviousValuesSubscription
+  extends Promise<AsyncIterator<AuthPayloadPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  token: () => Promise<AsyncIterator<String>>;
 }
 
 export interface FormDataSubscriptionPayload {
@@ -3163,6 +3479,7 @@ export interface UserSubscriptionPayloadSubscription
 export interface UserPreviousValues {
   id: ID_Output;
   auth0id?: String;
+  metaData?: String;
   identity?: String;
   email?: String;
   name?: String;
@@ -3171,10 +3488,10 @@ export interface UserPreviousValues {
   eblID?: String;
   profileStatus?: ProfileStatus;
   avatar?: String;
-  password?: String;
   points: Int;
   status?: UserStatus;
   tier: TIER;
+  role?: Role;
 }
 
 export interface UserPreviousValuesPromise
@@ -3182,6 +3499,7 @@ export interface UserPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   auth0id: () => Promise<String>;
+  metaData: () => Promise<String>;
   identity: () => Promise<String>;
   email: () => Promise<String>;
   name: () => Promise<String>;
@@ -3190,10 +3508,10 @@ export interface UserPreviousValuesPromise
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
   avatar: () => Promise<String>;
-  password: () => Promise<String>;
   points: () => Promise<Int>;
   status: () => Promise<UserStatus>;
   tier: () => Promise<TIER>;
+  role: () => Promise<Role>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -3201,6 +3519,7 @@ export interface UserPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   auth0id: () => Promise<AsyncIterator<String>>;
+  metaData: () => Promise<AsyncIterator<String>>;
   identity: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
@@ -3209,10 +3528,10 @@ export interface UserPreviousValuesSubscription
   eblID: () => Promise<AsyncIterator<String>>;
   profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
   avatar: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
   points: () => Promise<AsyncIterator<Int>>;
   status: () => Promise<AsyncIterator<UserStatus>>;
   tier: () => Promise<AsyncIterator<TIER>>;
+  role: () => Promise<AsyncIterator<Role>>;
 }
 
 /*
@@ -3227,6 +3546,11 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 export type String = string;
 
 /*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+*/
+export type Int = number;
+
+/*
 DateTime scalar input type, allowing Date
 */
 export type DateTimeInput = Date | string;
@@ -3235,11 +3559,6 @@ export type DateTimeInput = Date | string;
 DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
-
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
-*/
-export type Int = number;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
@@ -3282,11 +3601,19 @@ export const models: Model[] = [
     embedded: false
   },
   {
+    name: "AuthPayload",
+    embedded: false
+  },
+  {
     name: "FormData",
     embedded: false
   },
   {
     name: "Question",
+    embedded: false
+  },
+  {
+    name: "Role",
     embedded: false
   }
 ];

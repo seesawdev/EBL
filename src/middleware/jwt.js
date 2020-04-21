@@ -18,7 +18,7 @@ const checkJwt = jwt({
   credentialsRequired: false,
   audience: "https://everybodyleave.auth0.com/api/v2/",
   issuer: "https://everybodyleave.auth0.com",
-  algorithms: ["RS256"]
+  algorithm: ["RS256"]
 });
 
 module.exports = { checkJwt }
