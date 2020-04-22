@@ -2,9 +2,7 @@ const { GraphQLServer } = require('graphql-yoga')
 const cors = require('cors');
 const jwt = require("jsonwebtoken");
 const morgan = require("morgan");
-// var jwksClient = require("jwks-rsa");
 const { checkJwt } = require('./middleware/jwt')
-const { getUser } = require('./middleware/getUser');
 const { makeExecutableSchema } = require("graphql-tools")
 const { importSchema } = require("graphql-import");
 const { validateAndParseIdToken } = require('./helpers/validateAndParseIdToken')
@@ -18,6 +16,7 @@ const endpoint = `http://localhost:5000`;
 const options = {
   port: 5000,
 };
+//gets the logged in user, implemented for resolver level security in authResolvers file
 const getMe = async context => {
   const Authorization = context.request.get["Authorization"];
   if (Authorization) {
@@ -42,6 +41,7 @@ const server = new GraphQLServer({
   secret: `${process.env.PRISMA_SECRET}`,
   
   context: async request => {
+    //this will be used for resolver level security / directives
     if (request) {
       const me = await getMe(request);
       return {

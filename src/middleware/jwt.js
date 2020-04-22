@@ -11,13 +11,13 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://everybodyleave.auth0.com/.well-known/jwks.json`
+    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
   }),
 
   // Validate the audience and the issuer.
   credentialsRequired: false,
-  audience: "https://everybodyleave.auth0.com/api/v2/",
-  issuer: "https://everybodyleave.auth0.com",
+  audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
+  issuer: `https://${process.env.AUTH0_DOMAIN}`,
   algorithm: ["RS256"]
 });
 
