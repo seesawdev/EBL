@@ -42,14 +42,13 @@ const server = new GraphQLServer({
   secret: `${process.env.PRISMA_SECRET}`,
   
   context: async request => {
-    // if (request) {
-    //   const me = await getMe(request);
-
+    if (request) {
+      const me = await getMe(request);
       return {
         ...request,
-        // me,
+        me,
         prisma
-      // };
+      };
     }
   }
 });
@@ -60,31 +59,5 @@ server.express.post(endpoint, checkJwt, (req, res) => {
     msg: "Your Access Token was successfully validated!"
   });
 })
-// server.express.use(endpoint, checkJwt, (req, res, next) => {
-//   res.send({
-//     msg: "Your Access Token was successfully validated!"
-//   });
-//     next();
-//   });
 
-// server.express.use(checkJwt)
-// server.express.use(endpoint, checkJwt, (req, res) => {
-//   res.send({
-//     msg: "Your Access Token was successfully validated!"
-//   });
-// })
-// server.express.post(
-//   server.options.endpoint,
-//   checkJwt,
-//   (err, req, res) => {
-//     if (err) return res.status(401).send(err.message)
-//   }
-// )
-// server.express.post(server.options.endpoint, (req, res) =>
-//   getUser(req, res, context)
-// );
-// server.express.use(checkJwt);
-// server.express.use((req, res) =>
-//   getUser()
-// )
 server.start(options,  ({ port }) => console.log(`Server is running on http://localhost:${port}`));

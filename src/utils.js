@@ -1,25 +1,24 @@
 const jwt = require('jsonwebtoken')
-const jwksClient = require("jwks-rsa");
+// const jwksClient = require("jwks-rsa");
 
+// const client = jwksClient({
+//     jwksUri: `https://everybodyleave.auth0.com/.well-known/jwks.json`
+//   });
+// function getKey(header, callback) {
+//     client.getSigningKey(header.kid, function(err, key) {
+//       const signingKey = key.publicKey || key.rsaPublicKey;
+//       callback(null, signingKey);
+//     })
+//   }
 function getUserId(context) {
   const Authorization = context.request.get("Authorization");
-  const client = jwksClient({
-    jwksUri: `https://everybodyleave.auth0.com/.well-known/jwks.json`
-  });
-  function getKey(header, callback) {
-    client.getSigningKey(header.kid, function(err, key) {
-      const signingKey = key.publicKey || key.rsaPublicKey;
-      callback(null, signingKey);
-    })
-  }
+  
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
-    const { userId } = jwt.verify(token, getKey, function(err, decoded) {
-      console.log(decoded)
-    })
+    const { userId } = jwt.verify(token, `${process.env.APP_SECRET}`) 
+      console.log(userId)
     return userId
   }
-
   throw new AuthError()
 }
 
