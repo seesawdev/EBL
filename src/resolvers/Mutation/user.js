@@ -2,7 +2,7 @@ const { fromString } = require("uuidv4");
 const { combineResolvers } = require("graphql-resolvers");
 const { getUserId } = require("../../utils");
 const { isFriend } = require("../authResolvers");
-
+const { updateUserMetadata } = require("../helpers/managementClient");
 
 const user = {
   async setUserStatus(parent, { id, input }, context, info) {
@@ -79,6 +79,12 @@ const user = {
       data: { following: { connect: [{ username: args.username }] } }
     });
     return follow;
-  }
+  },
+
+ async updateUserProfile(parent, args, context, info){
+   const userId = getUserId(context)
+   const userAuth0Id = await context.prisma.user({ id: userId }).auth0Id();
+   
+ }
 };
 module.exports = { user };

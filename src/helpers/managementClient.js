@@ -15,7 +15,7 @@ const updateUserMetadata = async (params, metadata, function(err, user)) => {
            foo: barr
           }
         */
-    await management.users.updateUserMetadata(params, data)
+    await management.users.updateUserMetadata(params, metadata)
 
   } catch(err) {
     console.log("Error updating user metadata." err)
@@ -23,3 +23,5 @@ const updateUserMetadata = async (params, metadata, function(err, user)) => {
   console.log("Successfully updated user metadata." user)
   return user;
 }
+
+module.exports = { updateUserMetadata }

@@ -48,28 +48,35 @@ const auth = {
   //   };
   // },
 
-  async login(parent, { email, password, eblID }, context) {
-    const user = await context.prisma.user({ eblID });
-    const setUserPresence = await context.prisma.updateUser({
-      where: { id: user.id },
-      data: {
-        status: "ONLINE"
-      }
-    });
+  // async login(parent, { email, password, eblID }, context) {
+  //   const user = await context.prisma.user({ eblID });
+  //   const setUserPresence = await context.prisma.updateUser({
+  //     where: { id: user.id },
+  //     data: {
+  //       status: "ONLINE"
+  //     }
+  //   });
 
-    if (!user) {
-      throw new Error(`No user found for : ${email}`);
-    }
-    const passwordValid = await bcrypt.compare(password, user.password);
-    if (!passwordValid) {
-      throw new Error("Invalid password");
-    }
-    return {
-      token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
-      setUserPresence,
-      user
-    };
-  },
+  //   if (!user) {
+  //     throw new Error(`No user found for : ${email}`);
+  //   }
+  //   const passwordValid = await bcrypt.compare(password, user.password);
+  //   if (!passwordValid) {
+  //     throw new Error("Invalid password");
+  //   }
+  //   return {
+  //     token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
+  //     setUserPresence,
+  //     user
+  //   };
+  // },
+  
+
+/**
+logs in a user using Auth0 access token.  If user doesn't exist, create new prisma user
+and return a jwt token o
+
+ */
   async authenticate(parent, { idToken }, context, info) {
     let userToken = null;
     

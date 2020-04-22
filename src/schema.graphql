@@ -62,6 +62,7 @@ type AuthPayload {
 
 type User {
   id: ID!
+  auth0Id: String!
   eblID: String!
   identity: String!
   avatar: String
