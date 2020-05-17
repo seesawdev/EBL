@@ -1,4 +1,4 @@
-#import Query.users, Post from './prisma/generated/prisma-client/prisma-schema.graphql'
+#import Query.users, PostCreateInput, Post from './prisma/generated/prisma-client/prisma-schema.graphql'
 
 directive @isAuthenticated on OBJECT | QUERY | MUTATION | FIELD_DEFINITION
 directive @hasRole(roles: [String]) on QUERY | MUTATION | FIELD_DEFINITION
@@ -6,48 +6,57 @@ directive @isOwner(type: String) on QUERY | MUTATION | FIELD_DEFINITION
 directive @isOwnerOrHasRole(type: String, roles: [String]) on QUERY | MUTATION | FIELD_DEFINITION
 
 type Query {
+  getBulletinHistory: [Post!]! @isAuthenticated
   feed(filter: String): [Post!]!
   drafts: [Post!]! @isAuthenticated
   post(id: ID!): Post @isOwnerOrHasRole(type: "Post", roles: ["ADMIN"] )
   me: User @isAuthenticated
-  users(id: ID, username: String): [User!]!
-  friends(username: String!): String!
+  users(id: ID, nickname: String): [User!]!
+  friends(nickname: String!): String!
   followers: Int
   friendCount: Int
+  goals(id: ID, title: String): [Goal!]!
+  goalsByUser(id: ID): [Goal!]!
+  getGoalCount(id: ID): Int
+
   """
   displays friendslist of username passed in as argument
   """
-  userFriends(username: String): [User!]!
-  friendExists(username: String): Boolean
+  userFriends(nickname: String): [User!]!
+  friendExists(nickname: String): Boolean
   getUserStatus(status: UserStatus!): [User!]!
 }
 input ProfileInput {
   avatar: String
   email: String
   password: String
+  notes: [String]
 }
 
 type Mutation {
-  signup(email: String!, password: String!, name: String!): AuthPayload!
+  #signup(email: String!, password: String!, nickname: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
-  authenticate(idToken: String!): AuthPayload!
+  authenticate(token: String!, id_token: String): AuthPayload!
   createDraft(title: String!, content: String!): Post @isAuthenticated
   publish(id: ID!): Post! @isOwner(type: "Post")
+  postWithoutDraft(title: String!, info: String): Post!
   deletePost(id: ID!): Post! @isOwnerOrHasRole(type: "Post", roles:["ADMIN"])
   setUserStatus(id: ID, input: UserStatus!): User!
   updateProfile(input: ProfileInput): User!
+  postGoal(id: ID, title: String!, description: String!): Goal!
   """
    adds two users to each other's friendlist
   """
-  addUserToFriendlist(username: String): String
+  addUserToFriendlist(nickname: String): String
   """
    removes two users from each other's friendlist
   """
-  removeUserFromFriendlist(username1: String, username2: String): String
+  removeUserFromFriendlist(nickname1: String, nickname2: String): String
   """
    follow another user's public account
   """
-  followUser(username: String): User
+  followUser(nickname: String): User
+  updateUserProfile(input: ProfileInput): User
 }
 
 type Subscription {
@@ -56,13 +65,14 @@ type Subscription {
 }
 
 type AuthPayload {
-  token: String!
+  #token: String!
   user: User!
 }
 
 type User {
   id: ID!
   auth0Id: String!
+  discourseId: Int!
   eblID: String!
   identity: String!
   avatar: String
@@ -76,6 +86,7 @@ type User {
   status: UserStatus
   posts: [Post!]!
   following: [User]
+  metadata: [String]
   profileStatus: ProfileStatus
   tier: TIER!
 }
@@ -100,12 +111,12 @@ enum UserStatus {
 type Goal {
   id: ID!
   title: String!
-  startDate: String!
-  projectedCompletionDate: String!
-  actualCompletionDate: String!
-  pointsWorth: Int!
-  pointsEarned: Int!
-  pointsDeducted: Int!
+  startDate: String
+  projectedCompletionDate: String
+  actualCompletionDate: String
+  pointsWorth: Int
+  pointsEarned: Int
+  pointsDeducted: Int
   description: String!
   author: User!
 }
@@ -114,8 +125,8 @@ type Post {
   id: ID!
   published: Boolean!
   title: String!
-  info: String!
-  content: String!
+  info: String
+  content: String
   author: User!
 }
 type JournalEntry {
@@ -130,7 +141,7 @@ type FormData {
   id: ID! 
   email: String! 
   name: String!
-  username: String! 
+  nickname: String! 
   Q1: String
   Q2: String
   Q3: String

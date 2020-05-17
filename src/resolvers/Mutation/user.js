@@ -1,8 +1,8 @@
 const { fromString } = require("uuidv4");
 const { combineResolvers } = require("graphql-resolvers");
 const { getUserId } = require("../../utils");
-const { isFriend } = require("../authResolvers");
-const { updateUserMetadata } = require("../helpers/managementClient");
+const { isFriend, isAuthenticated } = require("../authResolvers");
+const { updateUserMetadata } = require("../../helpers/managementClient");
 
 const user = {
   async setUserStatus(parent, { id, input }, context, info) {
@@ -15,60 +15,60 @@ const user = {
       info
     );
   },
-
+  
   addUserToFriendlist: combineResolvers(
     isFriend,
-    async (parent, { username }, context, info) => {
+    async (parent, { nickname, auth0Id }, context, info) => {
       const userId = getUserId(context);
-      const currentUsername = await context.prisma
+      const currentNickname = await context.prisma
         .user({ id: userId })
-        .username();
+        .nickname();
       const addFriends = [
         {
           user1: await context.prisma.updateUser({
-            where: { username: currentUsername },
+            where: { nickname: currentNickname },
             data: {
-              friends: { connect: [{ eblID: fromString(username) }] }
+              friends: { connect: [{ eblID: fromString(auth0Id) }] }
             }
           }),
           user2: await context.prisma.updateUser({
-            where: { username: username },
+            where: { nickname: nickname },
             data: {
-              friends: { connect: [{ eblID: fromString(currentUsername) }] }
+              friends: { connect: [{ eblID: fromString(currentNickname) }] }
             }
           })
         }
       ];
       const user1 = addFriends[0].user1;
       const user2 = addFriends[0].user2;
-      return `${user1.username} and ${user2.username} are now friends`;
+      return `${user1.nickname} and ${user2.nickname} are now friends`;
     }
   ),
 
   async removeUserFromFriendlist(parent, args, context, info) {
     const userId = getUserId(context);
-    const currentUsername = await context.prisma
+    const currentNickname = await context.prisma
       .user({ id: userId })
-      .username();
+      .nickname();
     const removeFriends = [
       {
         user1: await context.prisma.updateUser({
-          where: { username: args.username1 },
+          where: { nickname: args.nickname1 },
           data: {
-            friends: { disconnect: [{ eblID: fromString(args.username2) }] }
+            friends: { disconnect: [{ eblID: fromString(args.nickname2) }] }
           }
         }),
         user2: await context.prisma.updateUser({
-          where: { username: args.username2 },
+          where: { nickname: args.nickname2 },
           data: {
-            friends: { disconnect: [{ eblID: fromString(args.username1) }] }
+            friends: { disconnect: [{ eblID: fromString(args.nickname1) }] }
           }
         })
       }
     ];
     const user1 = removeFriends[0].user1;
     const user2 = removeFriends[0].user2;
-    return `${user1.username} and ${user2.username} are no longer friends`;
+    return `${user1.nickname} and ${user2.nickname} are no longer friends`;
   },
 
   //adds user to current users following list
@@ -76,15 +76,19 @@ const user = {
     const userId = getUserId(context);
     const follow = await context.prisma.updateUser({
       where: { id: userId },
-      data: { following: { connect: [{ username: args.username }] } }
+      data: { following: { connect: [{ nickname: args.nickname }] } }
     });
     return follow;
   },
 
- async updateUserProfile(parent, args, context, info){
+ async updateUserProfile(parent, { formdata }, context, info){
    const userId = getUserId(context)
    const userAuth0Id = await context.prisma.user({ id: userId }).auth0Id();
-   
+   const update = context.prisma.updateUser({
+     where: { auth0Id: userAuth0Id },
+     data: { ...formdata }
+   })
+  return update
  }
 };
 module.exports = { user };
