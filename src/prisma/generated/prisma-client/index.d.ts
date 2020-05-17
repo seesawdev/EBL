@@ -355,8 +355,8 @@ export type JournalEntryOrderByInput =
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "auth0id_ASC"
-  | "auth0id_DESC"
+  | "auth0Id_ASC"
+  | "auth0Id_DESC"
   | "metaData_ASC"
   | "metaData_DESC"
   | "identity_ASC"
@@ -415,8 +415,8 @@ export type FormDataOrderByInput =
   | "email_DESC"
   | "name_ASC"
   | "name_DESC"
-  | "username_ASC"
-  | "username_DESC"
+  | "nickname_ASC"
+  | "nickname_DESC"
   | "Q1_ASC"
   | "Q1_DESC"
   | "Q2_ASC"
@@ -544,20 +544,20 @@ export interface UserWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
-  auth0id_not?: Maybe<String>;
-  auth0id_in?: Maybe<String[] | String>;
-  auth0id_not_in?: Maybe<String[] | String>;
-  auth0id_lt?: Maybe<String>;
-  auth0id_lte?: Maybe<String>;
-  auth0id_gt?: Maybe<String>;
-  auth0id_gte?: Maybe<String>;
-  auth0id_contains?: Maybe<String>;
-  auth0id_not_contains?: Maybe<String>;
-  auth0id_starts_with?: Maybe<String>;
-  auth0id_not_starts_with?: Maybe<String>;
-  auth0id_ends_with?: Maybe<String>;
-  auth0id_not_ends_with?: Maybe<String>;
+  auth0Id?: Maybe<String>;
+  auth0Id_not?: Maybe<String>;
+  auth0Id_in?: Maybe<String[] | String>;
+  auth0Id_not_in?: Maybe<String[] | String>;
+  auth0Id_lt?: Maybe<String>;
+  auth0Id_lte?: Maybe<String>;
+  auth0Id_gt?: Maybe<String>;
+  auth0Id_gte?: Maybe<String>;
+  auth0Id_contains?: Maybe<String>;
+  auth0Id_not_contains?: Maybe<String>;
+  auth0Id_starts_with?: Maybe<String>;
+  auth0Id_not_starts_with?: Maybe<String>;
+  auth0Id_ends_with?: Maybe<String>;
+  auth0Id_not_ends_with?: Maybe<String>;
   metaData?: Maybe<String>;
   metaData_not?: Maybe<String>;
   metaData_in?: Maybe<String[] | String>;
@@ -760,20 +760,20 @@ export interface FormDataWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
-  username?: Maybe<String>;
-  username_not?: Maybe<String>;
-  username_in?: Maybe<String[] | String>;
-  username_not_in?: Maybe<String[] | String>;
-  username_lt?: Maybe<String>;
-  username_lte?: Maybe<String>;
-  username_gt?: Maybe<String>;
-  username_gte?: Maybe<String>;
-  username_contains?: Maybe<String>;
-  username_not_contains?: Maybe<String>;
-  username_starts_with?: Maybe<String>;
-  username_not_starts_with?: Maybe<String>;
-  username_ends_with?: Maybe<String>;
-  username_not_ends_with?: Maybe<String>;
+  nickname?: Maybe<String>;
+  nickname_not?: Maybe<String>;
+  nickname_in?: Maybe<String[] | String>;
+  nickname_not_in?: Maybe<String[] | String>;
+  nickname_lt?: Maybe<String>;
+  nickname_lte?: Maybe<String>;
+  nickname_gt?: Maybe<String>;
+  nickname_gte?: Maybe<String>;
+  nickname_contains?: Maybe<String>;
+  nickname_not_contains?: Maybe<String>;
+  nickname_starts_with?: Maybe<String>;
+  nickname_not_starts_with?: Maybe<String>;
+  nickname_ends_with?: Maybe<String>;
+  nickname_not_ends_with?: Maybe<String>;
   Q1?: Maybe<String>;
   Q1_not?: Maybe<String>;
   Q1_in?: Maybe<String[] | String>;
@@ -1003,7 +1003,7 @@ export interface AuthPayloadWhereInput {
 export type FormDataWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   email?: Maybe<String>;
-  username?: Maybe<String>;
+  nickname?: Maybe<String>;
 }>;
 
 export type GoalWhereUniqueInput = AtLeastOne<{
@@ -1020,7 +1020,8 @@ export type PostWhereUniqueInput = AtLeastOne<{
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
+  auth0Id?: Maybe<String>;
+  email?: Maybe<String>;
 }>;
 
 export interface AuthPayloadCreateInput {
@@ -1036,7 +1037,7 @@ export interface UserCreateOneInput {
 
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
+  auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -1084,7 +1085,7 @@ export interface FormDataCreateInput {
   id?: Maybe<ID_Input>;
   email: String;
   name: String;
-  username: String;
+  nickname: String;
   Q1?: Maybe<String>;
   Q2?: Maybe<String>;
   Q3?: Maybe<String>;
@@ -1117,7 +1118,7 @@ export interface UserCreateManyWithoutFriendsInput {
 
 export interface UserCreateWithoutFriendsInput {
   id?: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
+  auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -1160,7 +1161,7 @@ export interface UserCreateManyWithoutFollowingInput {
 
 export interface UserCreateWithoutFollowingInput {
   id?: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
+  auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -1194,7 +1195,7 @@ export interface UserUpdateOneRequiredInput {
 }
 
 export interface UserUpdateDataInput {
-  auth0id?: Maybe<String>;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -1382,7 +1383,7 @@ export interface FormDataUpdateOneInput {
 export interface FormDataUpdateDataInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
-  username?: Maybe<String>;
+  nickname?: Maybe<String>;
   Q1?: Maybe<String>;
   Q2?: Maybe<String>;
   Q3?: Maybe<String>;
@@ -1538,7 +1539,7 @@ export interface UserUpdateWithWhereUniqueWithoutFriendsInput {
 }
 
 export interface UserUpdateWithoutFriendsDataInput {
-  auth0id?: Maybe<String>;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -1717,7 +1718,7 @@ export interface UserUpdateWithWhereUniqueWithoutFollowingInput {
 }
 
 export interface UserUpdateWithoutFollowingDataInput {
-  auth0id?: Maybe<String>;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -1759,20 +1760,20 @@ export interface UserScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
-  auth0id_not?: Maybe<String>;
-  auth0id_in?: Maybe<String[] | String>;
-  auth0id_not_in?: Maybe<String[] | String>;
-  auth0id_lt?: Maybe<String>;
-  auth0id_lte?: Maybe<String>;
-  auth0id_gt?: Maybe<String>;
-  auth0id_gte?: Maybe<String>;
-  auth0id_contains?: Maybe<String>;
-  auth0id_not_contains?: Maybe<String>;
-  auth0id_starts_with?: Maybe<String>;
-  auth0id_not_starts_with?: Maybe<String>;
-  auth0id_ends_with?: Maybe<String>;
-  auth0id_not_ends_with?: Maybe<String>;
+  auth0Id?: Maybe<String>;
+  auth0Id_not?: Maybe<String>;
+  auth0Id_in?: Maybe<String[] | String>;
+  auth0Id_not_in?: Maybe<String[] | String>;
+  auth0Id_lt?: Maybe<String>;
+  auth0Id_lte?: Maybe<String>;
+  auth0Id_gt?: Maybe<String>;
+  auth0Id_gte?: Maybe<String>;
+  auth0Id_contains?: Maybe<String>;
+  auth0Id_not_contains?: Maybe<String>;
+  auth0Id_starts_with?: Maybe<String>;
+  auth0Id_not_starts_with?: Maybe<String>;
+  auth0Id_ends_with?: Maybe<String>;
+  auth0Id_not_ends_with?: Maybe<String>;
   metaData?: Maybe<String>;
   metaData_not?: Maybe<String>;
   metaData_in?: Maybe<String[] | String>;
@@ -1914,7 +1915,7 @@ export interface UserUpdateManyWithWhereNestedInput {
 }
 
 export interface UserUpdateManyDataInput {
-  auth0id?: Maybe<String>;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -1948,7 +1949,7 @@ export interface AuthPayloadUpdateManyMutationInput {
 export interface FormDataUpdateInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
-  username?: Maybe<String>;
+  nickname?: Maybe<String>;
   Q1?: Maybe<String>;
   Q2?: Maybe<String>;
   Q3?: Maybe<String>;
@@ -1958,7 +1959,7 @@ export interface FormDataUpdateInput {
 export interface FormDataUpdateManyMutationInput {
   email?: Maybe<String>;
   name?: Maybe<String>;
-  username?: Maybe<String>;
+  nickname?: Maybe<String>;
   Q1?: Maybe<String>;
   Q2?: Maybe<String>;
   Q3?: Maybe<String>;
@@ -1985,7 +1986,7 @@ export interface UserCreateOneWithoutGoalsInput {
 
 export interface UserCreateWithoutGoalsInput {
   id?: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
+  auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2026,7 +2027,7 @@ export interface UserUpdateOneRequiredWithoutGoalsInput {
 }
 
 export interface UserUpdateWithoutGoalsDataInput {
-  auth0id?: Maybe<String>;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2078,7 +2079,7 @@ export interface UserCreateOneWithoutJournalInput {
 
 export interface UserCreateWithoutJournalInput {
   id?: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
+  auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2114,7 +2115,7 @@ export interface UserUpdateOneRequiredWithoutJournalInput {
 }
 
 export interface UserUpdateWithoutJournalDataInput {
-  auth0id?: Maybe<String>;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2152,7 +2153,7 @@ export interface PostCreateInput {
   title: String;
   info: String;
   content: String;
-  author?: Maybe<UserCreateOneWithoutPostsInput>;
+  author: UserCreateOneWithoutPostsInput;
 }
 
 export interface UserCreateOneWithoutPostsInput {
@@ -2162,7 +2163,7 @@ export interface UserCreateOneWithoutPostsInput {
 
 export interface UserCreateWithoutPostsInput {
   id?: Maybe<ID_Input>;
-  auth0id?: Maybe<String>;
+  auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2188,20 +2189,18 @@ export interface PostUpdateInput {
   title?: Maybe<String>;
   info?: Maybe<String>;
   content?: Maybe<String>;
-  author?: Maybe<UserUpdateOneWithoutPostsInput>;
+  author?: Maybe<UserUpdateOneRequiredWithoutPostsInput>;
 }
 
-export interface UserUpdateOneWithoutPostsInput {
+export interface UserUpdateOneRequiredWithoutPostsInput {
   create?: Maybe<UserCreateWithoutPostsInput>;
   update?: Maybe<UserUpdateWithoutPostsDataInput>;
   upsert?: Maybe<UserUpsertWithoutPostsInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
 export interface UserUpdateWithoutPostsDataInput {
-  auth0id?: Maybe<String>;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2235,7 +2234,7 @@ export interface PostUpdateManyMutationInput {
 }
 
 export interface UserUpdateInput {
-  auth0id?: Maybe<String>;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2258,7 +2257,7 @@ export interface UserUpdateInput {
 }
 
 export interface UserUpdateManyMutationInput {
-  auth0id?: Maybe<String>;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2389,7 +2388,7 @@ export interface AuthPayloadNullablePromise
 
 export interface User {
   id: ID_Output;
-  auth0id?: String;
+  auth0Id: String;
   metaData?: String;
   identity?: String;
   email?: String;
@@ -2407,7 +2406,7 @@ export interface User {
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
-  auth0id: () => Promise<String>;
+  auth0Id: () => Promise<String>;
   metaData: () => Promise<String>;
   identity: () => Promise<String>;
   email: () => Promise<String>;
@@ -2473,7 +2472,7 @@ export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  auth0id: () => Promise<AsyncIterator<String>>;
+  auth0Id: () => Promise<AsyncIterator<String>>;
   metaData: () => Promise<AsyncIterator<String>>;
   identity: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
@@ -2539,7 +2538,7 @@ export interface UserNullablePromise
   extends Promise<User | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  auth0id: () => Promise<String>;
+  auth0Id: () => Promise<String>;
   metaData: () => Promise<String>;
   identity: () => Promise<String>;
   email: () => Promise<String>;
@@ -2661,7 +2660,7 @@ export interface FormData {
   createdAt: DateTimeOutput;
   email: String;
   name: String;
-  username: String;
+  nickname: String;
   Q1?: String;
   Q2?: String;
   Q3?: String;
@@ -2673,7 +2672,7 @@ export interface FormDataPromise extends Promise<FormData>, Fragmentable {
   createdAt: () => Promise<DateTimeOutput>;
   email: () => Promise<String>;
   name: () => Promise<String>;
-  username: () => Promise<String>;
+  nickname: () => Promise<String>;
   Q1: () => Promise<String>;
   Q2: () => Promise<String>;
   Q3: () => Promise<String>;
@@ -2687,7 +2686,7 @@ export interface FormDataSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   email: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
-  username: () => Promise<AsyncIterator<String>>;
+  nickname: () => Promise<AsyncIterator<String>>;
   Q1: () => Promise<AsyncIterator<String>>;
   Q2: () => Promise<AsyncIterator<String>>;
   Q3: () => Promise<AsyncIterator<String>>;
@@ -2701,7 +2700,7 @@ export interface FormDataNullablePromise
   createdAt: () => Promise<DateTimeOutput>;
   email: () => Promise<String>;
   name: () => Promise<String>;
-  username: () => Promise<String>;
+  nickname: () => Promise<String>;
   Q1: () => Promise<String>;
   Q2: () => Promise<String>;
   Q3: () => Promise<String>;
@@ -3239,7 +3238,7 @@ export interface FormDataPreviousValues {
   createdAt: DateTimeOutput;
   email: String;
   name: String;
-  username: String;
+  nickname: String;
   Q1?: String;
   Q2?: String;
   Q3?: String;
@@ -3253,7 +3252,7 @@ export interface FormDataPreviousValuesPromise
   createdAt: () => Promise<DateTimeOutput>;
   email: () => Promise<String>;
   name: () => Promise<String>;
-  username: () => Promise<String>;
+  nickname: () => Promise<String>;
   Q1: () => Promise<String>;
   Q2: () => Promise<String>;
   Q3: () => Promise<String>;
@@ -3267,7 +3266,7 @@ export interface FormDataPreviousValuesSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   email: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
-  username: () => Promise<AsyncIterator<String>>;
+  nickname: () => Promise<AsyncIterator<String>>;
   Q1: () => Promise<AsyncIterator<String>>;
   Q2: () => Promise<AsyncIterator<String>>;
   Q3: () => Promise<AsyncIterator<String>>;
@@ -3478,7 +3477,7 @@ export interface UserSubscriptionPayloadSubscription
 
 export interface UserPreviousValues {
   id: ID_Output;
-  auth0id?: String;
+  auth0Id: String;
   metaData?: String;
   identity?: String;
   email?: String;
@@ -3498,7 +3497,7 @@ export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  auth0id: () => Promise<String>;
+  auth0Id: () => Promise<String>;
   metaData: () => Promise<String>;
   identity: () => Promise<String>;
   email: () => Promise<String>;
@@ -3518,7 +3517,7 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  auth0id: () => Promise<AsyncIterator<String>>;
+  auth0Id: () => Promise<AsyncIterator<String>>;
   metaData: () => Promise<AsyncIterator<String>>;
   identity: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
