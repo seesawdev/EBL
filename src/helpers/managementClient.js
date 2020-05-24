@@ -1,55 +1,27 @@
-// const ManagementClient = require('auth0').ManagementClient;
 
-// const management = new ManagementClient({
-//   domain: `${process.env.AUTH0_DOMAIN}`,
-//   clientId: `${process.env.AUTH0_CLIENT_ID}`,
-//   clientSecret: `${process.env.AUTH0_CLIENT_SECRET}`,
-//   scope: `${process.env.AUTH0_MANAGEMENT_API_SCOPES}`
-// })
-
-// const updateUserMetadata = async (params, metadata) => {
-//   try {
-//         /*
-//           params = { id: AUTH0_USER_ID }
-//           metadata = { 
-//            foo: barr
-//           }
-//         */
-//     await management.users.updateUserMetadata(params, metadata, (err, user))
-
-//   } catch(err) {
-//     console.log("Error updating user metadata.", err)
-//   }
-//   console.log("Successfully updated user metadata.", user)
-//   return user;
-// }
-
-// module.exports = { updateUserMetadata }
-const axios = require('axios')
-const { getUserId } = require('../utils')
-const  { config } = require('./auth0Config')
-
-async function multipleRequests(access_token) {
-  const options = {
-    headers: { 'Authorization': access_token },
-    xsrfCookieName: 'XSRF-TOKEN',
-    xsrfHeaderName: 'X-XSRF-TOKEN'
-  };
- axios.all([
-    axios.post("https://everybodyleave.auth0.com/oauth/token",
-      {
-        client_id: `${config.CLIENT_ID}`,
-        client_secret: `${config.CLIENT_SECRET}`,
-        audience: `${config.AUDIENCE}`,
-        grant_type: "client_credentials",
-      }),
-    axios.get("https://everybodyleave.auth0.com/userinfo", options)
-  ])
-  .then(axios.spread((tokenResponse, userResponse) => {
-    console.log("successfully fetched apiToken ", tokenResponse.data);
-    console.log("successfully fetched user profile ", userResponse.data)
-   })
-  )
+const axios = require("axios");
+const { getUserId } = require("../utils");
+const { config } = require("./auth0Config");
+const ManagementClient = require('auth0').ManagementClient;
+var auth0 = new ManagementClient({
+  domain: "everybodyleave.auth0.com",
+  clientId: `${config.CLIENT_ID}`,
+  clientSecret: `${config.CLIENT_SECRET}`,
+  scope: "read:users write:users",
+  audience: "https://everybodyleave.auth0.com/api/v2/",
+  tokenProvider: {
+    enableCache: true,
+    cacheTTLInSeconds: 10,
+  },
+});
+async function getUser(auth0Id) {
+  const auth0User = await auth0.management.getUser({id: auth0Id}, function(err, user) {
+    if (err) {
+      console.log(err)
+    }
+    return user
+  })
+  return await auth0User
 }
 async function fetchApiAccessToken() {
   try {
@@ -73,6 +45,30 @@ async function fetchApiAccessToken() {
   }
 };
 
+
+async function multipleRequests(access_token) {
+  const options = {
+    headers: { 'Authorization': access_token },
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN'
+  };
+ axios.all([
+    axios.post("https://everybodyleave.auth0.com/oauth/token",
+      {
+        client_id: `${config.CLIENT_ID}`,
+        client_secret: `${config.CLIENT_SECRET}`,
+        audience: `${config.AUDIENCE}`,
+        grant_type: "client_credentials",
+      }),
+    axios.get("https://everybodyleave.auth0.com/userinfo", options)
+  ])
+  .then(axios.spread((tokenResponse, userResponse) => {
+    console.log("successfully fetched apiToken ", tokenResponse.data);
+    console.log("successfully fetched user profile ", userResponse.data)
+   })
+  )
+}
+
 async function getUserInfo(access_token, id) {
   // const apiAccessToken = await fetchApiAccessToken();
   const options = {
@@ -82,7 +78,7 @@ async function getUserInfo(access_token, id) {
     const userInfo = await fetch(`https://everybodyleave.auth0.com/api/v2/users/${id}`, {
       method: 'POST',
       headers: new Headers({ 
-        authorization: fetchApiAccessToken()
+        authorization: `${access_token}`
       })
     })
     
@@ -103,7 +99,7 @@ async function getUserInfo(access_token, id) {
  * body must include username, email, password, user_metadata(optional)
  * 
  */
-const createAuth0User = async (email, username, password, data) => { 
+const createAuth0User = async (email, username, password, metaData) => { 
 
     const headers = {
       "Authorization": `Bearer ${process.env.AUTH0_API_TOKEN}`,
@@ -155,4 +151,4 @@ const updateUserMetadata = async (parent, args, context, info) => {
   }
 }
 
-module.exports = { fetchApiAccessToken, updateUserMetadata, getUserInfo, multipleRequests }
+module.exports = { fetchApiAccessToken, updateUserMetadata, getUserInfo, multipleRequests, createAuth0User, getUser }

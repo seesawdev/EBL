@@ -1,4 +1,4 @@
-#import Query.users, PostCreateInput, Post from './prisma/generated/prisma-client/prisma-schema.graphql'
+#import Query.users, Post from './prisma/generated/prisma-client/prisma-schema.graphql'
 
 directive @isAuthenticated on OBJECT | QUERY | MUTATION | FIELD_DEFINITION
 directive @hasRole(roles: [String]) on QUERY | MUTATION | FIELD_DEFINITION
@@ -32,17 +32,26 @@ input ProfileInput {
   password: String
   notes: [String]
 }
+input PostCreateInput {
+  id: ID
+  published: Boolean
+  title: String!
+  info: String!
+  content: String!
+  author: UserCreateOneWithoutPostsInput!
 
+}
 type Mutation {
-  #signup(email: String!, password: String!, nickname: String!): AuthPayload!
+  signup(email: String!, password: String!, avatar: String, username: String!, metaData: [String]): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
-  authenticate(token: String!, id_token: String): AuthPayload!
+  authenticate(access_token: String!, id_token: String): AuthPayload!
   createDraft(title: String!, content: String!): Post @isAuthenticated
   publish(id: ID!): Post! @isOwner(type: "Post")
   postWithoutDraft(title: String!, info: String): Post!
   deletePost(id: ID!): Post! @isOwnerOrHasRole(type: "Post", roles:["ADMIN"])
   setUserStatus(id: ID, input: UserStatus!): User!
   updateProfile(input: ProfileInput): User!
+  #createNewUser(email: String!, password: String!, username: String, avatar: String, data: String): User!
   postGoal(id: ID, title: String!, description: String!): Goal!
   """
    adds two users to each other's friendlist
@@ -65,15 +74,16 @@ type Subscription {
 }
 
 type AuthPayload {
-  #token: String!
+  token: String!
   user: User!
 }
 
 type User {
   id: ID!
   auth0Id: String!
-  discourseId: Int!
+  discourseId: Int
   eblID: String!
+  metaData: String
   identity: String!
   avatar: String
   email: String @isOwner(type: "User")
@@ -138,14 +148,10 @@ type JournalEntry {
 }
 
 type FormData {
-  id: ID! 
-  email: String! 
-  name: String!
-  nickname: String! 
+  id: ID!  
   Q1: String
   Q2: String
   Q3: String
-  Q4: Question 
 }
 
 enum Question {

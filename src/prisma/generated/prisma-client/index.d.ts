@@ -355,6 +355,8 @@ export type JournalEntryOrderByInput =
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "discourseId_ASC"
+  | "discourseId_DESC"
   | "auth0Id_ASC"
   | "auth0Id_DESC"
   | "metaData_ASC"
@@ -544,6 +546,14 @@ export interface UserWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  discourseId?: Maybe<Int>;
+  discourseId_not?: Maybe<Int>;
+  discourseId_in?: Maybe<Int[] | Int>;
+  discourseId_not_in?: Maybe<Int[] | Int>;
+  discourseId_lt?: Maybe<Int>;
+  discourseId_lte?: Maybe<Int>;
+  discourseId_gt?: Maybe<Int>;
+  discourseId_gte?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   auth0Id_not?: Maybe<String>;
   auth0Id_in?: Maybe<String[] | String>;
@@ -1037,6 +1047,7 @@ export interface UserCreateOneInput {
 
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
+  discourseId?: Maybe<Int>;
   auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -1118,6 +1129,7 @@ export interface UserCreateManyWithoutFriendsInput {
 
 export interface UserCreateWithoutFriendsInput {
   id?: Maybe<ID_Input>;
+  discourseId?: Maybe<Int>;
   auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -1161,6 +1173,7 @@ export interface UserCreateManyWithoutFollowingInput {
 
 export interface UserCreateWithoutFollowingInput {
   id?: Maybe<ID_Input>;
+  discourseId?: Maybe<Int>;
   auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -1195,6 +1208,7 @@ export interface UserUpdateOneRequiredInput {
 }
 
 export interface UserUpdateDataInput {
+  discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -1539,6 +1553,7 @@ export interface UserUpdateWithWhereUniqueWithoutFriendsInput {
 }
 
 export interface UserUpdateWithoutFriendsDataInput {
+  discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -1718,6 +1733,7 @@ export interface UserUpdateWithWhereUniqueWithoutFollowingInput {
 }
 
 export interface UserUpdateWithoutFollowingDataInput {
+  discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -1760,6 +1776,14 @@ export interface UserScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  discourseId?: Maybe<Int>;
+  discourseId_not?: Maybe<Int>;
+  discourseId_in?: Maybe<Int[] | Int>;
+  discourseId_not_in?: Maybe<Int[] | Int>;
+  discourseId_lt?: Maybe<Int>;
+  discourseId_lte?: Maybe<Int>;
+  discourseId_gt?: Maybe<Int>;
+  discourseId_gte?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   auth0Id_not?: Maybe<String>;
   auth0Id_in?: Maybe<String[] | String>;
@@ -1915,6 +1939,7 @@ export interface UserUpdateManyWithWhereNestedInput {
 }
 
 export interface UserUpdateManyDataInput {
+  discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -1986,6 +2011,7 @@ export interface UserCreateOneWithoutGoalsInput {
 
 export interface UserCreateWithoutGoalsInput {
   id?: Maybe<ID_Input>;
+  discourseId?: Maybe<Int>;
   auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -2027,6 +2053,7 @@ export interface UserUpdateOneRequiredWithoutGoalsInput {
 }
 
 export interface UserUpdateWithoutGoalsDataInput {
+  discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -2079,6 +2106,7 @@ export interface UserCreateOneWithoutJournalInput {
 
 export interface UserCreateWithoutJournalInput {
   id?: Maybe<ID_Input>;
+  discourseId?: Maybe<Int>;
   auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -2115,6 +2143,7 @@ export interface UserUpdateOneRequiredWithoutJournalInput {
 }
 
 export interface UserUpdateWithoutJournalDataInput {
+  discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -2163,6 +2192,7 @@ export interface UserCreateOneWithoutPostsInput {
 
 export interface UserCreateWithoutPostsInput {
   id?: Maybe<ID_Input>;
+  discourseId?: Maybe<Int>;
   auth0Id: String;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -2200,6 +2230,7 @@ export interface UserUpdateOneRequiredWithoutPostsInput {
 }
 
 export interface UserUpdateWithoutPostsDataInput {
+  discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -2234,6 +2265,7 @@ export interface PostUpdateManyMutationInput {
 }
 
 export interface UserUpdateInput {
+  discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -2257,6 +2289,7 @@ export interface UserUpdateInput {
 }
 
 export interface UserUpdateManyMutationInput {
+  discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
@@ -2388,6 +2421,7 @@ export interface AuthPayloadNullablePromise
 
 export interface User {
   id: ID_Output;
+  discourseId?: Int;
   auth0Id: String;
   metaData?: String;
   identity?: String;
@@ -2406,6 +2440,7 @@ export interface User {
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
+  discourseId: () => Promise<Int>;
   auth0Id: () => Promise<String>;
   metaData: () => Promise<String>;
   identity: () => Promise<String>;
@@ -2472,6 +2507,7 @@ export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  discourseId: () => Promise<AsyncIterator<Int>>;
   auth0Id: () => Promise<AsyncIterator<String>>;
   metaData: () => Promise<AsyncIterator<String>>;
   identity: () => Promise<AsyncIterator<String>>;
@@ -2538,6 +2574,7 @@ export interface UserNullablePromise
   extends Promise<User | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  discourseId: () => Promise<Int>;
   auth0Id: () => Promise<String>;
   metaData: () => Promise<String>;
   identity: () => Promise<String>;
@@ -3477,6 +3514,7 @@ export interface UserSubscriptionPayloadSubscription
 
 export interface UserPreviousValues {
   id: ID_Output;
+  discourseId?: Int;
   auth0Id: String;
   metaData?: String;
   identity?: String;
@@ -3497,6 +3535,7 @@ export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  discourseId: () => Promise<Int>;
   auth0Id: () => Promise<String>;
   metaData: () => Promise<String>;
   identity: () => Promise<String>;
@@ -3517,6 +3556,7 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  discourseId: () => Promise<AsyncIterator<Int>>;
   auth0Id: () => Promise<AsyncIterator<String>>;
   metaData: () => Promise<AsyncIterator<String>>;
   identity: () => Promise<AsyncIterator<String>>;

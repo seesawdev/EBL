@@ -26,14 +26,14 @@ const verifyToken = token =>
       if (err) throw new Error(err);
       const signingKey = key.publicKey || key.rsaPublicKey;
       //If the JWT Token was valid, verify its validity against the JKWS's signing key
-      jwt.verify(
-        token,
-        signingKey,
-        {
+      jwt.verify(token, signingKey, {
           algorithms: ["RS256"],
-          audience: [`https://everybodyleave.auth0.com/api/v2/`, `https://everybodyleave.auth0.com/userinfo`],
+          audience: [
+            `https://everybodyleave.auth0.com/api/v2/`, 
+            `https://everybodyleave.auth0.com/userinfo`,
+          ],
           ignoreExpiration: false,
-          issuer: `https://everybodyleave.auth0.com/`
+          issuer: `https://everybodyleave.auth0.com/`,
         },
         (err, decoded) => {
           if (err) throw new Error(err);
@@ -48,14 +48,14 @@ const getAuth0userEmail = (accessToken) => {
   fetch(`https://everybodyleave.auth0.com/userinfo?access_token=${accessToken}`).then(response => response.json())
     .then(json => json.email)
 } 
-const getAuth0UserInfo = async () => {
+const getAuth0UserInfo = async (access_token) => {
   try {
     const userInfo = await axios.get('https://everybodyleave.auth0.com/userinfo', {
       authorization: `Bearer ${access_token}`
     })
     const response = await userInfo.data;
     console.log(response)
-    return await response 
+    return  response 
   } catch (err) {
     console.log("error retrieving your user info", err);
   }
@@ -83,15 +83,15 @@ const getAuth0UserInfo = async () => {
     // }
   // }
 
-const getPrismaUser = async (parent, { accessToken }, context) => {
+const getPrismaUser = async (parent, { access_token }, context) => {
   let email;
-  const decodedToken = await verifyToken(accessToken)
+  const decodedToken = await verifyToken(access_token)
   const auth0Id = sub.split("|")[1]
   const prismaUser = await context.prisma.user({auth0Id})
   if (prismaUser === null) {
     if (decodedToken.scope.includes('email')) {
-      email = await fetchAuth0UserEmail(accessToken)
-      return await email
+      email = await fetchAuth0UserEmail(access_token)
+      return  email
     }
   }
 }

@@ -8,10 +8,9 @@ type Post {
   content: String!
   author: User! @relation(name:"UserPosts")
 }
-
 type User {
   id: ID! @id
-  discourseId: Int!
+  discourseId: Int
   auth0Id: String! @unique 
   metaData: String 
   identity: String
@@ -33,14 +32,11 @@ type User {
   tier: TIER! @default(value: FREE)
   role: Role @default(value: USER)
 }
-
-
 enum TIER {
   FREE
   CONTRIBUTER
   PREMIUM
 }
-
 type Goal {
   id: ID! @id
   title: String!

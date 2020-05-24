@@ -12,7 +12,7 @@ async feed(parent, args, context, info) {
           AND: [{ published: true }]
         }
       : { published: true };
-    return await context.prisma.posts({ where }, info);
+    return await context.prisma.posts({ where }, info) || {};
   },
   drafts(parent, args, context) {
     const id = getUserId(context);

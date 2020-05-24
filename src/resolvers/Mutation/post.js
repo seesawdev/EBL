@@ -25,18 +25,20 @@ const post = {
         where: { id },
         data: { published: true },
       },
-    )
+    ) 
   },
   async postWithoutDraft(parent, args, context, info) {
     const  userId  = getUserId(context)
     return await context.prisma.createPost({
+        
           title: args.title,
           info: args.info,
           content: args.content,
           published: true,
           author: { 
             connect: { id: userId } 
-        }
+        
+      }
     })
   },
   async deletePost(parent, { id }, context) {

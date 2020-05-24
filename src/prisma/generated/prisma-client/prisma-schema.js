@@ -1445,6 +1445,7 @@ enum TIER {
 
 type User {
   id: ID!
+  discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
@@ -1475,6 +1476,7 @@ type UserConnection {
 
 input UserCreateInput {
   id: ID
+  discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
@@ -1529,6 +1531,7 @@ input UserCreateOneWithoutPostsInput {
 
 input UserCreateWithoutFollowingInput {
   id: ID
+  discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
@@ -1552,6 +1555,7 @@ input UserCreateWithoutFollowingInput {
 
 input UserCreateWithoutFriendsInput {
   id: ID
+  discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
@@ -1575,6 +1579,7 @@ input UserCreateWithoutFriendsInput {
 
 input UserCreateWithoutGoalsInput {
   id: ID
+  discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
@@ -1598,6 +1603,7 @@ input UserCreateWithoutGoalsInput {
 
 input UserCreateWithoutJournalInput {
   id: ID
+  discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
@@ -1621,6 +1627,7 @@ input UserCreateWithoutJournalInput {
 
 input UserCreateWithoutPostsInput {
   id: ID
+  discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
@@ -1650,6 +1657,8 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
+  discourseId_ASC
+  discourseId_DESC
   auth0Id_ASC
   auth0Id_DESC
   metaData_ASC
@@ -1682,6 +1691,7 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
+  discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
@@ -1713,6 +1723,14 @@ input UserScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  discourseId: Int
+  discourseId_not: Int
+  discourseId_in: [Int!]
+  discourseId_not_in: [Int!]
+  discourseId_lt: Int
+  discourseId_lte: Int
+  discourseId_gt: Int
+  discourseId_gte: Int
   auth0Id: String
   auth0Id_not: String
   auth0Id_in: [String!]
@@ -1887,6 +1905,7 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateDataInput {
+  discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
@@ -1910,6 +1929,7 @@ input UserUpdateDataInput {
 }
 
 input UserUpdateInput {
+  discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
@@ -1933,6 +1953,7 @@ input UserUpdateInput {
 }
 
 input UserUpdateManyDataInput {
+  discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
@@ -1950,6 +1971,7 @@ input UserUpdateManyDataInput {
 }
 
 input UserUpdateManyMutationInput {
+  discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
@@ -2024,6 +2046,7 @@ input UserUpdateOneRequiredWithoutPostsInput {
 }
 
 input UserUpdateWithoutFollowingDataInput {
+  discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
@@ -2046,6 +2069,7 @@ input UserUpdateWithoutFollowingDataInput {
 }
 
 input UserUpdateWithoutFriendsDataInput {
+  discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
@@ -2068,6 +2092,7 @@ input UserUpdateWithoutFriendsDataInput {
 }
 
 input UserUpdateWithoutGoalsDataInput {
+  discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
@@ -2090,6 +2115,7 @@ input UserUpdateWithoutGoalsDataInput {
 }
 
 input UserUpdateWithoutJournalDataInput {
+  discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
@@ -2112,6 +2138,7 @@ input UserUpdateWithoutJournalDataInput {
 }
 
 input UserUpdateWithoutPostsDataInput {
+  discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
@@ -2190,6 +2217,14 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  discourseId: Int
+  discourseId_not: Int
+  discourseId_in: [Int!]
+  discourseId_not_in: [Int!]
+  discourseId_lt: Int
+  discourseId_lte: Int
+  discourseId_gt: Int
+  discourseId_gte: Int
   auth0Id: String
   auth0Id_not: String
   auth0Id_in: [String!]
