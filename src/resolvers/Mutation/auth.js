@@ -1,16 +1,16 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { fromString } = require("uuidv4");
-const { getDiscourseId, logOutDiscourseUser } = require('../../helpers/discourse')
+const { getDiscourseId, logOutDiscourseUser, syncSsoData } = require('../../helpers/discourse')
 const { verifyToken, getAuth0UserInfo, getAuth0UserEmail} = require("../../helpers/auth0Authentication")
 const { fetchApiAccessToken, getUser, getUserInfo, multipleRequests } = require('../../helpers/managementClient')
 const validateAndParseToken = require("../../helpers/validateAndParseIdToken");
 const { getAuth0User,  createAuth0User, createUserData} = require('../../helpers/practicefile')
-async function createPrismaUser(context, auth0User) {
+async function createPrismaUser(context, auth0User, auth0ID) {
   let data;
-  const discourseId = await getDiscourseId(auth0User.sub.split(`|`)[1]);
+  const discourseId = await getDiscourseId(auth0ID);
   data = {
-    auth0Id: auth0User.sub.split(`|`)[1],
+    auth0Id: auth0ID ? auth0ID : auth0User.sub.split("|")[1],
     identity: auth0User.sub.split(`|`)[0],
     nickname: auth0User.nickname,
     avatar: auth0User.picture,
@@ -42,8 +42,11 @@ const auth = {
     const userData = await createUserData(args)
     console.log(userData) 
     const auth0User = await createAuth0User(userData)
-    console.log(auth0User)
-    const user = await context.prisma.createUser({ ...userData, password });
+    const auth0Identities = Object.values(auth0User['identities'])[0];
+    const auth0ID = auth0Identities['user_id']
+    console.log("auth0ID", auth0ID)
+
+    const user = await createPrismaUser({ context, auth0User, auth0ID });
     // const updateUser = await context.prisma.updateUser({
     //   where: { id: user.id },
     //   data: { eblID: fromString(user.formData.username)  }
@@ -143,17 +146,19 @@ const auth = {
     console.log(logins)
     // let auth0User = await getAuth0User(access_token);
     console.log("auth0User", auth0Id);
-
     if(!user) {
       user = await createPrismaUser(context, auth0User)
     }
     //check if user has logged in, try to update discourseId 
     const discourseUserId = await context.prisma.user({ auth0Id }).discourseId();
-    if(logins > 1 && discourseUserId === null) {
+    if(logins >= 1) {
       try {
-        discourseID = await getDiscourseId(auth0Id)
-        console.log("updating discourseId...")
-        await context.prisma.updateUser({ where: { auth0Id }, data: { update: { discourseId: discourseID }} })
+        const ssoData = await syncSsoData();
+        if (ssoData) {
+          discourseID = await getDiscourseId(auth0Id)
+          console.log("attempting to update discourseId...")
+          await context.prisma.updateUser({ where: { auth0Id: auth0User.sub.split("|")[1] }, data: { discourseId: discourseID } })
+        }
       } catch(err) {
         console.log("no discourseId found", err)
       }

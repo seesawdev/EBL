@@ -1,4 +1,4 @@
-#import Query.users, Post from './prisma/generated/prisma-client/prisma-schema.graphql'
+#import Query.users, Post, UserUpdateInput from './prisma/generated/prisma-client/prisma-schema.graphql'
 
 directive @isAuthenticated on OBJECT | QUERY | MUTATION | FIELD_DEFINITION
 directive @hasRole(roles: [String]) on QUERY | MUTATION | FIELD_DEFINITION
@@ -6,7 +6,7 @@ directive @isOwner(type: String) on QUERY | MUTATION | FIELD_DEFINITION
 directive @isOwnerOrHasRole(type: String, roles: [String]) on QUERY | MUTATION | FIELD_DEFINITION
 
 type Query {
-  getBulletinHistory: [Post!]! @isAuthenticated
+  bulletinPostHistory: [Post!]! @isAuthenticated
   feed(filter: String): [Post!]!
   drafts: [Post!]! @isAuthenticated
   post(id: ID!): Post @isOwnerOrHasRole(type: "Post", roles: ["ADMIN"] )

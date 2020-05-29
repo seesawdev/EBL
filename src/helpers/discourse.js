@@ -1,5 +1,15 @@
 const  { config }  = require("./discourseConfig");
-
+async function syncSsoData() {
+  const requestOptions = {
+    method: 'POST',
+  }
+  try {
+    console.log("syncing sso data")
+    await fetch(`http://discourse.everybodyleave.com/admin/users/sync_sso?api_username=${config.DISCOURSE_API_USERNAME}&api_key=${config.DISCOURSE_API_KEY}`, requestOptions)
+  } catch (err) {
+    console.log("error syncing sso data")
+  }
+}
 async function getDiscourseId(auth0Id) {
   const requestOptions = {
     method: 'GET',
@@ -37,4 +47,4 @@ async function logOutDiscourseUser(auth0Id) {
   };
 };
 
-module.exports = { getDiscourseId, logOutDiscourseUser };
+module.exports = { getDiscourseId, logOutDiscourseUser, syncSsoData };

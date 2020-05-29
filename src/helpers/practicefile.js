@@ -14,6 +14,7 @@ const createUserData = async (input) => {
   return data
 }
 const createAuth0User = async (userData = {}) => {
+  const user_metaData = Object.assign({}, userData.metaData)
   const token = await fetchApiAccessToken()
   const headers = {
     Authorization: `Bearer ${process.env.AUTH0_API_TOKEN}`,
@@ -24,7 +25,7 @@ const createAuth0User = async (userData = {}) => {
     email: userData.email,
     username: userData.name,
     password: userData.password,
-    user_metadata: userData.metaData ,
+    user_metadata: user_metaData || {},
     email_verified: true,
   };
   try {
