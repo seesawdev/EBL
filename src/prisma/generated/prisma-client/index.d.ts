@@ -1161,7 +1161,7 @@ export interface PostCreateWithoutAuthorInput {
   published?: Maybe<Boolean>;
   title: String;
   info: String;
-  content: String;
+  content?: Maybe<String>;
 }
 
 export interface UserCreateManyWithoutFollowingInput {
@@ -2181,7 +2181,7 @@ export interface PostCreateInput {
   published?: Maybe<Boolean>;
   title: String;
   info: String;
-  content: String;
+  content?: Maybe<String>;
   author: UserCreateOneWithoutPostsInput;
 }
 
@@ -2792,7 +2792,7 @@ export interface Post {
   published: Boolean;
   title: String;
   info: String;
-  content: String;
+  content?: String;
 }
 
 export interface PostPromise extends Promise<Post>, Fragmentable {
@@ -3460,7 +3460,7 @@ export interface PostPreviousValues {
   published: Boolean;
   title: String;
   info: String;
-  content: String;
+  content?: String;
 }
 
 export interface PostPreviousValuesPromise

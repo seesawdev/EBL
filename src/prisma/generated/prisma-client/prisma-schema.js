@@ -1083,7 +1083,7 @@ type Post {
   published: Boolean!
   title: String!
   info: String!
-  content: String!
+  content: String
   author: User!
 }
 
@@ -1098,7 +1098,7 @@ input PostCreateInput {
   published: Boolean
   title: String!
   info: String!
-  content: String!
+  content: String
   author: UserCreateOneWithoutPostsInput!
 }
 
@@ -1112,7 +1112,7 @@ input PostCreateWithoutAuthorInput {
   published: Boolean
   title: String!
   info: String!
-  content: String!
+  content: String
 }
 
 type PostEdge {
@@ -1144,7 +1144,7 @@ type PostPreviousValues {
   published: Boolean!
   title: String!
   info: String!
-  content: String!
+  content: String
 }
 
 input PostScalarWhereInput {

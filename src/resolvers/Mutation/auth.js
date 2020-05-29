@@ -8,7 +8,7 @@ const validateAndParseToken = require("../../helpers/validateAndParseIdToken");
 const { getAuth0User,  createAuth0User, createUserData} = require('../../helpers/practicefile')
 async function createPrismaUser(context, auth0User) {
   let data;
-  // const discourseId = await getDiscourseId(auth0Id);
+  const discourseId = await getDiscourseId(auth0User.sub.split(`|`)[1]);
   data = {
     auth0Id: auth0User.sub.split(`|`)[1],
     identity: auth0User.sub.split(`|`)[0],
@@ -17,7 +17,7 @@ async function createPrismaUser(context, auth0User) {
     name: auth0User.name,
     email: auth0User.email,
     eblID: fromString(auth0User.sub.split(`|`)[1]),
-    // discourseId: discourseId,
+    discourseId: discourseId,
   };
   console.log(data)
   const user = await context.prisma.createUser({ ...data   
@@ -50,7 +50,10 @@ const auth = {
     // });
     
     return {
-      token: jwt.sign({ userId: user.id }, `${process.env.APP_SECRET}`),
+      token: jwt.sign(
+        { userId: user.id, exp: decodedToken.exp },
+        `${process.env.APP_SECRET}`
+      ),
       user,
       // updateUser
     };
@@ -120,57 +123,51 @@ const auth = {
     }
   },
   
-/**
- * 
- * verifies that the auth0Id from decoded token exists in auth0 database 
- */
-// async checkId(parent, { idToken }, context, info) {
 
-// },
-/**
-logs in a user using Auth0 access token.  If user doesn't exist, create new prisma user
-and return a jwt token o
-
- */
-  //signup
+  //authenticate with Auth0 accessToken, create user if user doesn't exist, try to retrieve discourseId if that exists, set user presence, return jwt
   async authenticate(parent, { access_token, id_token }, context, info) {
     let decodedToken = null;
-    let decodedIdToken = null;
+    let auth0User = null;
+    let discourseID = null
+    // let decodedIdToken = null;
     try {
       decodedToken = await verifyToken(access_token);
+      auth0User = await getAuth0User(access_token)
     } catch (err) {
       throw new Error(err.message)
     }
-    const auth0Id = decodedToken.sub.split("|")[1];
+    // const auth0Id = decodedToken.sub.split("|")[1];
+    const auth0Id = auth0User.sub.split("|")[1];
     let logins = decodedToken["https://everybodyleave.com/additional_profile_info"].logins;
     let user = await context.prisma.user({ auth0Id })
-    let auth0User = await getAuth0User(access_token);
-     console.log("auth0User", auth0User.sub.split("|")[1]);
+    console.log(logins)
+    // let auth0User = await getAuth0User(access_token);
+    console.log("auth0User", auth0Id);
+
     if(!user) {
-     
       user = await createPrismaUser(context, auth0User)
     }
-    if (logins < 1 && id_token) {
-      let decodedIdToken = await verifyToken(id_token)
-      let auth0User = await getAuth0User(access_token);
-      console.log(auth0User)
-      user = await createPrismaUser(context, decodedIdToken)
+    //check if user has logged in, try to update discourseId 
+    const discourseUserId = await context.prisma.user({ auth0Id }).discourseId();
+    if(logins > 1 && discourseUserId === null) {
+      try {
+        discourseID = await getDiscourseId(auth0Id)
+        console.log("updating discourseId...")
+        await context.prisma.updateUser({ where: { auth0Id }, data: { update: { discourseId: discourseID }} })
+      } catch(err) {
+        console.log("no discourseId found", err)
+      }
     }
     
     const setUserPresence = await context.prisma.updateUser({
-       where: { auth0Id},
+       where: { auth0Id },
        data: {
          status: "ONLINE",
        },
      });
    
-    // const discourseId = await getDiscourseId(auth0Id);
     // const discourseLogOut = await logOutDiscourseUser(auth0Id)
-    // // console.log(discourseLogOut)
-    //check if prisma user's auth0Id matches the one from decoded token / auth0 database
-    if (user && auth0User.sub.includes(auth0Id)) {
-      console.log("verified user in auth0 database.", auth0User.sub)      
-    }
+   
     /**
     cookie
 
