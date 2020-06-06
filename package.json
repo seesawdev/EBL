@@ -6,7 +6,7 @@
     "nodemon": "nodemon"
   },
   "dependencies": {
-    "apollo-server-express": "^2.13.1",
+    "apollo-server-express": "^2.14.2",
     "auth0": "^2.24.0",
     "axios": "^0.19.2",
     "babel-preset-env": "^1.7.0",
