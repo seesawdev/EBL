@@ -1,18 +1,29 @@
 const jwt = require('jsonwebtoken')
+
+function isLoggedIn(context) {
+  const loggedInStatus = context.req.cookies["auth0.is.authenticated"]
+  return loggedInStatus
+}
 //if using jwt authentication
 function getUserId(context) {
-  const Authorization = context.request.get("Authorization");
+  const tokenCookie = context.req.signedCookies.authorization
+  const Authorization = context.req.get("Authorization");
   
   if (Authorization) {
-    const token = Authorization.replace('Bearer ', '')
+    const token = Authorization.replace("Bearer ", "");
     const { userId } = jwt.verify(token, `${process.env.APP_SECRET}`) 
-      console.log(userId)
     return userId
+  } else {
+    if (tokenCookie) {
+      const { userId } = jwt.verify(tokenCookie, `${process.env.APP_SECRET}`)
+      return userId
+    }
   }
   throw new AuthError()
 }
+
 function getUserAuth0Id(context) {
-  const Authorization = context.request.get("Authorization");
+  const Authorization = context.req.get("Authorization");
 
   if(Authorization) {
     const token = Authorization.replace('Bearer ', '');
@@ -29,14 +40,14 @@ function getUserAuth0Id(context) {
 //   }
 //   throw new AuthError();
 // }
-
+const createToken =  (userId) => jwt.sign({ userId, expiresIn: "7d"}, `${process.env.App_SECRET}`)
 class AuthError extends Error {
   constructor() {
     super('Not authorized. You must be logged in to perform this function')
   }
 }
-
 module.exports = {
+  createToken,
   getUserId,
   getUserAuth0Id,
   AuthError

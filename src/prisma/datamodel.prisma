@@ -10,12 +10,15 @@ type Post {
 }
 type User {
   id: ID! @id
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String! @unique 
   metaData: String 
   identity: String
   email: String @unique
   name: String 
+  password: String
   nickname: String 
   guestCheckIns: Int @default(value: 0)
   eblID: String 

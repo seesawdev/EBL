@@ -1,10 +1,19 @@
-#import Query.users, Post, UserUpdateInput from './prisma/generated/prisma-client/prisma-schema.graphql'
+#import Query.users, Post, UserUpdateInput, UserCreateInput, from './prisma/generated/prisma-client/prisma-schema.graphql'
 
 directive @isAuthenticated on OBJECT | QUERY | MUTATION | FIELD_DEFINITION
 directive @hasRole(roles: [String]) on QUERY | MUTATION | FIELD_DEFINITION
 directive @isOwner(type: String) on QUERY | MUTATION | FIELD_DEFINITION
 directive @isOwnerOrHasRole(type: String, roles: [String]) on QUERY | MUTATION | FIELD_DEFINITION
-
+# directive @auth on QUERY | FIELD_DEFINITION | FIELD
+enum CacheControlScope {
+    PUBLIC
+    PRIVATE
+  }
+  
+  directive @cacheControl (
+    maxAge: Int
+    scope: CacheControlScope
+  ) on FIELD_DEFINITION | OBJECT | INTERFACE
 type Query {
   bulletinPostHistory: [Post!]! @isAuthenticated
   feed(filter: String): [Post!]!
@@ -42,7 +51,7 @@ input PostCreateInput {
 
 }
 type Mutation {
-  signup(email: String!, password: String!, avatar: String, username: String!, metaData: [String]): AuthPayload!
+  signup(email: String!, password: String!, username: String!, metaData: [String], avatar: String): SignUpPayload!
   login(email: String!, password: String!): AuthPayload!
   authenticate(access_token: String!, id_token: String): AuthPayload!
   createDraft(title: String!, content: String!): Post @isAuthenticated
@@ -62,7 +71,7 @@ type Mutation {
   """
   removeUserFromFriendlist(nickname1: String, nickname2: String): String
   """
-   follow another user's public account
+   follow another user's public account 
   """
   followUser(nickname: String): User
   updateUserProfile(input: ProfileInput): User
@@ -72,20 +81,24 @@ type Subscription {
   feedSubscription: Post
   userStatusSubscription: User
 }
+type SignUpPayload {
+  token: String!
+  user: User!
+}
 
 type AuthPayload {
   token: String!
   user: User!
 }
 
-type User {
+type User @cacheControl(maxAge: 120){
   id: ID!
   auth0Id: String!
   discourseId: Int
   eblID: String!
   metaData: String
   identity: String!
-  avatar: String
+  avatar: String @cacheControl(maxAge: 240)
   email: String @isOwner(type: "User")
   name: String
   nickname: String
@@ -94,6 +107,7 @@ type User {
   points: Int!
   friends: [User!]!
   status: UserStatus
+  password: String!
   posts: [Post!]!
   following: [User]
   metadata: [String]

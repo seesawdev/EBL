@@ -1445,12 +1445,15 @@ enum TIER {
 
 type User {
   id: ID!
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1476,12 +1479,15 @@ type UserConnection {
 
 input UserCreateInput {
   id: ID
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1531,12 +1537,15 @@ input UserCreateOneWithoutPostsInput {
 
 input UserCreateWithoutFollowingInput {
   id: ID
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1555,12 +1564,15 @@ input UserCreateWithoutFollowingInput {
 
 input UserCreateWithoutFriendsInput {
   id: ID
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1579,12 +1591,15 @@ input UserCreateWithoutFriendsInput {
 
 input UserCreateWithoutGoalsInput {
   id: ID
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1603,12 +1618,15 @@ input UserCreateWithoutGoalsInput {
 
 input UserCreateWithoutJournalInput {
   id: ID
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1627,12 +1645,15 @@ input UserCreateWithoutJournalInput {
 
 input UserCreateWithoutPostsInput {
   id: ID
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1657,6 +1678,10 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
+  created_at_ASC
+  created_at_DESC
+  updated_at_ASC
+  updated_at_DESC
   discourseId_ASC
   discourseId_DESC
   auth0Id_ASC
@@ -1669,6 +1694,8 @@ enum UserOrderByInput {
   email_DESC
   name_ASC
   name_DESC
+  password_ASC
+  password_DESC
   nickname_ASC
   nickname_DESC
   guestCheckIns_ASC
@@ -1691,12 +1718,15 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String!
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1723,6 +1753,34 @@ input UserScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  created_at: String
+  created_at_not: String
+  created_at_in: [String!]
+  created_at_not_in: [String!]
+  created_at_lt: String
+  created_at_lte: String
+  created_at_gt: String
+  created_at_gte: String
+  created_at_contains: String
+  created_at_not_contains: String
+  created_at_starts_with: String
+  created_at_not_starts_with: String
+  created_at_ends_with: String
+  created_at_not_ends_with: String
+  updated_at: String
+  updated_at_not: String
+  updated_at_in: [String!]
+  updated_at_not_in: [String!]
+  updated_at_lt: String
+  updated_at_lte: String
+  updated_at_gt: String
+  updated_at_gte: String
+  updated_at_contains: String
+  updated_at_not_contains: String
+  updated_at_starts_with: String
+  updated_at_not_starts_with: String
+  updated_at_ends_with: String
+  updated_at_not_ends_with: String
   discourseId: Int
   discourseId_not: Int
   discourseId_in: [Int!]
@@ -1801,6 +1859,20 @@ input UserScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
   nickname: String
   nickname_not: String
   nickname_in: [String!]
@@ -1905,12 +1977,15 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateDataInput {
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1929,12 +2004,15 @@ input UserUpdateDataInput {
 }
 
 input UserUpdateInput {
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1953,12 +2031,15 @@ input UserUpdateInput {
 }
 
 input UserUpdateManyDataInput {
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -1971,12 +2052,15 @@ input UserUpdateManyDataInput {
 }
 
 input UserUpdateManyMutationInput {
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -2046,12 +2130,15 @@ input UserUpdateOneRequiredWithoutPostsInput {
 }
 
 input UserUpdateWithoutFollowingDataInput {
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -2069,12 +2156,15 @@ input UserUpdateWithoutFollowingDataInput {
 }
 
 input UserUpdateWithoutFriendsDataInput {
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -2092,12 +2182,15 @@ input UserUpdateWithoutFriendsDataInput {
 }
 
 input UserUpdateWithoutGoalsDataInput {
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -2115,12 +2208,15 @@ input UserUpdateWithoutGoalsDataInput {
 }
 
 input UserUpdateWithoutJournalDataInput {
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -2138,12 +2234,15 @@ input UserUpdateWithoutJournalDataInput {
 }
 
 input UserUpdateWithoutPostsDataInput {
+  created_at: String
+  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
   identity: String
   email: String
   name: String
+  password: String
   nickname: String
   guestCheckIns: Int
   eblID: String
@@ -2217,6 +2316,34 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  created_at: String
+  created_at_not: String
+  created_at_in: [String!]
+  created_at_not_in: [String!]
+  created_at_lt: String
+  created_at_lte: String
+  created_at_gt: String
+  created_at_gte: String
+  created_at_contains: String
+  created_at_not_contains: String
+  created_at_starts_with: String
+  created_at_not_starts_with: String
+  created_at_ends_with: String
+  created_at_not_ends_with: String
+  updated_at: String
+  updated_at_not: String
+  updated_at_in: [String!]
+  updated_at_not_in: [String!]
+  updated_at_lt: String
+  updated_at_lte: String
+  updated_at_gt: String
+  updated_at_gte: String
+  updated_at_contains: String
+  updated_at_not_contains: String
+  updated_at_starts_with: String
+  updated_at_not_starts_with: String
+  updated_at_ends_with: String
+  updated_at_not_ends_with: String
   discourseId: Int
   discourseId_not: Int
   discourseId_in: [Int!]
@@ -2295,6 +2422,20 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
   nickname: String
   nickname_not: String
   nickname_in: [String!]

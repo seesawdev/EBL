@@ -9,7 +9,7 @@ function isAuthenticated(parent, args, context) {
 }
 
 async function isOwner(parent, { id }, { prisma, me }) {
-  const movie = await prisma.post({ id }).postedBy();
+  const post = await prisma.post({ id }).postedBy();
   // console.log(movie.id, me)
   if (post.id !== me) {
     throw new Error("Not authenticated as owner");

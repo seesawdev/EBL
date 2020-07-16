@@ -140,17 +140,13 @@ async feed(parent, args, context, info) {
     return isUserInFriendList !== 0 ? true : false;
   },
   async bulletinPostHistory(parent, args, context, info) {
-    const where = args.filter
-      ? {
-          OR: [
-            { title_contains: args.filter },
-            { author: { nickname_contains: args.filter } },
-            { content_contains: args.filter }
-          ],
-          AND: [{ published: true }]
-        }
-      :""
-    return await context.prisma.posts({ where }, info) || {};
+    const userId = getUserId(context);
+    const where = {
+      published: true,
+      author: { id: userId }
+    };
+    const postsHistory = await context.prisma.posts({ where }, info);
+    return postsHistory;
   },
 }
 module.exports = { Query }
