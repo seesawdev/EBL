@@ -21,4 +21,4 @@ const validateAndParseToken = (token) => new Promise((resolve, reject) => {
   })
 })
 
-module.exports = validateAndParseToken
+module.exports = { validateAndParseToken }

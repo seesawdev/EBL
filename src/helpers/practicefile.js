@@ -2,14 +2,15 @@ const { getUserId, getUserAuth0Id } = require('../utils');
 const { fetchApiAccessToken } = require('./managementClient')
 const bcrypt = require('bcrypt')
 const axios = require('axios');
-const createUserData = async (input) => {
 const { config }  = require('./auth0Config')
+
+const createUserData = async (userId, input) => {
   const data = {
     email: input.email,
     password: input.password,
     // avatar: input.avatar || null,
     name: input.username,
-    metaData: input.metaData || {}
+    metaData: { userId, ...input.metaData } || {} 
   }
   return data
 }
@@ -38,6 +39,7 @@ const createAuth0User = async (userData = {}) => {
          Authorization: `Bearer ${token}`,
         "Content-type": "application/json"
       },
+      // credentials: 'same-site'
       }
     );
     const response = await newUser.data;
@@ -56,7 +58,8 @@ const getAuth0User = async (access_token) => {
   const requestOptions = { 
     method: 'GET',
     headers: myHeaders,
-    redirect: 'follow'
+    redirect: 'follow',
+    // credentials: 'same-site'
   }
   try {
     const userinfo = await fetch("https://everybodyleave.auth0.com/userinfo", requestOptions)
@@ -84,6 +87,7 @@ const loginAfterSignup =  async (email, password) => {
     headers: myHeaders,
     body: urlencoded,
     redirect: 'follow',
+    // credentials: 'same-site',
   }
   let tokens;
   try {

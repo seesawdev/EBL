@@ -79,7 +79,8 @@ async function getUserInfo(access_token, id) {
       method: 'POST',
       headers: new Headers({ 
         authorization: `${access_token}`
-      })
+      }),
+      credentials: 'same-site'
     })
     
     const response = await userInfo.json();

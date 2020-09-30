@@ -4,7 +4,7 @@ const { fromString } = require("uuidv4");
 const { getDiscourseId, logOutDiscourseUser, syncSsoData } = require('../../helpers/discourse')
 const { verifyToken, getAuth0UserInfo, getAuth0UserEmail} = require("../../helpers/auth0Authentication")
 const { fetchApiAccessToken, getUser, getUserInfo, multipleRequests } = require('../../helpers/managementClient')
-const validateAndParseToken = require("../../helpers/validateAndParseIdToken");
+const validateAndParseToken = require("../../helpers/validateAndParseToken");
 const { getAuth0User,  createAuth0User, createUserData, loginAfterSignup} = require('../../helpers/practicefile')
 const { config } = require('../../helpers/auth0Config')
 async function createPrismaUser(context, decodedToken) {
@@ -48,13 +48,16 @@ const generateRefreshCookie = (args, context) => {
 const auth = {
   async signup(parent, args, context) {
     const hashedpassword = await bcrypt.hash(args.password, 10);
-    let userData = await createUserData(args)
+    let user = await context.prisma.createUser({name: args.username, email: args.email, password: args.password })
+    let userId = user.id
+    let userData = await createUserData(userId, args)
     console.log("sending user data to Auth0", userData) 
     let auth0User = await createAuth0User(userData)
     // console.log("auth0User response object", auth0User.name)
     let auth0Identities = Object.values(auth0User['identities'])[0];
     let auth0ID = auth0Identities['user_id']
     // console.log("auth0ID", auth0ID)
+   
 
     let syncData = {
       created_at: auth0User.created_at,
@@ -72,7 +75,6 @@ const auth = {
       // username: auth0User.username,
   }
   let authTokens;
-  let user = await context.prisma.createUser({ ...syncData })
   // try {
   //   authTokens = await loginAfterSignup(auth0User.email, args.password)
   //   return authTokens
@@ -85,28 +87,47 @@ const auth = {
   // );
   authTokens = await loginAfterSignup(auth0User.email, args.password);
   console.log(authTokens)
+  const jwtExpirySeconds = 900
+
   const refreshToken = authTokens.refresh_token;
-  context.res.cookie("refresh_token", refreshToken, {
-    signed: true, 
-    httpOnly: true,
-    secure: false, 
-    sameSite: 'strict',
-    // expiresIn: authTokens.expires_in,
-    maxAge: 60 * 60 * 24 * 30
-  });
+  // context.res.cookie("refresh_token", refreshToken, {
+  //   path: '/',
+  //   signed: true, 
+  //   httpOnly: true,
+  //   // secure: false, 
+  //   // sameSite: 'lax',
+  //   // expiresIn: authTokens.expires_in,
+  //   maxAge: jwtExpirySeconds * 2592000 //30 days
+  // });
 
   const prismaToken = jwt.sign({ userId: user.id }, `${process.env.APP_SECRET}`, {expiresIn: authTokens.expires_in})
   context.res.cookie("authorization", prismaToken, { 
-        signed: true, 
+        signed: false, 
+        path: '/',
         httpOnly: true,
-        secure: false, 
-        // sameSite: 'strict',
+        // secure: false, 
+        domain: 'http:/localhost:3000',
+        // sameSite: 'lax',
         // expiresIn: authTokens.expires_in
-        maxAge: 60 * 60 * 24 
+        maxAge: jwtExpirySeconds * 1000 //15 min
       })
+ const cookieOptions = {
+   signed: true,
+   path: '/',
+   httpOnly: true,
+   domain: 'http:/localhost:3000',
+   maxAge: jwtExpirySeconds * 2592000
+ }
+ context.res.cookie("onboarded", true, { cookieOptions }, 
+  // "refresh_token", refreshToken, { cookieOptions }, 
+  // "authorization", prismaToken, { cookieOptions }
+   )
   context.prisma.updateUser({
     where: { id: user.id },
-    data:  { refresh_token: refreshToken }
+    data:  { 
+      ...syncData,
+      refreshToken: refreshToken  
+      }
   })
   // context.response.cookie("access_token", authTokens.access_token, {
   //   httpOnly: true,
@@ -149,20 +170,19 @@ const auth = {
       email,
       password
     );
-    //  context.response.cookie("refresh_token", refreshToken, {
-    //    httpOnly: true,
-    //    expiresIn: authTokens.expires_in,
-    //  });
+   
      const prismaToken = jwt.sign(
        { userId: user.id },
        `${process.env.APP_SECRET}`,
        { expiresIn: authTokens.expires_in }
      );
      context.res.cookie("authorization", prismaToken, {
-       signed: true, 
+      //  signed: true, 
        httpOnly: true,
-       secure: false, 
-      //  sameSite: 'strict',
+       domain: 'http://127.0.0.1',
+       path: '/',
+      //  secure: false, 
+      //  sameSite: 'lax',
       //  expiresIn: authTokens.expires_in,
       maxAge: 60 * 60 * 24 
      });
@@ -274,21 +294,23 @@ const auth = {
      });
    
     // const discourseLogOut = await logOutDiscourseUser(auth0Id)
-   
+   const jwtExpirySeconds = 900
     /**
     cookie
     context.request.session.userId = user.id
      */
     console.log("decodedToken.exp ", decodedToken.exp)
-    const token = jwt.sign({ userId: user.id }, `${process.env.APP_SECRET}`, { expiresIn: decodedToken.exp }, )
+    const token = await jwt.sign({ userId: user.id }, `${process.env.APP_SECRET}`, { expiresIn: jwtExpirySeconds }, )
 
     context.res.cookie('authorization', token, { 
       signed: true, 
+      path: '/',
+      // domain: 'http://127.0.0.1',
       // expiresIn: decodedToken.exp,
-      maxAge: 60 * 60 * 24,
+      maxAge: jwtExpirySeconds * 1000,
       httpOnly: true,
-      secure: false, 
-      sameSite: 'strict'
+      // secure: false, 
+      // sameSite: 'false'
     })
     console.log(user)
     return await {

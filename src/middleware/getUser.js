@@ -8,20 +8,20 @@ const getUser = async (request, response, next, context) => {
 }
 
 const getCookie = async(request, response, next, context) => {
-  console.log("request.cookies", request.cookies)
-  const { prismaToken }  = request.cookies;
+  console.log("request.cookies", request.signedCookies)
+  const { prismaToken }  = request.signedCookies;
   if (!prismaToken ) {
-    return
+    next()
   }
   try {
     const { userId } = await jwt.verify(prismaToken, `${process.env.APP_SECRET}`);
     if(request.user.id === userId) ;
     console.log("userId from cookie", userId)
-    return next()
+    return userId
   } catch (err) {
     const refreshToken = await request.cookies['refresh_token']
     if (!refreshToken) {
-      return 
+      next() 
     }
   }
 }

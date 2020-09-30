@@ -3,8 +3,8 @@ type Post {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   published: Boolean! @default(value: false)
-  title: String!
-  info: String!
+  title: String
+  info: String
   content: String
   author: User! @relation(name:"UserPosts")
 }
@@ -13,7 +13,7 @@ type User {
   created_at: String
   updated_at: String
   discourseId: Int
-  auth0Id: String! @unique 
+  auth0Id: String @unique 
   metaData: String 
   identity: String
   email: String @unique
@@ -21,7 +21,7 @@ type User {
   password: String
   nickname: String 
   guestCheckIns: Int @default(value: 0)
-  eblID: String 
+  eblID: String @unique
   profileStatus: ProfileStatus @default(value: PUBLIC)
   avatar: String 
   goals: [Goal] @relation(name: "UserToGoals")
@@ -34,6 +34,7 @@ type User {
   following: [User] @relation(name: "FollowingUsers", link: TABLE)
   tier: TIER! @default(value: FREE)
   role: Role @default(value: USER)
+  refreshToken: String
 }
 enum TIER {
   FREE
@@ -43,7 +44,7 @@ enum TIER {
 type Goal {
   id: ID! @id
   title: String!
-  startDate: DateTime! @startDate
+  createdAt: DateTime! @createdAt
   projectedCompletionDate: DateTime! @projectedCompletionDate
   actualCompletionDate: DateTime! @actualCompletionDate
   pointsWorth: Int!

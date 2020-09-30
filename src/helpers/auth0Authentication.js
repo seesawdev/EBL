@@ -3,7 +3,7 @@ const jwkRsa = require("jwks-rsa");
 const  axios = require('axios')
 const config = require("./auth0Config")
 const { fetchApiAccessToken } = require("./managementClient")
-const validateAndParseIdToken = require('./validateAndParseIdToken')
+const validateAndParseIdToken = require('./validateAndParseToken')
 //Validates the request JWT token
 const verifyToken = token =>
   new Promise(resolve => {
@@ -87,7 +87,7 @@ const getPrismaUser = async (parent, { access_token }, context) => {
   let email;
   const decodedToken = await verifyToken(access_token)
   const auth0Id = sub.split("|")[1]
-  const prismaUser = await context.prisma.user({auth0Id})
+  const prismaUser = await context.prisma.user({auth0Id}).id()
   if (prismaUser === null) {
     if (decodedToken.scope.includes('email')) {
       email = await fetchAuth0UserEmail(access_token)

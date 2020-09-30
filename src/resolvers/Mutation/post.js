@@ -27,11 +27,11 @@ const post = {
       },
     ) 
   },
-  async postWithoutDraft(parent, args, context, info) {
-    const  userId  = getUserId(context)
+  async postWithoutDraft(parent, { title, content }, context,  info) {
+    const  userId  = await getUserId(context)
     return await context.prisma.createPost({
-          title: args.title,
-          info: args.info,
+          title,
+          content,
           // content: args.content,
           published: true,
           author: { 

@@ -11,6 +11,9 @@ const User = {
   discourseId: ({ id }, args, context) => {
     return context.prisma.user({ id }).discourseId();
   },
+  eblID: ({ id }, args, context) => {
+    return context.prisma.user({ id }).eblID();
+  },
 };
 module.exports = {
   User,

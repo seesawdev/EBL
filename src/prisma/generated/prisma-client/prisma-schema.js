@@ -393,7 +393,7 @@ input FormDataWhereUniqueInput {
 type Goal {
   id: ID!
   title: String!
-  startDate: DateTime!
+  createdAt: DateTime!
   projectedCompletionDate: DateTime!
   actualCompletionDate: DateTime!
   pointsWorth: Int!
@@ -412,7 +412,6 @@ type GoalConnection {
 input GoalCreateInput {
   id: ID
   title: String!
-  startDate: DateTime!
   projectedCompletionDate: DateTime!
   actualCompletionDate: DateTime!
   pointsWorth: Int!
@@ -430,7 +429,6 @@ input GoalCreateManyWithoutAuthorInput {
 input GoalCreateWithoutAuthorInput {
   id: ID
   title: String!
-  startDate: DateTime!
   projectedCompletionDate: DateTime!
   actualCompletionDate: DateTime!
   pointsWorth: Int!
@@ -449,8 +447,8 @@ enum GoalOrderByInput {
   id_DESC
   title_ASC
   title_DESC
-  startDate_ASC
-  startDate_DESC
+  createdAt_ASC
+  createdAt_DESC
   projectedCompletionDate_ASC
   projectedCompletionDate_DESC
   actualCompletionDate_ASC
@@ -468,7 +466,7 @@ enum GoalOrderByInput {
 type GoalPreviousValues {
   id: ID!
   title: String!
-  startDate: DateTime!
+  createdAt: DateTime!
   projectedCompletionDate: DateTime!
   actualCompletionDate: DateTime!
   pointsWorth: Int!
@@ -506,14 +504,14 @@ input GoalScalarWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
-  startDate: DateTime
-  startDate_not: DateTime
-  startDate_in: [DateTime!]
-  startDate_not_in: [DateTime!]
-  startDate_lt: DateTime
-  startDate_lte: DateTime
-  startDate_gt: DateTime
-  startDate_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   projectedCompletionDate: DateTime
   projectedCompletionDate_not: DateTime
   projectedCompletionDate_in: [DateTime!]
@@ -593,7 +591,6 @@ input GoalSubscriptionWhereInput {
 
 input GoalUpdateInput {
   title: String
-  startDate: DateTime
   projectedCompletionDate: DateTime
   actualCompletionDate: DateTime
   pointsWorth: Int
@@ -605,7 +602,6 @@ input GoalUpdateInput {
 
 input GoalUpdateManyDataInput {
   title: String
-  startDate: DateTime
   projectedCompletionDate: DateTime
   actualCompletionDate: DateTime
   pointsWorth: Int
@@ -616,7 +612,6 @@ input GoalUpdateManyDataInput {
 
 input GoalUpdateManyMutationInput {
   title: String
-  startDate: DateTime
   projectedCompletionDate: DateTime
   actualCompletionDate: DateTime
   pointsWorth: Int
@@ -644,7 +639,6 @@ input GoalUpdateManyWithWhereNestedInput {
 
 input GoalUpdateWithoutAuthorDataInput {
   title: String
-  startDate: DateTime
   projectedCompletionDate: DateTime
   actualCompletionDate: DateTime
   pointsWorth: Int
@@ -693,14 +687,14 @@ input GoalWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
-  startDate: DateTime
-  startDate_not: DateTime
-  startDate_in: [DateTime!]
-  startDate_not_in: [DateTime!]
-  startDate_lt: DateTime
-  startDate_lte: DateTime
-  startDate_gt: DateTime
-  startDate_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   projectedCompletionDate: DateTime
   projectedCompletionDate_not: DateTime
   projectedCompletionDate_in: [DateTime!]
@@ -1081,8 +1075,8 @@ type Post {
   createdAt: DateTime!
   updatedAt: DateTime!
   published: Boolean!
-  title: String!
-  info: String!
+  title: String
+  info: String
   content: String
   author: User!
 }
@@ -1096,8 +1090,8 @@ type PostConnection {
 input PostCreateInput {
   id: ID
   published: Boolean
-  title: String!
-  info: String!
+  title: String
+  info: String
   content: String
   author: UserCreateOneWithoutPostsInput!
 }
@@ -1110,8 +1104,8 @@ input PostCreateManyWithoutAuthorInput {
 input PostCreateWithoutAuthorInput {
   id: ID
   published: Boolean
-  title: String!
-  info: String!
+  title: String
+  info: String
   content: String
 }
 
@@ -1142,8 +1136,8 @@ type PostPreviousValues {
   createdAt: DateTime!
   updatedAt: DateTime!
   published: Boolean!
-  title: String!
-  info: String!
+  title: String
+  info: String
   content: String
 }
 
@@ -1448,7 +1442,7 @@ type User {
   created_at: String
   updated_at: String
   discourseId: Int
-  auth0Id: String!
+  auth0Id: String
   metaData: String
   identity: String
   email: String
@@ -1469,6 +1463,7 @@ type User {
   following(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   tier: TIER!
   role: Role
+  refreshToken: String
 }
 
 type UserConnection {
@@ -1482,7 +1477,7 @@ input UserCreateInput {
   created_at: String
   updated_at: String
   discourseId: Int
-  auth0Id: String!
+  auth0Id: String
   metaData: String
   identity: String
   email: String
@@ -1503,6 +1498,7 @@ input UserCreateInput {
   following: UserCreateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserCreateManyWithoutFollowingInput {
@@ -1540,7 +1536,7 @@ input UserCreateWithoutFollowingInput {
   created_at: String
   updated_at: String
   discourseId: Int
-  auth0Id: String!
+  auth0Id: String
   metaData: String
   identity: String
   email: String
@@ -1560,6 +1556,7 @@ input UserCreateWithoutFollowingInput {
   posts: PostCreateManyWithoutAuthorInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserCreateWithoutFriendsInput {
@@ -1567,7 +1564,7 @@ input UserCreateWithoutFriendsInput {
   created_at: String
   updated_at: String
   discourseId: Int
-  auth0Id: String!
+  auth0Id: String
   metaData: String
   identity: String
   email: String
@@ -1587,6 +1584,7 @@ input UserCreateWithoutFriendsInput {
   following: UserCreateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserCreateWithoutGoalsInput {
@@ -1594,7 +1592,7 @@ input UserCreateWithoutGoalsInput {
   created_at: String
   updated_at: String
   discourseId: Int
-  auth0Id: String!
+  auth0Id: String
   metaData: String
   identity: String
   email: String
@@ -1614,6 +1612,7 @@ input UserCreateWithoutGoalsInput {
   following: UserCreateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserCreateWithoutJournalInput {
@@ -1621,7 +1620,7 @@ input UserCreateWithoutJournalInput {
   created_at: String
   updated_at: String
   discourseId: Int
-  auth0Id: String!
+  auth0Id: String
   metaData: String
   identity: String
   email: String
@@ -1641,6 +1640,7 @@ input UserCreateWithoutJournalInput {
   following: UserCreateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserCreateWithoutPostsInput {
@@ -1648,7 +1648,7 @@ input UserCreateWithoutPostsInput {
   created_at: String
   updated_at: String
   discourseId: Int
-  auth0Id: String!
+  auth0Id: String
   metaData: String
   identity: String
   email: String
@@ -1668,6 +1668,7 @@ input UserCreateWithoutPostsInput {
   following: UserCreateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 type UserEdge {
@@ -1714,6 +1715,8 @@ enum UserOrderByInput {
   tier_DESC
   role_ASC
   role_DESC
+  refreshToken_ASC
+  refreshToken_DESC
 }
 
 type UserPreviousValues {
@@ -1721,7 +1724,7 @@ type UserPreviousValues {
   created_at: String
   updated_at: String
   discourseId: Int
-  auth0Id: String!
+  auth0Id: String
   metaData: String
   identity: String
   email: String
@@ -1736,6 +1739,7 @@ type UserPreviousValues {
   status: UserStatus
   tier: TIER!
   role: Role
+  refreshToken: String
 }
 
 input UserScalarWhereInput {
@@ -1947,6 +1951,20 @@ input UserScalarWhereInput {
   role_not: Role
   role_in: [Role!]
   role_not_in: [Role!]
+  refreshToken: String
+  refreshToken_not: String
+  refreshToken_in: [String!]
+  refreshToken_not_in: [String!]
+  refreshToken_lt: String
+  refreshToken_lte: String
+  refreshToken_gt: String
+  refreshToken_gte: String
+  refreshToken_contains: String
+  refreshToken_not_contains: String
+  refreshToken_starts_with: String
+  refreshToken_not_starts_with: String
+  refreshToken_ends_with: String
+  refreshToken_not_ends_with: String
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -2001,6 +2019,7 @@ input UserUpdateDataInput {
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserUpdateInput {
@@ -2028,6 +2047,7 @@ input UserUpdateInput {
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserUpdateManyDataInput {
@@ -2049,6 +2069,7 @@ input UserUpdateManyDataInput {
   status: UserStatus
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserUpdateManyMutationInput {
@@ -2070,6 +2091,7 @@ input UserUpdateManyMutationInput {
   status: UserStatus
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserUpdateManyWithoutFollowingInput {
@@ -2153,6 +2175,7 @@ input UserUpdateWithoutFollowingDataInput {
   posts: PostUpdateManyWithoutAuthorInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserUpdateWithoutFriendsDataInput {
@@ -2179,6 +2202,7 @@ input UserUpdateWithoutFriendsDataInput {
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserUpdateWithoutGoalsDataInput {
@@ -2205,6 +2229,7 @@ input UserUpdateWithoutGoalsDataInput {
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserUpdateWithoutJournalDataInput {
@@ -2231,6 +2256,7 @@ input UserUpdateWithoutJournalDataInput {
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -2257,6 +2283,7 @@ input UserUpdateWithoutPostsDataInput {
   following: UserUpdateManyWithoutFollowingInput
   tier: TIER
   role: Role
+  refreshToken: String
 }
 
 input UserUpdateWithWhereUniqueWithoutFollowingInput {
@@ -2526,6 +2553,20 @@ input UserWhereInput {
   role_not: Role
   role_in: [Role!]
   role_not_in: [Role!]
+  refreshToken: String
+  refreshToken_not: String
+  refreshToken_in: [String!]
+  refreshToken_not_in: [String!]
+  refreshToken_lt: String
+  refreshToken_lte: String
+  refreshToken_gt: String
+  refreshToken_gte: String
+  refreshToken_contains: String
+  refreshToken_not_contains: String
+  refreshToken_starts_with: String
+  refreshToken_not_starts_with: String
+  refreshToken_ends_with: String
+  refreshToken_not_ends_with: String
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -2535,6 +2576,7 @@ input UserWhereUniqueInput {
   id: ID
   auth0Id: String
   email: String
+  eblID: String
 }
 `
       }

@@ -63,9 +63,9 @@ async feed(parent, args, context, info) {
       .count();
     return await goalTotal;
   },
-  me(parent, args, context) {
+  async me(parent, args, context) {
     const id = getUserId(context);
-    return context.prisma.user({ id });
+    return await context.prisma.user({ id });
   },
 
   // returns total number of friend for current user
@@ -84,7 +84,7 @@ async feed(parent, args, context, info) {
       )
       .aggregate()
       .count();
-    return friendsOfCurrentUser;
+    return await friendsOfCurrentUser;
   },
 
 
@@ -140,12 +140,16 @@ async feed(parent, args, context, info) {
     return isUserInFriendList !== 0 ? true : false;
   },
   async bulletinPostHistory(parent, args, context, info) {
-    const userId = getUserId(context);
-    const where = {
-      published: true,
-      author: { id: userId }
-    };
-    const postsHistory = await context.prisma.posts({ where }, info);
+    const userId  = await getUserId(context);
+    
+    // const where = {
+    //   AND : [
+    //    { published: true },
+    //    { author: { id_in: userId } }
+    //   ]
+    // };
+    // const postsHistory = await context.prisma.posts({ where }, info);
+    const postsHistory = await context.prisma.user({ id: userId }).posts()
     return postsHistory;
   },
 }

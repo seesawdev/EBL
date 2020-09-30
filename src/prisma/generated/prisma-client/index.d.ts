@@ -325,8 +325,8 @@ export type GoalOrderByInput =
   | "id_DESC"
   | "title_ASC"
   | "title_DESC"
-  | "startDate_ASC"
-  | "startDate_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
   | "projectedCompletionDate_ASC"
   | "projectedCompletionDate_DESC"
   | "actualCompletionDate_ASC"
@@ -390,7 +390,9 @@ export type UserOrderByInput =
   | "tier_ASC"
   | "tier_DESC"
   | "role_ASC"
-  | "role_DESC";
+  | "role_DESC"
+  | "refreshToken_ASC"
+  | "refreshToken_DESC";
 
 export type PostOrderByInput =
   | "id_ASC"
@@ -469,14 +471,14 @@ export interface GoalWhereInput {
   title_not_starts_with?: Maybe<String>;
   title_ends_with?: Maybe<String>;
   title_not_ends_with?: Maybe<String>;
-  startDate?: Maybe<DateTimeInput>;
-  startDate_not?: Maybe<DateTimeInput>;
-  startDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  startDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  startDate_lt?: Maybe<DateTimeInput>;
-  startDate_lte?: Maybe<DateTimeInput>;
-  startDate_gt?: Maybe<DateTimeInput>;
-  startDate_gte?: Maybe<DateTimeInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
   projectedCompletionDate?: Maybe<DateTimeInput>;
   projectedCompletionDate_not?: Maybe<DateTimeInput>;
   projectedCompletionDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -762,6 +764,20 @@ export interface UserWhereInput {
   role_not?: Maybe<Role>;
   role_in?: Maybe<Role[] | Role>;
   role_not_in?: Maybe<Role[] | Role>;
+  refreshToken?: Maybe<String>;
+  refreshToken_not?: Maybe<String>;
+  refreshToken_in?: Maybe<String[] | String>;
+  refreshToken_not_in?: Maybe<String[] | String>;
+  refreshToken_lt?: Maybe<String>;
+  refreshToken_lte?: Maybe<String>;
+  refreshToken_gt?: Maybe<String>;
+  refreshToken_gte?: Maybe<String>;
+  refreshToken_contains?: Maybe<String>;
+  refreshToken_not_contains?: Maybe<String>;
+  refreshToken_starts_with?: Maybe<String>;
+  refreshToken_not_starts_with?: Maybe<String>;
+  refreshToken_ends_with?: Maybe<String>;
+  refreshToken_not_ends_with?: Maybe<String>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
@@ -1080,6 +1096,7 @@ export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   auth0Id?: Maybe<String>;
   email?: Maybe<String>;
+  eblID?: Maybe<String>;
 }>;
 
 export interface AuthPayloadCreateInput {
@@ -1098,7 +1115,7 @@ export interface UserCreateInput {
   created_at?: Maybe<String>;
   updated_at?: Maybe<String>;
   discourseId?: Maybe<Int>;
-  auth0Id: String;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -1119,6 +1136,7 @@ export interface UserCreateInput {
   following?: Maybe<UserCreateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface GoalCreateManyWithoutAuthorInput {
@@ -1129,7 +1147,6 @@ export interface GoalCreateManyWithoutAuthorInput {
 export interface GoalCreateWithoutAuthorInput {
   id?: Maybe<ID_Input>;
   title: String;
-  startDate: DateTimeInput;
   projectedCompletionDate: DateTimeInput;
   actualCompletionDate: DateTimeInput;
   pointsWorth: Int;
@@ -1183,7 +1200,7 @@ export interface UserCreateWithoutFriendsInput {
   created_at?: Maybe<String>;
   updated_at?: Maybe<String>;
   discourseId?: Maybe<Int>;
-  auth0Id: String;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -1203,6 +1220,7 @@ export interface UserCreateWithoutFriendsInput {
   following?: Maybe<UserCreateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface PostCreateManyWithoutAuthorInput {
@@ -1213,8 +1231,8 @@ export interface PostCreateManyWithoutAuthorInput {
 export interface PostCreateWithoutAuthorInput {
   id?: Maybe<ID_Input>;
   published?: Maybe<Boolean>;
-  title: String;
-  info: String;
+  title?: Maybe<String>;
+  info?: Maybe<String>;
   content?: Maybe<String>;
 }
 
@@ -1230,7 +1248,7 @@ export interface UserCreateWithoutFollowingInput {
   created_at?: Maybe<String>;
   updated_at?: Maybe<String>;
   discourseId?: Maybe<Int>;
-  auth0Id: String;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -1250,6 +1268,7 @@ export interface UserCreateWithoutFollowingInput {
   posts?: Maybe<PostCreateManyWithoutAuthorInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface AuthPayloadUpdateInput {
@@ -1289,6 +1308,7 @@ export interface UserUpdateDataInput {
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface GoalUpdateManyWithoutAuthorInput {
@@ -1318,7 +1338,6 @@ export interface GoalUpdateWithWhereUniqueWithoutAuthorInput {
 
 export interface GoalUpdateWithoutAuthorDataInput {
   title?: Maybe<String>;
-  startDate?: Maybe<DateTimeInput>;
   projectedCompletionDate?: Maybe<DateTimeInput>;
   actualCompletionDate?: Maybe<DateTimeInput>;
   pointsWorth?: Maybe<Int>;
@@ -1362,14 +1381,14 @@ export interface GoalScalarWhereInput {
   title_not_starts_with?: Maybe<String>;
   title_ends_with?: Maybe<String>;
   title_not_ends_with?: Maybe<String>;
-  startDate?: Maybe<DateTimeInput>;
-  startDate_not?: Maybe<DateTimeInput>;
-  startDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  startDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  startDate_lt?: Maybe<DateTimeInput>;
-  startDate_lte?: Maybe<DateTimeInput>;
-  startDate_gt?: Maybe<DateTimeInput>;
-  startDate_gte?: Maybe<DateTimeInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
   projectedCompletionDate?: Maybe<DateTimeInput>;
   projectedCompletionDate_not?: Maybe<DateTimeInput>;
   projectedCompletionDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -1436,7 +1455,6 @@ export interface GoalUpdateManyWithWhereNestedInput {
 
 export interface GoalUpdateManyDataInput {
   title?: Maybe<String>;
-  startDate?: Maybe<DateTimeInput>;
   projectedCompletionDate?: Maybe<DateTimeInput>;
   actualCompletionDate?: Maybe<DateTimeInput>;
   pointsWorth?: Maybe<Int>;
@@ -1636,6 +1654,7 @@ export interface UserUpdateWithoutFriendsDataInput {
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface PostUpdateManyWithoutAuthorInput {
@@ -1819,6 +1838,7 @@ export interface UserUpdateWithoutFollowingDataInput {
   posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutFollowingInput {
@@ -2036,6 +2056,20 @@ export interface UserScalarWhereInput {
   role_not?: Maybe<Role>;
   role_in?: Maybe<Role[] | Role>;
   role_not_in?: Maybe<Role[] | Role>;
+  refreshToken?: Maybe<String>;
+  refreshToken_not?: Maybe<String>;
+  refreshToken_in?: Maybe<String[] | String>;
+  refreshToken_not_in?: Maybe<String[] | String>;
+  refreshToken_lt?: Maybe<String>;
+  refreshToken_lte?: Maybe<String>;
+  refreshToken_gt?: Maybe<String>;
+  refreshToken_gte?: Maybe<String>;
+  refreshToken_contains?: Maybe<String>;
+  refreshToken_not_contains?: Maybe<String>;
+  refreshToken_starts_with?: Maybe<String>;
+  refreshToken_not_starts_with?: Maybe<String>;
+  refreshToken_ends_with?: Maybe<String>;
+  refreshToken_not_ends_with?: Maybe<String>;
   AND?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
   OR?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
   NOT?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
@@ -2065,6 +2099,7 @@ export interface UserUpdateManyDataInput {
   status?: Maybe<UserStatus>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutFriendsInput {
@@ -2105,7 +2140,6 @@ export interface FormDataUpdateManyMutationInput {
 export interface GoalCreateInput {
   id?: Maybe<ID_Input>;
   title: String;
-  startDate: DateTimeInput;
   projectedCompletionDate: DateTimeInput;
   actualCompletionDate: DateTimeInput;
   pointsWorth: Int;
@@ -2125,7 +2159,7 @@ export interface UserCreateWithoutGoalsInput {
   created_at?: Maybe<String>;
   updated_at?: Maybe<String>;
   discourseId?: Maybe<Int>;
-  auth0Id: String;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2145,11 +2179,11 @@ export interface UserCreateWithoutGoalsInput {
   following?: Maybe<UserCreateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface GoalUpdateInput {
   title?: Maybe<String>;
-  startDate?: Maybe<DateTimeInput>;
   projectedCompletionDate?: Maybe<DateTimeInput>;
   actualCompletionDate?: Maybe<DateTimeInput>;
   pointsWorth?: Maybe<Int>;
@@ -2190,6 +2224,7 @@ export interface UserUpdateWithoutGoalsDataInput {
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface UserUpsertWithoutGoalsInput {
@@ -2199,7 +2234,6 @@ export interface UserUpsertWithoutGoalsInput {
 
 export interface GoalUpdateManyMutationInput {
   title?: Maybe<String>;
-  startDate?: Maybe<DateTimeInput>;
   projectedCompletionDate?: Maybe<DateTimeInput>;
   actualCompletionDate?: Maybe<DateTimeInput>;
   pointsWorth?: Maybe<Int>;
@@ -2226,7 +2260,7 @@ export interface UserCreateWithoutJournalInput {
   created_at?: Maybe<String>;
   updated_at?: Maybe<String>;
   discourseId?: Maybe<Int>;
-  auth0Id: String;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2246,6 +2280,7 @@ export interface UserCreateWithoutJournalInput {
   following?: Maybe<UserCreateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface JournalEntryUpdateInput {
@@ -2286,6 +2321,7 @@ export interface UserUpdateWithoutJournalDataInput {
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface UserUpsertWithoutJournalInput {
@@ -2302,8 +2338,8 @@ export interface JournalEntryUpdateManyMutationInput {
 export interface PostCreateInput {
   id?: Maybe<ID_Input>;
   published?: Maybe<Boolean>;
-  title: String;
-  info: String;
+  title?: Maybe<String>;
+  info?: Maybe<String>;
   content?: Maybe<String>;
   author: UserCreateOneWithoutPostsInput;
 }
@@ -2318,7 +2354,7 @@ export interface UserCreateWithoutPostsInput {
   created_at?: Maybe<String>;
   updated_at?: Maybe<String>;
   discourseId?: Maybe<Int>;
-  auth0Id: String;
+  auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
   identity?: Maybe<String>;
   email?: Maybe<String>;
@@ -2338,6 +2374,7 @@ export interface UserCreateWithoutPostsInput {
   following?: Maybe<UserCreateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface PostUpdateInput {
@@ -2379,6 +2416,7 @@ export interface UserUpdateWithoutPostsDataInput {
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface UserUpsertWithoutPostsInput {
@@ -2418,6 +2456,7 @@ export interface UserUpdateInput {
   following?: Maybe<UserUpdateManyWithoutFollowingInput>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -2439,6 +2478,7 @@ export interface UserUpdateManyMutationInput {
   status?: Maybe<UserStatus>;
   tier?: Maybe<TIER>;
   role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
 }
 
 export interface AuthPayloadSubscriptionWhereInput {
@@ -2559,7 +2599,7 @@ export interface User {
   created_at?: String;
   updated_at?: String;
   discourseId?: Int;
-  auth0Id: String;
+  auth0Id?: String;
   metaData?: String;
   identity?: String;
   email?: String;
@@ -2574,6 +2614,7 @@ export interface User {
   status?: UserStatus;
   tier: TIER;
   role?: Role;
+  refreshToken?: String;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -2642,6 +2683,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   }) => T;
   tier: () => Promise<TIER>;
   role: () => Promise<Role>;
+  refreshToken: () => Promise<String>;
 }
 
 export interface UserSubscription
@@ -2712,6 +2754,7 @@ export interface UserSubscription
   }) => T;
   tier: () => Promise<AsyncIterator<TIER>>;
   role: () => Promise<AsyncIterator<Role>>;
+  refreshToken: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserNullablePromise
@@ -2782,12 +2825,13 @@ export interface UserNullablePromise
   }) => T;
   tier: () => Promise<TIER>;
   role: () => Promise<Role>;
+  refreshToken: () => Promise<String>;
 }
 
 export interface Goal {
   id: ID_Output;
   title: String;
-  startDate: DateTimeOutput;
+  createdAt: DateTimeOutput;
   projectedCompletionDate: DateTimeOutput;
   actualCompletionDate: DateTimeOutput;
   pointsWorth: Int;
@@ -2799,7 +2843,7 @@ export interface Goal {
 export interface GoalPromise extends Promise<Goal>, Fragmentable {
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
-  startDate: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
   projectedCompletionDate: () => Promise<DateTimeOutput>;
   actualCompletionDate: () => Promise<DateTimeOutput>;
   pointsWorth: () => Promise<Int>;
@@ -2814,7 +2858,7 @@ export interface GoalSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   title: () => Promise<AsyncIterator<String>>;
-  startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   projectedCompletionDate: () => Promise<AsyncIterator<DateTimeOutput>>;
   actualCompletionDate: () => Promise<AsyncIterator<DateTimeOutput>>;
   pointsWorth: () => Promise<AsyncIterator<Int>>;
@@ -2829,7 +2873,7 @@ export interface GoalNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
-  startDate: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
   projectedCompletionDate: () => Promise<DateTimeOutput>;
   actualCompletionDate: () => Promise<DateTimeOutput>;
   pointsWorth: () => Promise<Int>;
@@ -2937,8 +2981,8 @@ export interface Post {
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
   published: Boolean;
-  title: String;
-  info: String;
+  title?: String;
+  info?: String;
   content?: String;
 }
 
@@ -3485,7 +3529,7 @@ export interface GoalSubscriptionPayloadSubscription
 export interface GoalPreviousValues {
   id: ID_Output;
   title: String;
-  startDate: DateTimeOutput;
+  createdAt: DateTimeOutput;
   projectedCompletionDate: DateTimeOutput;
   actualCompletionDate: DateTimeOutput;
   pointsWorth: Int;
@@ -3499,7 +3543,7 @@ export interface GoalPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
-  startDate: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
   projectedCompletionDate: () => Promise<DateTimeOutput>;
   actualCompletionDate: () => Promise<DateTimeOutput>;
   pointsWorth: () => Promise<Int>;
@@ -3513,7 +3557,7 @@ export interface GoalPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   title: () => Promise<AsyncIterator<String>>;
-  startDate: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   projectedCompletionDate: () => Promise<AsyncIterator<DateTimeOutput>>;
   actualCompletionDate: () => Promise<AsyncIterator<DateTimeOutput>>;
   pointsWorth: () => Promise<AsyncIterator<Int>>;
@@ -3605,8 +3649,8 @@ export interface PostPreviousValues {
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
   published: Boolean;
-  title: String;
-  info: String;
+  title?: String;
+  info?: String;
   content?: String;
 }
 
@@ -3664,7 +3708,7 @@ export interface UserPreviousValues {
   created_at?: String;
   updated_at?: String;
   discourseId?: Int;
-  auth0Id: String;
+  auth0Id?: String;
   metaData?: String;
   identity?: String;
   email?: String;
@@ -3679,6 +3723,7 @@ export interface UserPreviousValues {
   status?: UserStatus;
   tier: TIER;
   role?: Role;
+  refreshToken?: String;
 }
 
 export interface UserPreviousValuesPromise
@@ -3703,6 +3748,7 @@ export interface UserPreviousValuesPromise
   status: () => Promise<UserStatus>;
   tier: () => Promise<TIER>;
   role: () => Promise<Role>;
+  refreshToken: () => Promise<String>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -3727,6 +3773,7 @@ export interface UserPreviousValuesSubscription
   status: () => Promise<AsyncIterator<UserStatus>>;
   tier: () => Promise<AsyncIterator<TIER>>;
   role: () => Promise<AsyncIterator<Role>>;
+  refreshToken: () => Promise<AsyncIterator<String>>;
 }
 
 /*

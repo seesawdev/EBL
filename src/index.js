@@ -14,26 +14,64 @@ const { checkJwt } = require('./middleware/jwt')
 const { getUser, getCookie } = require('./middleware/getUser')
 const { makeExecutableSchema } = require("graphql-tools")
 const { importSchema } = require("graphql-import");
-const { validateAndParseIdToken } = require('./helpers/validateAndParseIdToken')
+const { validateAndParseToken } = require('./helpers/validateAndParseToken')
 const resolvers = require('./resolvers')
 const { prisma } = require("./prisma/generated/prisma-client");
 const { authDirectiveResolvers } = require('./directives')
 const { config } = require('./helpers/auth0Config')
 // const { Cookies } = require("universal-cookie");
 const Cookies = require('cookies') 
+const session = require('express-session')
 const http = require('http')
+const Logger = require("@ptkdev/logger");
+const { verifyToken } = require('./helpers/auth0Authentication')
+const options = {
+  language: "en",
+  colors: true,
+  debug: true,
+  info: true,
+  warning: true,
+  error: true,
+  sponsor: true,
+  write: true,
+  type: "log",
+  path: {
+    debug_log: "./debug.log",
+    error_log: "./errors.log",
+  },
+};
+
+const logger = new Logger(options);
+logger.info("message");
 const port = `${process.env.PORT}` || 5000
 // const endpoint = `${process..PRISMA_ENDPOINT}`
 const endpoint = `http://localhost:5000/graphql`;
 
 // const cookies = new Cookies()
 const app = express()
+/**
+  this is for session cookies authentication
+*/
+// app.use(
+//     session({
+//       name: "prisma",
+//       secret: process.env.SESSION_SECRET,
+//       resave: true,
+//       saveUninitialized: false,
+//       cookie: {
+//         httpOnly: true,
+//         secure: process.env.NODE_ENV === "production",
+//         maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+//       }
+//     })
+//   );
 const corsOptions = {
     port: 5000,
-    origin: "http://localhost:3000",
-    credentials: true,
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    origin: ["http://127.0.0.1", "http://localhost:3000"],
+    credentials: false,
+    methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
     preflightContinue: false,
+    allowedHeaders: "Content-Type, Authorization, X-Requested-With",
     optionsSuccessStatus: 204,
   }
 app.use(cors(corsOptions))
@@ -41,48 +79,52 @@ app.use(helmet());
 app.use(
   morgan("dev")
 );
-// app.use(cors());
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
+
 app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
-app.use(cookieParser(process.env.APP_SECRET));
 app.use(compression());
-app.use((req, res, next, context) => {
-  const options = { keys: ['Some random keys']};
-  context.req.cookies = new Cookies(req, res, options);
-  next();
+app.use(cookieParser(process.env.APP_SECRET));
+// app.use(checkJwt) 
+app.use((req, res, next) => {
+  req.cookies = new Cookies(req, res);
+  const tokenCookie = req.signedCookies.authorization
+  if(!tokenCookie) {
+      next();
+  }
 })
 
+//gets the logged in user, implemented for resolver level security in authResolvers file
 const getMe = async (context) => {
-  const Authorization = await context.req.get("Authorization")
   const tokenCookie = await context.req.signedCookies.authorization
-  // console.log("signed cookies: ", context.req.signedCookies.authorization)
-  // console.log("cookies", context.req.cookies)
+  let user
+  // const Authorization = context.req.cookies.get("auth0.is.authenticated", { signed: true });
+  const Authorization = await context.req.get("Authorization")
   if (Authorization) {
       try {
         const token = Authorization.replace('Bearer ', '')
-        const { userId } =  await jwt.verify(token, process.env.APP_SECRET);
-        return userId;
+        const decodedToken =  await verifyToken(token);
+        let auth0ID = await decodedToken.sub.split("|")[1];
+        //  user = await context.req.prisma.users({
+        //    where: { 
+        //      auth0Id: auth0ID 
+        //     }
+        //   })
+        //   return context.req.user
+        return auth0ID
+
       } catch (error) {
         console.log(error);
       }
-      } else {
-  if (tokenCookie) {
-    try {
-      const { userId } = await jwt.verify(tokenCookie, process.env.APP_SECRET)
-      console.log("userId", userId)
-      return userId
-    } catch (error) {
-      console.log(error)
-    }
-  }
+      // } else {
+  // if (tokenCookie) {
+  //   try {
+  //     const { userId } = await jwt.verify(tokenCookie, process.env.APP_SECRET)
+  //     console.log("userId", userId)
+  //     return userId
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 }
 };
 
@@ -95,8 +137,10 @@ const server = new ApolloServer({
   schema,
   debug: true,
   secret: process.env.PRISMA_SECRET,
+  cors: false,
    cacheControl: {
-      defaultMaxAge: 5,
+      defaultMaxAge: 900,
+  //     // maxAge: 86400,
       stripFormattedExtensions: false,
       calculateCacheControlHeaders: true,
     },
@@ -106,7 +150,7 @@ const server = new ApolloServer({
       const me = await getMe(req);
       return await {
         ...req,
-        ...res,
+        // res,
         me,
         prisma,
       }
@@ -117,26 +161,11 @@ const server = new ApolloServer({
 server.applyMiddleware({
   app,
   path: '/',
-  cors: false
+  cors: false,
 })
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
-/**
-  this is for session cookies authentication
-*/
-// app.use(
-//     session({
-//       name: "prisma",
-//       secret: `${process.env.SESSION_SECRET}`,
-//       resave: false,
-//       saveUninitialized: false,
-//       cookie: {
-//         httpOnly: true,
-//         secure: process.env.NODE_ENV === "production",
-//         maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
-//       }
-//     })
-//   );
+
 
 httpServer.listen({ port }, () => { 
   console.log(`Server is running on http://localhost:${port}`),
