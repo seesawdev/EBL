@@ -95,7 +95,7 @@ app.use((req, res, next) => {
 
 //gets the logged in user, implemented for resolver level security in authResolvers file
 const getMe = async (context) => {
-  const tokenCookie = await context.req.signedCookies.authorization
+  // const tokenCookie = await context.req.signedCookies.authorization
   let user
   // const Authorization = context.req.cookies.get("auth0.is.authenticated", { signed: true });
   const Authorization = await context.req.get("Authorization")
@@ -144,18 +144,19 @@ const server = new ApolloServer({
       stripFormattedExtensions: false,
       calculateCacheControlHeaders: true,
     },
-  context: async (req, res) => {
+  context: ({ req, res }) => ({
     //this will be used for resolver level security / directives
-    if (req) {
-      const me = await getMe(req);
-      return await {
+    // if (req) {
+      // const me =  getMe(req);
+      //  return {
         ...req,
+        ...res,
         // res,
-        me,
+        me: getMe(req),
         prisma,
-      }
-    }
-  }
+      // }
+    // }
+  })
 });
 
 server.applyMiddleware({

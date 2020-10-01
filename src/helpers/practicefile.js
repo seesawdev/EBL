@@ -27,7 +27,7 @@ const createAuth0User = async (userData = {}) => {
     // avatar: userData.avatar || null,
     username: userData.name,
     password: userData.password,
-    user_metadata: { user_metaData } || {},
+    user_metadata:  user_metaData || {},
     email_verified: true,
   };
   try {

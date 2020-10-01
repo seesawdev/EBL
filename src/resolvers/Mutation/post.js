@@ -2,7 +2,7 @@ const { getUserId } = require('../../utils')
 
 const post = {
   async createDraft(parent, { title, info }, context) {
-    const userId = getUserId(context)
+    const userId = await getUserId(context)
     return context.prisma.createPost({
       title,
       info,
@@ -11,7 +11,7 @@ const post = {
   },
 
   async publish(parent, { id }, context) {
-    const userId = getUserId(context)
+    const userId = await getUserId(context)
     const postExists = await context.prisma.$exists.post({
       id,
       author: { id: userId },
@@ -40,7 +40,7 @@ const post = {
     })
   },
   async deletePost(parent, { id }, context) {
-    const userId = getUserId(context)
+    const userId = await getUserId(context)
     const postExists = await context.prisma.$exists.post({
       id,
       author: { id: userId },

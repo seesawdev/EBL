@@ -64,7 +64,7 @@ async feed(parent, args, context, info) {
     return await goalTotal;
   },
   async me(parent, args, context) {
-    const id = getUserId(context);
+    const id = await getUserId(context);
     return await context.prisma.user({ id });
   },
 
@@ -141,7 +141,7 @@ async feed(parent, args, context, info) {
   },
   async bulletinPostHistory(parent, args, context, info) {
     const userId  = await getUserId(context);
-    
+    console.log("userId: ", userId)
     // const where = {
     //   AND : [
     //    { published: true },

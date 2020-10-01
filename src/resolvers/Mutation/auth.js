@@ -86,19 +86,20 @@ const auth = {
   //   context
   // );
   authTokens = await loginAfterSignup(auth0User.email, args.password);
-  console.log(authTokens)
+  // console.log(authTokens)
   const jwtExpirySeconds = 900
 
   const refreshToken = authTokens.refresh_token;
-  // context.res.cookie("refresh_token", refreshToken, {
-  //   path: '/',
-  //   signed: true, 
-  //   httpOnly: true,
-  //   // secure: false, 
-  //   // sameSite: 'lax',
-  //   // expiresIn: authTokens.expires_in,
-  //   maxAge: jwtExpirySeconds * 2592000 //30 days
-  // });
+  console.log("refresh token: ", refreshToken)
+  context.res.cookie("refresh_token", refreshToken, {
+    path: '/',
+    // signed: true, 
+    httpOnly: true,
+    // secure: false, 
+    // sameSite: 'lax',
+    // expiresIn: authTokens.expires_in,
+    maxAge: jwtExpirySeconds * 2592000 //30 days
+  });
 
   const prismaToken = jwt.sign({ userId: user.id }, `${process.env.APP_SECRET}`, {expiresIn: authTokens.expires_in})
   context.res.cookie("authorization", prismaToken, { 
@@ -118,15 +119,16 @@ const auth = {
    domain: 'http:/localhost:3000',
    maxAge: jwtExpirySeconds * 2592000
  }
- context.res.cookie("onboarded", true, { cookieOptions }, 
+ context.res.cookie( 
   // "refresh_token", refreshToken, { cookieOptions }, 
-  // "authorization", prismaToken, { cookieOptions }
+  "authorization", prismaToken, { cookieOptions },
+  "onboarded", true, { cookieOptions }
    )
   context.prisma.updateUser({
     where: { id: user.id },
     data:  { 
+      refreshToken: refreshToken,
       ...syncData,
-      refreshToken: refreshToken  
       }
   })
   // context.response.cookie("access_token", authTokens.access_token, {

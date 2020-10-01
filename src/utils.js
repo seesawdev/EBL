@@ -12,7 +12,7 @@ function isLoggedIn(context) {
 async function getUserId(context){
   // const authed = context.req.signedCookies.authorization
   // const loggedIn = context.req.cookies
-  const tokenCookie = await context.req.signedCookies.authorization 
+  // const tokenCookie = await context.req.signedCookies.authorization 
   const Authorization = await context.req.get("Authorization");
   // console.log(context.req.cookies)
   if (Authorization) {
@@ -22,17 +22,17 @@ async function getUserId(context){
         const token = await context.req.headers.authorization.split("Bearer ")[1]
         const decodedToken =  await verifyToken(token);
         const metadata = await decodedToken["https://everybodyleave.com/claims/user_metadata"]
-        const userId = metadata["user_metaData"].userId
+        const userId = metadata.userId
        
         console.log(userId)
         return userId
       } 
-  if (tokenCookie) {
-        const token = await context.req.headers.authorization.split("Bearer ")[1]
-        const { userId } = jwt.verify(tokenCookie, `${process.env.APP_SECRET}`)
-        console.log("user: ", userId)
-        return userId
-      }
+  // if (tokenCookie) {
+  //       const token = await context.req.headers.authorization.split("Bearer ")[1]
+  //       const { userId } = jwt.verify(tokenCookie, `${process.env.APP_SECRET}`)
+  //       console.log("user: ", userId)
+  //       return userId
+  //     }
 
 
       // const user = await getPrismaUser(token)
