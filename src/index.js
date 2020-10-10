@@ -68,7 +68,7 @@ const app = express()
 const corsOptions = {
     port: 5000,
     origin: ["http://127.0.0.1", "http://localhost:3000"],
-    credentials: false,
+    credentials: true,
     methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
     preflightContinue: false,
     allowedHeaders: "Content-Type, Authorization, X-Requested-With",
@@ -84,38 +84,52 @@ app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
 app.use(compression());
 app.use(cookieParser(process.env.APP_SECRET));
+// app.use('/',checkJwt, (err, req, res, next) => {
+//     if (err) return res.status(401).send(err.message)
+//     next()
+//   }
+// )
+// app.post('/', (req, res, next) =>
+//   getUser(req, res, next, prisma)
+// )
 // app.use(checkJwt) 
-app.use((req, res, next) => {
-  req.cookies = new Cookies(req, res);
-  const tokenCookie = req.signedCookies.authorization
-  if(!tokenCookie) {
-      next();
-  }
-})
+// app.use((req, res, next) => {
+//   req.cookies = new Cookies(req, res);
+//   const tokenCookie = req.cookies.authorization
+//   if(!tokenCookie) {
+//     console.log("please log back in to continue")
+//       next();
+//   }
+// })
 
 //gets the logged in user, implemented for resolver level security in authResolvers file
 const getMe = async (context) => {
-  // const tokenCookie = await context.req.signedCookies.authorization
+  // const tokenCookie = await context.req.cookies
+  // console.log("tokenCookie @getMe: ", tokenCookie)
   let user
   // const Authorization = context.req.cookies.get("auth0.is.authenticated", { signed: true });
-  const Authorization = await context.req.get("Authorization")
+  const Authorization = await context.req.headers.authorization
   if (Authorization) {
       try {
-        const token = Authorization.replace('Bearer ', '')
+        const token = await context.req.headers.authorization.split("Bearer ")[1]
         const decodedToken =  await verifyToken(token);
-        let auth0ID = await decodedToken.sub.split("|")[1];
-        //  user = await context.req.prisma.users({
-        //    where: { 
-        //      auth0Id: auth0ID 
-        //     }
-        //   })
-        //   return context.req.user
-        return auth0ID
+        // if (!decodedToken) {
+          //  const { userId } = jwt.verify(token, `${process.env.APP_SECRET}`)
+          //  console.log(userId)
 
+          //  return userId
+        // }
+        const metadata = await decodedToken["https://everybodyleave.com/claims/user_metadata"]
+        const userId = metadata.userId
+       
+        console.log(userId)
+        return userId
+      // } 
       } catch (error) {
         console.log(error);
       }
-      // } else {
+      } 
+      // else {
   // if (tokenCookie) {
   //   try {
   //     const { userId } = await jwt.verify(tokenCookie, process.env.APP_SECRET)
@@ -125,7 +139,7 @@ const getMe = async (context) => {
   //     console.log(error)
   //   }
   // }
-}
+// }
 };
 
 const schema = makeExecutableSchema({
@@ -140,23 +154,26 @@ const server = new ApolloServer({
   cors: false,
    cacheControl: {
       defaultMaxAge: 900,
-  //     // maxAge: 86400,
       stripFormattedExtensions: false,
       calculateCacheControlHeaders: true,
     },
-  context: ({ req, res }) => ({
+  context: async ({ req, res }) => {
     //this will be used for resolver level security / directives
-    // if (req) {
-      // const me =  getMe(req);
-      //  return {
-        ...req,
-        ...res,
-        // res,
-        me: getMe(req),
+    if (req) {
+      const token = req.headers.authorization.split("Bearer ")[1]
+      const decodedToken =  await verifyToken(token);
+      const metadata = await decodedToken["https://everybodyleave.com/claims/user_metadata"]
+      const me = await metadata.userId
+     // console.log("me: ", me)
+   
+       return {
+        req,
+        res,
+        me,
         prisma,
-      // }
-    // }
-  })
+      }
+    }
+  }
 });
 
 server.applyMiddleware({
@@ -164,6 +181,7 @@ server.applyMiddleware({
   path: '/',
   cors: false,
 })
+
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 

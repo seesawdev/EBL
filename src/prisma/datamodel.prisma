@@ -10,8 +10,8 @@ type Post {
 }
 type User {
   id: ID! @id
-  created_at: String
-  updated_at: String
+  created_at: DateTime! @createdAt
+  updated_at: DateTime! @updatedAt
   discourseId: Int
   auth0Id: String @unique 
   metaData: String 

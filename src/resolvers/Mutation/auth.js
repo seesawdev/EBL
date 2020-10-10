@@ -47,8 +47,8 @@ const generateRefreshCookie = (args, context) => {
 };
 const auth = {
   async signup(parent, args, context) {
-    const hashedpassword = await bcrypt.hash(args.password, 10);
-    let user = await context.prisma.createUser({name: args.username, email: args.email, password: args.password })
+    const hashedPassword = await bcrypt.hash(args.password, 10);
+    let user = await context.prisma.createUser({name: args.username, email: args.email, password: hashedPassword})
     let userId = user.id
     let userData = await createUserData(userId, args)
     console.log("sending user data to Auth0", userData) 
@@ -62,6 +62,7 @@ const auth = {
     let syncData = {
       created_at: auth0User.created_at,
       email: auth0User.email,
+      // password
       // identities: auth0User.identities,
       name: auth0User.username,
       nickname: auth0User.nickname,
@@ -69,7 +70,6 @@ const auth = {
       updated_at: auth0User.updated_at,
       auth0Id: auth0User.user_id.split("|")[1],
       metaData: auth0User.user_metaData,
-      password: hashedpassword,
       eblID: fromString(auth0User.user_id.split("|")[1]),
       // refreshCookie: await generateRefreshCookie({eblID, email: auth0User.email}, context)
       // username: auth0User.username,
@@ -113,7 +113,7 @@ const auth = {
         maxAge: jwtExpirySeconds * 1000 //15 min
       })
  const cookieOptions = {
-   signed: true,
+  //  signed: true,
    path: '/',
    httpOnly: true,
    domain: 'http:/localhost:3000',
@@ -121,7 +121,7 @@ const auth = {
  }
  context.res.cookie( 
   // "refresh_token", refreshToken, { cookieOptions }, 
-  "authorization", prismaToken, { cookieOptions },
+  // "authorization", prismaToken, { cookieOptions },
   "onboarded", true, { cookieOptions }
    )
   context.prisma.updateUser({
@@ -160,7 +160,7 @@ const auth = {
     //     status: "ONLINE"
     //   }
     // });
-
+   console.log(user.password)
     if (!user) {
       throw new Error(`No user found for : ${email}`);
     }
@@ -267,6 +267,8 @@ const auth = {
 
     let auth0Id = await decodedToken.sub.split("|")[1];
     let logins = await decodedToken["https://everybodyleave.com/claims/user_metadata"].logins;
+    let userID = await decodedToken["https://everybodyleave.com/claims/user_metadata"].userId;
+
     let user = await context.prisma.user({ auth0Id })
     console.log(logins)
     // let auth0User = await getAuth0User(access_token);

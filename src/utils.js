@@ -12,7 +12,7 @@ function isLoggedIn(context) {
 async function getUserId(context){
   // const authed = context.req.signedCookies.authorization
   // const loggedIn = context.req.cookies
-  // const tokenCookie = await context.req.signedCookies.authorization 
+  // const tokenCookie = await context.req.cookies.authorization 
   const Authorization = await context.req.get("Authorization");
   // console.log(context.req.cookies)
   if (Authorization) {
@@ -21,6 +21,12 @@ async function getUserId(context){
       // if (context.req && context.req.headers.authorization) {
         const token = await context.req.headers.authorization.split("Bearer ")[1]
         const decodedToken =  await verifyToken(token);
+        // if (!decodedToken) {
+          //  const { userId } = jwt.verify(token, `${process.env.APP_SECRET}`)
+          //  console.log(userId)
+
+          //  return userId
+        // }
         const metadata = await decodedToken["https://everybodyleave.com/claims/user_metadata"]
         const userId = metadata.userId
        
