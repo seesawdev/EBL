@@ -5,8 +5,8 @@ const Post = {
   title: ({ id }, args, context) => {
     return context.prisma.post({ id }).title()
   },
-  info: ({ id }, args, context) => {
-    return context.prisma.post({ id }).info()
+  description: ({ id }, args, context) => {
+    return context.prisma.post({ id }).description()
   },
   content: ({ id }, args, context) => {
     return context.prisma.post({ id }).content()

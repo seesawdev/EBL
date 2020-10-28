@@ -5,12 +5,14 @@ const axios = require('axios');
 const { config }  = require('./auth0Config')
 
 const createUserData = async (userId, input) => {
+  const { email, password, name, leavingFrom, leavingTo, metaData } = input
+  
   const data = {
-    email: input.email,
-    password: input.password,
+    email: email,
+    password: password,
     // avatar: input.avatar || null,
-    name: input.username,
-    metaData: { userId, ...input.metaData } || {} 
+    name: name,
+    metaData: { userId, leavingFrom, leavingTo, ...metaData } || {} 
   }
   return data
 }
@@ -113,5 +115,30 @@ const listAuth0Users = () => {
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
 }
-module.exports = { getAuth0User, createAuth0User, createUserData, loginAfterSignup }
+const updateUserMetadata = async (userId, auth0Id, args) => {
+  // const auth0Id = context.prisma.user({ id: userId }).auth0Id();
+  const token = fetchApiAccessToken()
+  const headers = {
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/x-www-form-urlencoded"
+  }
+  const metadata = [...args]
+  try {
+    const updatedMetadata = await axios.patch(`${process.env.AUTH0_AUDIENCE}${auth0Id}`, {
+      headers:{
+    "Authorization": `Bearer ${process.env.AUTH0_API_TOKEN}`,
+    "Content-Type": "application/x-www-form-urlencoded"
+  }
+      },
+      metadata
+    )
+    const response = await updatedMetadata.data
+    console.log("successfully updated metadata", response)
+    return  response
+  } catch(err) {
+    console.log("error updating metadata", err)
+    throw new Error(err);
+  }
+}
+module.exports = { getAuth0User, createAuth0User, createUserData, loginAfterSignup, updateUserMetadata }
 

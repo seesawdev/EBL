@@ -4,8 +4,9 @@ type Post {
   updatedAt: DateTime! @updatedAt
   published: Boolean! @default(value: false)
   title: String
-  info: String
+  description: String
   content: String
+  image: String
   author: User! @relation(name:"UserPosts")
 }
 type User {
@@ -17,7 +18,7 @@ type User {
   metaData: String 
   identity: String
   email: String @unique
-  name: String 
+  name: String
   password: String
   nickname: String 
   guestCheckIns: Int @default(value: 0)
@@ -25,7 +26,6 @@ type User {
   profileStatus: ProfileStatus @default(value: PUBLIC)
   avatar: String 
   goals: [Goal] @relation(name: "UserToGoals")
-  userInfo: FormData @relation(link: INLINE)
   journal: [JournalEntry] @relation(name: "UserJournal")
   points: Int! @default(value: 0)
   friends: [User!]! @relation(name: "FriendsOfUser", link: TABLE)
@@ -35,6 +35,9 @@ type User {
   tier: TIER! @default(value: FREE)
   role: Role @default(value: USER)
   refreshToken: String
+  latestMessage: Reaction @relation(name: "LatestMessages", link: TABLE)
+  leavingFrom: String
+  leavingTo: String
 }
 enum TIER {
   FREE
@@ -79,17 +82,6 @@ type AuthPayload {
   token: String!
   user: User!
 }
-type FormData {
-  id: ID! @id
-  createdAt: DateTime! @createdAt
-  email: String! @unique
-  name: String! 
-  nickname: String! @unique
-  Q1: String
-  Q2: String
-  Q3: String
-  Q4: Question @default(value: CHOICE1)
-}
 
 enum Question {
   CHOICE1
@@ -102,3 +94,21 @@ enum Role {
   ADMIN
   USER
 }
+
+type Message {
+  id: ID! @id
+  content: String!
+  from: String!
+  to: String!
+  createdAt: DateTime! @createdAt
+  reactions: [Reaction] @relation(name: "MessageReactions", link: TABLE)
+}
+
+type Reaction {
+  id: ID! @id
+  content: String!
+  createdAt: DateTime! @createdAt
+  message: Message! @relation(name: "MessageReactions")
+  user: User! @relation(name: "LatestMessages")
+}
+

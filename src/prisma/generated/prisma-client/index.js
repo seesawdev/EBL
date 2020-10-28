@@ -37,15 +37,19 @@ var models = [
     embedded: false
   },
   {
-    name: "FormData",
-    embedded: false
-  },
-  {
     name: "Question",
     embedded: false
   },
   {
     name: "Role",
+    embedded: false
+  },
+  {
+    name: "Message",
+    embedded: false
+  },
+  {
+    name: "Reaction",
     embedded: false
   }
 ];

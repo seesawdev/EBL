@@ -8,60 +8,18 @@ function isLoggedIn(context) {
   const loggedInStatus = context.req.cookies["auth0.is.authenticated"]
   return loggedInStatus
 }
+
 //if using jwt authentication
 async function getUserId(context){
-  // const authed = context.req.signedCookies.authorization
-  // const loggedIn = context.req.cookies
-  // const tokenCookie = await context.req.cookies.authorization 
   const Authorization = await context.req.get("Authorization");
-  // console.log(context.req.cookies)
   if (Authorization) {
-    // try {
-      // let user;
-      // if (context.req && context.req.headers.authorization) {
         const token = await context.req.headers.authorization.split("Bearer ")[1]
         const decodedToken =  await verifyToken(token);
-        // if (!decodedToken) {
-          //  const { userId } = jwt.verify(token, `${process.env.APP_SECRET}`)
-          //  console.log(userId)
-
-          //  return userId
-        // }
         const metadata = await decodedToken["https://everybodyleave.com/claims/user_metadata"]
-        const userId = metadata.userId
-       
-        console.log(userId)
+        const userId = metadata.userId     
+        console.log("userId: ", userId)
         return userId
       } 
-  // if (tokenCookie) {
-  //       const token = await context.req.headers.authorization.split("Bearer ")[1]
-  //       const { userId } = jwt.verify(tokenCookie, `${process.env.APP_SECRET}`)
-  //       console.log("user: ", userId)
-  //       return userId
-  //     }
-
-
-      // const user = await getPrismaUser(token)
-      // return user.id
-    // const token = Authorization.replace("Bearer ", "");
-
-    // const decoded = await verifyToken(token)
-    // const auth0ID = await decoded.sub.split("|")[1]
-    // // console.log("auth0Id: ", me.auth0Id())
-    // user = await context.prisma.users({ auth0Id: auth0ID }).eblID()
-    //  console.log("user", user)
-    // return user
-    // } catch (err) {
-    //   console.log("error getting prisma user", err)
-    // }
-   
-  // }
-  // } else {
-  //   if (tokenCookie) {
-  //     const { userId } = await jwt.verify(tokenCookie, `${process.env.APP_SECRET}`)
-  //     return userId
-  //   }
-  // }
   throw new AuthError()
 }
 // function getUserAuth0Id(context) {

@@ -1,6 +1,21 @@
-const { getUserId } = require('../utils')
+const { combineResolvers } = require("graphql-resolvers");
+const { getUserId } = require("../utils");
+const { isFriend, isAuthenticated, isOwner } = require("./authResolvers");
 
 const Query = {
+async status(parent, args, context, info) {
+  const userId = await getUserId(context)
+  const where = args.filter
+  ? {
+    OR: [
+      { nickname_contains: args.filter },
+      { name_contains: args.filter }
+    ]
+  } 
+  : { id: userId }
+  const user = context.prisma.user({ where })
+  return await user
+},
 async feed(parent, args, context, info) {
     const where = args.filter
       ? {
@@ -14,8 +29,8 @@ async feed(parent, args, context, info) {
       : { published: true };
     return await context.prisma.posts({ where }, info) || {};
   },
-  drafts(parent, args, context) {
-    const id = getUserId(context);
+async drafts(parent, args, context) {
+    const id = await getUserId(context);
     const where = {
       published: false,
       author: {
@@ -51,7 +66,7 @@ async feed(parent, args, context, info) {
 
   //returns current user's total number of goals
   async getGoalCount(parent, args, context, info) {
-    const userId = getUserId(context);
+    const userId = await getUserId(context);
     const goalTotal = await context.prisma
       .goalsConnection(
         {
@@ -139,18 +154,13 @@ async feed(parent, args, context, info) {
     // console.log(userId, isUserInFriendList, info)
     return isUserInFriendList !== 0 ? true : false;
   },
-  async bulletinPostHistory(parent, args, context, info) {
+ 
+ 
+  async bulletinPostHistory(parent, args, context, info){
     const userId  = await getUserId(context);
-    console.log("userId: ", userId)
-    // const where = {
-    //   AND : [
-    //    { published: true },
-    //    { author: { id_in: userId } }
-    //   ]
-    // };
-    // const postsHistory = await context.prisma.posts({ where }, info);
+    console.log("getting post history from userId: ", userId)
     const postsHistory = await context.prisma.user({ id: userId }).posts()
-    return postsHistory;
-  },
+      return postsHistory;
+    }
 }
 module.exports = { Query }

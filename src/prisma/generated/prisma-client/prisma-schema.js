@@ -7,10 +7,6 @@ module.exports = {
   count: Int!
 }
 
-type AggregateFormData {
-  count: Int!
-}
-
 type AggregateGoal {
   count: Int!
 }
@@ -19,7 +15,15 @@ type AggregateJournalEntry {
   count: Int!
 }
 
+type AggregateMessage {
+  count: Int!
+}
+
 type AggregatePost {
+  count: Int!
+}
+
+type AggregateReaction {
   count: Int!
 }
 
@@ -133,262 +137,6 @@ type BatchPayload {
 }
 
 scalar DateTime
-
-type FormData {
-  id: ID!
-  createdAt: DateTime!
-  email: String!
-  name: String!
-  nickname: String!
-  Q1: String
-  Q2: String
-  Q3: String
-  Q4: Question
-}
-
-type FormDataConnection {
-  pageInfo: PageInfo!
-  edges: [FormDataEdge]!
-  aggregate: AggregateFormData!
-}
-
-input FormDataCreateInput {
-  id: ID
-  email: String!
-  name: String!
-  nickname: String!
-  Q1: String
-  Q2: String
-  Q3: String
-  Q4: Question
-}
-
-input FormDataCreateOneInput {
-  create: FormDataCreateInput
-  connect: FormDataWhereUniqueInput
-}
-
-type FormDataEdge {
-  node: FormData!
-  cursor: String!
-}
-
-enum FormDataOrderByInput {
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  email_ASC
-  email_DESC
-  name_ASC
-  name_DESC
-  nickname_ASC
-  nickname_DESC
-  Q1_ASC
-  Q1_DESC
-  Q2_ASC
-  Q2_DESC
-  Q3_ASC
-  Q3_DESC
-  Q4_ASC
-  Q4_DESC
-}
-
-type FormDataPreviousValues {
-  id: ID!
-  createdAt: DateTime!
-  email: String!
-  name: String!
-  nickname: String!
-  Q1: String
-  Q2: String
-  Q3: String
-  Q4: Question
-}
-
-type FormDataSubscriptionPayload {
-  mutation: MutationType!
-  node: FormData
-  updatedFields: [String!]
-  previousValues: FormDataPreviousValues
-}
-
-input FormDataSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: FormDataWhereInput
-  AND: [FormDataSubscriptionWhereInput!]
-  OR: [FormDataSubscriptionWhereInput!]
-  NOT: [FormDataSubscriptionWhereInput!]
-}
-
-input FormDataUpdateDataInput {
-  email: String
-  name: String
-  nickname: String
-  Q1: String
-  Q2: String
-  Q3: String
-  Q4: Question
-}
-
-input FormDataUpdateInput {
-  email: String
-  name: String
-  nickname: String
-  Q1: String
-  Q2: String
-  Q3: String
-  Q4: Question
-}
-
-input FormDataUpdateManyMutationInput {
-  email: String
-  name: String
-  nickname: String
-  Q1: String
-  Q2: String
-  Q3: String
-  Q4: Question
-}
-
-input FormDataUpdateOneInput {
-  create: FormDataCreateInput
-  update: FormDataUpdateDataInput
-  upsert: FormDataUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: FormDataWhereUniqueInput
-}
-
-input FormDataUpsertNestedInput {
-  update: FormDataUpdateDataInput!
-  create: FormDataCreateInput!
-}
-
-input FormDataWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  email: String
-  email_not: String
-  email_in: [String!]
-  email_not_in: [String!]
-  email_lt: String
-  email_lte: String
-  email_gt: String
-  email_gte: String
-  email_contains: String
-  email_not_contains: String
-  email_starts_with: String
-  email_not_starts_with: String
-  email_ends_with: String
-  email_not_ends_with: String
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  nickname: String
-  nickname_not: String
-  nickname_in: [String!]
-  nickname_not_in: [String!]
-  nickname_lt: String
-  nickname_lte: String
-  nickname_gt: String
-  nickname_gte: String
-  nickname_contains: String
-  nickname_not_contains: String
-  nickname_starts_with: String
-  nickname_not_starts_with: String
-  nickname_ends_with: String
-  nickname_not_ends_with: String
-  Q1: String
-  Q1_not: String
-  Q1_in: [String!]
-  Q1_not_in: [String!]
-  Q1_lt: String
-  Q1_lte: String
-  Q1_gt: String
-  Q1_gte: String
-  Q1_contains: String
-  Q1_not_contains: String
-  Q1_starts_with: String
-  Q1_not_starts_with: String
-  Q1_ends_with: String
-  Q1_not_ends_with: String
-  Q2: String
-  Q2_not: String
-  Q2_in: [String!]
-  Q2_not_in: [String!]
-  Q2_lt: String
-  Q2_lte: String
-  Q2_gt: String
-  Q2_gte: String
-  Q2_contains: String
-  Q2_not_contains: String
-  Q2_starts_with: String
-  Q2_not_starts_with: String
-  Q2_ends_with: String
-  Q2_not_ends_with: String
-  Q3: String
-  Q3_not: String
-  Q3_in: [String!]
-  Q3_not_in: [String!]
-  Q3_lt: String
-  Q3_lte: String
-  Q3_gt: String
-  Q3_gte: String
-  Q3_contains: String
-  Q3_not_contains: String
-  Q3_starts_with: String
-  Q3_not_starts_with: String
-  Q3_ends_with: String
-  Q3_not_ends_with: String
-  Q4: Question
-  Q4_not: Question
-  Q4_in: [Question!]
-  Q4_not_in: [Question!]
-  AND: [FormDataWhereInput!]
-  OR: [FormDataWhereInput!]
-  NOT: [FormDataWhereInput!]
-}
-
-input FormDataWhereUniqueInput {
-  id: ID
-  email: String
-  nickname: String
-}
 
 type Goal {
   id: ID!
@@ -1014,6 +762,193 @@ input JournalEntryWhereUniqueInput {
 
 scalar Long
 
+type Message {
+  id: ID!
+  content: String!
+  from: String!
+  to: String!
+  createdAt: DateTime!
+  reactions(where: ReactionWhereInput, orderBy: ReactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Reaction!]
+}
+
+type MessageConnection {
+  pageInfo: PageInfo!
+  edges: [MessageEdge]!
+  aggregate: AggregateMessage!
+}
+
+input MessageCreateInput {
+  id: ID
+  content: String!
+  from: String!
+  to: String!
+  reactions: ReactionCreateManyWithoutMessageInput
+}
+
+input MessageCreateOneWithoutReactionsInput {
+  create: MessageCreateWithoutReactionsInput
+  connect: MessageWhereUniqueInput
+}
+
+input MessageCreateWithoutReactionsInput {
+  id: ID
+  content: String!
+  from: String!
+  to: String!
+}
+
+type MessageEdge {
+  node: Message!
+  cursor: String!
+}
+
+enum MessageOrderByInput {
+  id_ASC
+  id_DESC
+  content_ASC
+  content_DESC
+  from_ASC
+  from_DESC
+  to_ASC
+  to_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type MessagePreviousValues {
+  id: ID!
+  content: String!
+  from: String!
+  to: String!
+  createdAt: DateTime!
+}
+
+type MessageSubscriptionPayload {
+  mutation: MutationType!
+  node: Message
+  updatedFields: [String!]
+  previousValues: MessagePreviousValues
+}
+
+input MessageSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MessageWhereInput
+  AND: [MessageSubscriptionWhereInput!]
+  OR: [MessageSubscriptionWhereInput!]
+  NOT: [MessageSubscriptionWhereInput!]
+}
+
+input MessageUpdateInput {
+  content: String
+  from: String
+  to: String
+  reactions: ReactionUpdateManyWithoutMessageInput
+}
+
+input MessageUpdateManyMutationInput {
+  content: String
+  from: String
+  to: String
+}
+
+input MessageUpdateOneRequiredWithoutReactionsInput {
+  create: MessageCreateWithoutReactionsInput
+  update: MessageUpdateWithoutReactionsDataInput
+  upsert: MessageUpsertWithoutReactionsInput
+  connect: MessageWhereUniqueInput
+}
+
+input MessageUpdateWithoutReactionsDataInput {
+  content: String
+  from: String
+  to: String
+}
+
+input MessageUpsertWithoutReactionsInput {
+  update: MessageUpdateWithoutReactionsDataInput!
+  create: MessageCreateWithoutReactionsInput!
+}
+
+input MessageWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  from: String
+  from_not: String
+  from_in: [String!]
+  from_not_in: [String!]
+  from_lt: String
+  from_lte: String
+  from_gt: String
+  from_gte: String
+  from_contains: String
+  from_not_contains: String
+  from_starts_with: String
+  from_not_starts_with: String
+  from_ends_with: String
+  from_not_ends_with: String
+  to: String
+  to_not: String
+  to_in: [String!]
+  to_not_in: [String!]
+  to_lt: String
+  to_lte: String
+  to_gt: String
+  to_gte: String
+  to_contains: String
+  to_not_contains: String
+  to_starts_with: String
+  to_not_starts_with: String
+  to_ends_with: String
+  to_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  reactions_every: ReactionWhereInput
+  reactions_some: ReactionWhereInput
+  reactions_none: ReactionWhereInput
+  AND: [MessageWhereInput!]
+  OR: [MessageWhereInput!]
+  NOT: [MessageWhereInput!]
+}
+
+input MessageWhereUniqueInput {
+  id: ID
+}
+
 type Mutation {
   createAuthPayload(data: AuthPayloadCreateInput!): AuthPayload!
   updateAuthPayload(data: AuthPayloadUpdateInput!, where: AuthPayloadWhereUniqueInput!): AuthPayload
@@ -1021,12 +956,6 @@ type Mutation {
   upsertAuthPayload(where: AuthPayloadWhereUniqueInput!, create: AuthPayloadCreateInput!, update: AuthPayloadUpdateInput!): AuthPayload!
   deleteAuthPayload(where: AuthPayloadWhereUniqueInput!): AuthPayload
   deleteManyAuthPayloads(where: AuthPayloadWhereInput): BatchPayload!
-  createFormData(data: FormDataCreateInput!): FormData!
-  updateFormData(data: FormDataUpdateInput!, where: FormDataWhereUniqueInput!): FormData
-  updateManyFormDatas(data: FormDataUpdateManyMutationInput!, where: FormDataWhereInput): BatchPayload!
-  upsertFormData(where: FormDataWhereUniqueInput!, create: FormDataCreateInput!, update: FormDataUpdateInput!): FormData!
-  deleteFormData(where: FormDataWhereUniqueInput!): FormData
-  deleteManyFormDatas(where: FormDataWhereInput): BatchPayload!
   createGoal(data: GoalCreateInput!): Goal!
   updateGoal(data: GoalUpdateInput!, where: GoalWhereUniqueInput!): Goal
   updateManyGoals(data: GoalUpdateManyMutationInput!, where: GoalWhereInput): BatchPayload!
@@ -1039,12 +968,24 @@ type Mutation {
   upsertJournalEntry(where: JournalEntryWhereUniqueInput!, create: JournalEntryCreateInput!, update: JournalEntryUpdateInput!): JournalEntry!
   deleteJournalEntry(where: JournalEntryWhereUniqueInput!): JournalEntry
   deleteManyJournalEntries(where: JournalEntryWhereInput): BatchPayload!
+  createMessage(data: MessageCreateInput!): Message!
+  updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
+  updateManyMessages(data: MessageUpdateManyMutationInput!, where: MessageWhereInput): BatchPayload!
+  upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
+  deleteMessage(where: MessageWhereUniqueInput!): Message
+  deleteManyMessages(where: MessageWhereInput): BatchPayload!
   createPost(data: PostCreateInput!): Post!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateManyPosts(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload!
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   deletePost(where: PostWhereUniqueInput!): Post
   deleteManyPosts(where: PostWhereInput): BatchPayload!
+  createReaction(data: ReactionCreateInput!): Reaction!
+  updateReaction(data: ReactionUpdateInput!, where: ReactionWhereUniqueInput!): Reaction
+  updateManyReactions(data: ReactionUpdateManyMutationInput!, where: ReactionWhereInput): BatchPayload!
+  upsertReaction(where: ReactionWhereUniqueInput!, create: ReactionCreateInput!, update: ReactionUpdateInput!): Reaction!
+  deleteReaction(where: ReactionWhereUniqueInput!): Reaction
+  deleteManyReactions(where: ReactionWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -1076,8 +1017,9 @@ type Post {
   updatedAt: DateTime!
   published: Boolean!
   title: String
-  info: String
+  description: String
   content: String
+  image: String
   author: User!
 }
 
@@ -1091,8 +1033,9 @@ input PostCreateInput {
   id: ID
   published: Boolean
   title: String
-  info: String
+  description: String
   content: String
+  image: String
   author: UserCreateOneWithoutPostsInput!
 }
 
@@ -1105,8 +1048,9 @@ input PostCreateWithoutAuthorInput {
   id: ID
   published: Boolean
   title: String
-  info: String
+  description: String
   content: String
+  image: String
 }
 
 type PostEdge {
@@ -1125,10 +1069,12 @@ enum PostOrderByInput {
   published_DESC
   title_ASC
   title_DESC
-  info_ASC
-  info_DESC
+  description_ASC
+  description_DESC
   content_ASC
   content_DESC
+  image_ASC
+  image_DESC
 }
 
 type PostPreviousValues {
@@ -1137,8 +1083,9 @@ type PostPreviousValues {
   updatedAt: DateTime!
   published: Boolean!
   title: String
-  info: String
+  description: String
   content: String
+  image: String
 }
 
 input PostScalarWhereInput {
@@ -1188,20 +1135,20 @@ input PostScalarWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
-  info: String
-  info_not: String
-  info_in: [String!]
-  info_not_in: [String!]
-  info_lt: String
-  info_lte: String
-  info_gt: String
-  info_gte: String
-  info_contains: String
-  info_not_contains: String
-  info_starts_with: String
-  info_not_starts_with: String
-  info_ends_with: String
-  info_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
   content: String
   content_not: String
   content_in: [String!]
@@ -1216,6 +1163,20 @@ input PostScalarWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
   AND: [PostScalarWhereInput!]
   OR: [PostScalarWhereInput!]
   NOT: [PostScalarWhereInput!]
@@ -1242,23 +1203,26 @@ input PostSubscriptionWhereInput {
 input PostUpdateInput {
   published: Boolean
   title: String
-  info: String
+  description: String
   content: String
+  image: String
   author: UserUpdateOneRequiredWithoutPostsInput
 }
 
 input PostUpdateManyDataInput {
   published: Boolean
   title: String
-  info: String
+  description: String
   content: String
+  image: String
 }
 
 input PostUpdateManyMutationInput {
   published: Boolean
   title: String
-  info: String
+  description: String
   content: String
+  image: String
 }
 
 input PostUpdateManyWithoutAuthorInput {
@@ -1281,8 +1245,9 @@ input PostUpdateManyWithWhereNestedInput {
 input PostUpdateWithoutAuthorDataInput {
   published: Boolean
   title: String
-  info: String
+  description: String
   content: String
+  image: String
 }
 
 input PostUpdateWithWhereUniqueWithoutAuthorInput {
@@ -1343,20 +1308,20 @@ input PostWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
-  info: String
-  info_not: String
-  info_in: [String!]
-  info_not_in: [String!]
-  info_lt: String
-  info_lte: String
-  info_gt: String
-  info_gte: String
-  info_contains: String
-  info_not_contains: String
-  info_starts_with: String
-  info_not_starts_with: String
-  info_ends_with: String
-  info_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
   content: String
   content_not: String
   content_in: [String!]
@@ -1371,6 +1336,20 @@ input PostWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
   author: UserWhereInput
   AND: [PostWhereInput!]
   OR: [PostWhereInput!]
@@ -1392,29 +1371,262 @@ type Query {
   authPayload(where: AuthPayloadWhereUniqueInput!): AuthPayload
   authPayloads(where: AuthPayloadWhereInput, orderBy: AuthPayloadOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [AuthPayload]!
   authPayloadsConnection(where: AuthPayloadWhereInput, orderBy: AuthPayloadOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AuthPayloadConnection!
-  formData(where: FormDataWhereUniqueInput!): FormData
-  formDatas(where: FormDataWhereInput, orderBy: FormDataOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FormData]!
-  formDatasConnection(where: FormDataWhereInput, orderBy: FormDataOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FormDataConnection!
   goal(where: GoalWhereUniqueInput!): Goal
   goals(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Goal]!
   goalsConnection(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GoalConnection!
   journalEntry(where: JournalEntryWhereUniqueInput!): JournalEntry
   journalEntries(where: JournalEntryWhereInput, orderBy: JournalEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JournalEntry]!
   journalEntriesConnection(where: JournalEntryWhereInput, orderBy: JournalEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JournalEntryConnection!
+  message(where: MessageWhereUniqueInput!): Message
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
+  messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
   post(where: PostWhereUniqueInput!): Post
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
+  reaction(where: ReactionWhereUniqueInput!): Reaction
+  reactions(where: ReactionWhereInput, orderBy: ReactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Reaction]!
+  reactionsConnection(where: ReactionWhereInput, orderBy: ReactionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ReactionConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
 }
 
-enum Question {
-  CHOICE1
-  CHOICE2
-  CHOICE3
-  CHOICE4
+type Reaction {
+  id: ID!
+  content: String!
+  createdAt: DateTime!
+  message: Message!
+  user: User!
+}
+
+type ReactionConnection {
+  pageInfo: PageInfo!
+  edges: [ReactionEdge]!
+  aggregate: AggregateReaction!
+}
+
+input ReactionCreateInput {
+  id: ID
+  content: String!
+  message: MessageCreateOneWithoutReactionsInput!
+  user: UserCreateOneWithoutLatestMessageInput!
+}
+
+input ReactionCreateManyWithoutMessageInput {
+  create: [ReactionCreateWithoutMessageInput!]
+  connect: [ReactionWhereUniqueInput!]
+}
+
+input ReactionCreateOneWithoutUserInput {
+  create: ReactionCreateWithoutUserInput
+  connect: ReactionWhereUniqueInput
+}
+
+input ReactionCreateWithoutMessageInput {
+  id: ID
+  content: String!
+  user: UserCreateOneWithoutLatestMessageInput!
+}
+
+input ReactionCreateWithoutUserInput {
+  id: ID
+  content: String!
+  message: MessageCreateOneWithoutReactionsInput!
+}
+
+type ReactionEdge {
+  node: Reaction!
+  cursor: String!
+}
+
+enum ReactionOrderByInput {
+  id_ASC
+  id_DESC
+  content_ASC
+  content_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ReactionPreviousValues {
+  id: ID!
+  content: String!
+  createdAt: DateTime!
+}
+
+input ReactionScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [ReactionScalarWhereInput!]
+  OR: [ReactionScalarWhereInput!]
+  NOT: [ReactionScalarWhereInput!]
+}
+
+type ReactionSubscriptionPayload {
+  mutation: MutationType!
+  node: Reaction
+  updatedFields: [String!]
+  previousValues: ReactionPreviousValues
+}
+
+input ReactionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ReactionWhereInput
+  AND: [ReactionSubscriptionWhereInput!]
+  OR: [ReactionSubscriptionWhereInput!]
+  NOT: [ReactionSubscriptionWhereInput!]
+}
+
+input ReactionUpdateInput {
+  content: String
+  message: MessageUpdateOneRequiredWithoutReactionsInput
+  user: UserUpdateOneRequiredWithoutLatestMessageInput
+}
+
+input ReactionUpdateManyDataInput {
+  content: String
+}
+
+input ReactionUpdateManyMutationInput {
+  content: String
+}
+
+input ReactionUpdateManyWithoutMessageInput {
+  create: [ReactionCreateWithoutMessageInput!]
+  delete: [ReactionWhereUniqueInput!]
+  connect: [ReactionWhereUniqueInput!]
+  set: [ReactionWhereUniqueInput!]
+  disconnect: [ReactionWhereUniqueInput!]
+  update: [ReactionUpdateWithWhereUniqueWithoutMessageInput!]
+  upsert: [ReactionUpsertWithWhereUniqueWithoutMessageInput!]
+  deleteMany: [ReactionScalarWhereInput!]
+  updateMany: [ReactionUpdateManyWithWhereNestedInput!]
+}
+
+input ReactionUpdateManyWithWhereNestedInput {
+  where: ReactionScalarWhereInput!
+  data: ReactionUpdateManyDataInput!
+}
+
+input ReactionUpdateOneWithoutUserInput {
+  create: ReactionCreateWithoutUserInput
+  update: ReactionUpdateWithoutUserDataInput
+  upsert: ReactionUpsertWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ReactionWhereUniqueInput
+}
+
+input ReactionUpdateWithoutMessageDataInput {
+  content: String
+  user: UserUpdateOneRequiredWithoutLatestMessageInput
+}
+
+input ReactionUpdateWithoutUserDataInput {
+  content: String
+  message: MessageUpdateOneRequiredWithoutReactionsInput
+}
+
+input ReactionUpdateWithWhereUniqueWithoutMessageInput {
+  where: ReactionWhereUniqueInput!
+  data: ReactionUpdateWithoutMessageDataInput!
+}
+
+input ReactionUpsertWithoutUserInput {
+  update: ReactionUpdateWithoutUserDataInput!
+  create: ReactionCreateWithoutUserInput!
+}
+
+input ReactionUpsertWithWhereUniqueWithoutMessageInput {
+  where: ReactionWhereUniqueInput!
+  update: ReactionUpdateWithoutMessageDataInput!
+  create: ReactionCreateWithoutMessageInput!
+}
+
+input ReactionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  message: MessageWhereInput
+  user: UserWhereInput
+  AND: [ReactionWhereInput!]
+  OR: [ReactionWhereInput!]
+  NOT: [ReactionWhereInput!]
+}
+
+input ReactionWhereUniqueInput {
+  id: ID
 }
 
 enum Role {
@@ -1424,10 +1636,11 @@ enum Role {
 
 type Subscription {
   authPayload(where: AuthPayloadSubscriptionWhereInput): AuthPayloadSubscriptionPayload
-  formData(where: FormDataSubscriptionWhereInput): FormDataSubscriptionPayload
   goal(where: GoalSubscriptionWhereInput): GoalSubscriptionPayload
   journalEntry(where: JournalEntrySubscriptionWhereInput): JournalEntrySubscriptionPayload
+  message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
+  reaction(where: ReactionSubscriptionWhereInput): ReactionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -1439,8 +1652,8 @@ enum TIER {
 
 type User {
   id: ID!
-  created_at: String
-  updated_at: String
+  created_at: DateTime!
+  updated_at: DateTime!
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1454,7 +1667,6 @@ type User {
   profileStatus: ProfileStatus
   avatar: String
   goals(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Goal!]
-  userInfo: FormData
   journal(where: JournalEntryWhereInput, orderBy: JournalEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JournalEntry!]
   points: Int!
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -1464,6 +1676,9 @@ type User {
   tier: TIER!
   role: Role
   refreshToken: String
+  latestMessage: Reaction
+  leavingFrom: String
+  leavingTo: String
 }
 
 type UserConnection {
@@ -1474,8 +1689,6 @@ type UserConnection {
 
 input UserCreateInput {
   id: ID
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1489,7 +1702,6 @@ input UserCreateInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalCreateManyWithoutAuthorInput
-  userInfo: FormDataCreateOneInput
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
@@ -1499,6 +1711,9 @@ input UserCreateInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionCreateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserCreateManyWithoutFollowingInput {
@@ -1526,6 +1741,11 @@ input UserCreateOneWithoutJournalInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutLatestMessageInput {
+  create: UserCreateWithoutLatestMessageInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   connect: UserWhereUniqueInput
@@ -1533,8 +1753,6 @@ input UserCreateOneWithoutPostsInput {
 
 input UserCreateWithoutFollowingInput {
   id: ID
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1548,7 +1766,6 @@ input UserCreateWithoutFollowingInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalCreateManyWithoutAuthorInput
-  userInfo: FormDataCreateOneInput
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
@@ -1557,12 +1774,13 @@ input UserCreateWithoutFollowingInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionCreateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserCreateWithoutFriendsInput {
   id: ID
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1576,7 +1794,6 @@ input UserCreateWithoutFriendsInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalCreateManyWithoutAuthorInput
-  userInfo: FormDataCreateOneInput
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   status: UserStatus
@@ -1585,12 +1802,13 @@ input UserCreateWithoutFriendsInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionCreateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserCreateWithoutGoalsInput {
   id: ID
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1603,7 +1821,6 @@ input UserCreateWithoutGoalsInput {
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
-  userInfo: FormDataCreateOneInput
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
@@ -1613,12 +1830,13 @@ input UserCreateWithoutGoalsInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionCreateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserCreateWithoutJournalInput {
   id: ID
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1632,7 +1850,6 @@ input UserCreateWithoutJournalInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalCreateManyWithoutAuthorInput
-  userInfo: FormDataCreateOneInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
   status: UserStatus
@@ -1641,12 +1858,13 @@ input UserCreateWithoutJournalInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionCreateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
-input UserCreateWithoutPostsInput {
+input UserCreateWithoutLatestMessageInput {
   id: ID
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1660,7 +1878,34 @@ input UserCreateWithoutPostsInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalCreateManyWithoutAuthorInput
-  userInfo: FormDataCreateOneInput
+  journal: JournalEntryCreateManyWithoutAuthorInput
+  points: Int
+  friends: UserCreateManyWithoutFriendsInput
+  status: UserStatus
+  posts: PostCreateManyWithoutAuthorInput
+  following: UserCreateManyWithoutFollowingInput
+  tier: TIER
+  role: Role
+  refreshToken: String
+  leavingFrom: String
+  leavingTo: String
+}
+
+input UserCreateWithoutPostsInput {
+  id: ID
+  discourseId: Int
+  auth0Id: String
+  metaData: String
+  identity: String
+  email: String
+  name: String
+  password: String
+  nickname: String
+  guestCheckIns: Int
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
+  goals: GoalCreateManyWithoutAuthorInput
   journal: JournalEntryCreateManyWithoutAuthorInput
   points: Int
   friends: UserCreateManyWithoutFriendsInput
@@ -1669,6 +1914,9 @@ input UserCreateWithoutPostsInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionCreateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 type UserEdge {
@@ -1717,12 +1965,16 @@ enum UserOrderByInput {
   role_DESC
   refreshToken_ASC
   refreshToken_DESC
+  leavingFrom_ASC
+  leavingFrom_DESC
+  leavingTo_ASC
+  leavingTo_DESC
 }
 
 type UserPreviousValues {
   id: ID!
-  created_at: String
-  updated_at: String
+  created_at: DateTime!
+  updated_at: DateTime!
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1740,6 +1992,8 @@ type UserPreviousValues {
   tier: TIER!
   role: Role
   refreshToken: String
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserScalarWhereInput {
@@ -1757,34 +2011,22 @@ input UserScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  created_at: String
-  created_at_not: String
-  created_at_in: [String!]
-  created_at_not_in: [String!]
-  created_at_lt: String
-  created_at_lte: String
-  created_at_gt: String
-  created_at_gte: String
-  created_at_contains: String
-  created_at_not_contains: String
-  created_at_starts_with: String
-  created_at_not_starts_with: String
-  created_at_ends_with: String
-  created_at_not_ends_with: String
-  updated_at: String
-  updated_at_not: String
-  updated_at_in: [String!]
-  updated_at_not_in: [String!]
-  updated_at_lt: String
-  updated_at_lte: String
-  updated_at_gt: String
-  updated_at_gte: String
-  updated_at_contains: String
-  updated_at_not_contains: String
-  updated_at_starts_with: String
-  updated_at_not_starts_with: String
-  updated_at_ends_with: String
-  updated_at_not_ends_with: String
+  created_at: DateTime
+  created_at_not: DateTime
+  created_at_in: [DateTime!]
+  created_at_not_in: [DateTime!]
+  created_at_lt: DateTime
+  created_at_lte: DateTime
+  created_at_gt: DateTime
+  created_at_gte: DateTime
+  updated_at: DateTime
+  updated_at_not: DateTime
+  updated_at_in: [DateTime!]
+  updated_at_not_in: [DateTime!]
+  updated_at_lt: DateTime
+  updated_at_lte: DateTime
+  updated_at_gt: DateTime
+  updated_at_gte: DateTime
   discourseId: Int
   discourseId_not: Int
   discourseId_in: [Int!]
@@ -1965,6 +2207,34 @@ input UserScalarWhereInput {
   refreshToken_not_starts_with: String
   refreshToken_ends_with: String
   refreshToken_not_ends_with: String
+  leavingFrom: String
+  leavingFrom_not: String
+  leavingFrom_in: [String!]
+  leavingFrom_not_in: [String!]
+  leavingFrom_lt: String
+  leavingFrom_lte: String
+  leavingFrom_gt: String
+  leavingFrom_gte: String
+  leavingFrom_contains: String
+  leavingFrom_not_contains: String
+  leavingFrom_starts_with: String
+  leavingFrom_not_starts_with: String
+  leavingFrom_ends_with: String
+  leavingFrom_not_ends_with: String
+  leavingTo: String
+  leavingTo_not: String
+  leavingTo_in: [String!]
+  leavingTo_not_in: [String!]
+  leavingTo_lt: String
+  leavingTo_lte: String
+  leavingTo_gt: String
+  leavingTo_gte: String
+  leavingTo_contains: String
+  leavingTo_not_contains: String
+  leavingTo_starts_with: String
+  leavingTo_not_starts_with: String
+  leavingTo_ends_with: String
+  leavingTo_not_ends_with: String
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -1995,8 +2265,6 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateDataInput {
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2010,7 +2278,6 @@ input UserUpdateDataInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneInput
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
@@ -2020,11 +2287,12 @@ input UserUpdateDataInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionUpdateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserUpdateInput {
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2038,7 +2306,6 @@ input UserUpdateInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneInput
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
@@ -2048,11 +2315,12 @@ input UserUpdateInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionUpdateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserUpdateManyDataInput {
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2070,11 +2338,11 @@ input UserUpdateManyDataInput {
   tier: TIER
   role: Role
   refreshToken: String
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserUpdateManyMutationInput {
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2092,6 +2360,8 @@ input UserUpdateManyMutationInput {
   tier: TIER
   role: Role
   refreshToken: String
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserUpdateManyWithoutFollowingInput {
@@ -2144,6 +2414,13 @@ input UserUpdateOneRequiredWithoutJournalInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutLatestMessageInput {
+  create: UserCreateWithoutLatestMessageInput
+  update: UserUpdateWithoutLatestMessageDataInput
+  upsert: UserUpsertWithoutLatestMessageInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   update: UserUpdateWithoutPostsDataInput
@@ -2152,8 +2429,6 @@ input UserUpdateOneRequiredWithoutPostsInput {
 }
 
 input UserUpdateWithoutFollowingDataInput {
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2167,7 +2442,6 @@ input UserUpdateWithoutFollowingDataInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneInput
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
@@ -2176,11 +2450,12 @@ input UserUpdateWithoutFollowingDataInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionUpdateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserUpdateWithoutFriendsDataInput {
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2194,7 +2469,6 @@ input UserUpdateWithoutFriendsDataInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneInput
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   status: UserStatus
@@ -2203,11 +2477,12 @@ input UserUpdateWithoutFriendsDataInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionUpdateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserUpdateWithoutGoalsDataInput {
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2220,7 +2495,6 @@ input UserUpdateWithoutGoalsDataInput {
   eblID: String
   profileStatus: ProfileStatus
   avatar: String
-  userInfo: FormDataUpdateOneInput
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
@@ -2230,11 +2504,12 @@ input UserUpdateWithoutGoalsDataInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionUpdateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserUpdateWithoutJournalDataInput {
-  created_at: String
-  updated_at: String
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2248,7 +2523,6 @@ input UserUpdateWithoutJournalDataInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
   status: UserStatus
@@ -2257,11 +2531,12 @@ input UserUpdateWithoutJournalDataInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionUpdateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
-input UserUpdateWithoutPostsDataInput {
-  created_at: String
-  updated_at: String
+input UserUpdateWithoutLatestMessageDataInput {
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2275,7 +2550,33 @@ input UserUpdateWithoutPostsDataInput {
   profileStatus: ProfileStatus
   avatar: String
   goals: GoalUpdateManyWithoutAuthorInput
-  userInfo: FormDataUpdateOneInput
+  journal: JournalEntryUpdateManyWithoutAuthorInput
+  points: Int
+  friends: UserUpdateManyWithoutFriendsInput
+  status: UserStatus
+  posts: PostUpdateManyWithoutAuthorInput
+  following: UserUpdateManyWithoutFollowingInput
+  tier: TIER
+  role: Role
+  refreshToken: String
+  leavingFrom: String
+  leavingTo: String
+}
+
+input UserUpdateWithoutPostsDataInput {
+  discourseId: Int
+  auth0Id: String
+  metaData: String
+  identity: String
+  email: String
+  name: String
+  password: String
+  nickname: String
+  guestCheckIns: Int
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
+  goals: GoalUpdateManyWithoutAuthorInput
   journal: JournalEntryUpdateManyWithoutAuthorInput
   points: Int
   friends: UserUpdateManyWithoutFriendsInput
@@ -2284,6 +2585,9 @@ input UserUpdateWithoutPostsDataInput {
   tier: TIER
   role: Role
   refreshToken: String
+  latestMessage: ReactionUpdateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
 }
 
 input UserUpdateWithWhereUniqueWithoutFollowingInput {
@@ -2309,6 +2613,11 @@ input UserUpsertWithoutGoalsInput {
 input UserUpsertWithoutJournalInput {
   update: UserUpdateWithoutJournalDataInput!
   create: UserCreateWithoutJournalInput!
+}
+
+input UserUpsertWithoutLatestMessageInput {
+  update: UserUpdateWithoutLatestMessageDataInput!
+  create: UserCreateWithoutLatestMessageInput!
 }
 
 input UserUpsertWithoutPostsInput {
@@ -2343,34 +2652,22 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  created_at: String
-  created_at_not: String
-  created_at_in: [String!]
-  created_at_not_in: [String!]
-  created_at_lt: String
-  created_at_lte: String
-  created_at_gt: String
-  created_at_gte: String
-  created_at_contains: String
-  created_at_not_contains: String
-  created_at_starts_with: String
-  created_at_not_starts_with: String
-  created_at_ends_with: String
-  created_at_not_ends_with: String
-  updated_at: String
-  updated_at_not: String
-  updated_at_in: [String!]
-  updated_at_not_in: [String!]
-  updated_at_lt: String
-  updated_at_lte: String
-  updated_at_gt: String
-  updated_at_gte: String
-  updated_at_contains: String
-  updated_at_not_contains: String
-  updated_at_starts_with: String
-  updated_at_not_starts_with: String
-  updated_at_ends_with: String
-  updated_at_not_ends_with: String
+  created_at: DateTime
+  created_at_not: DateTime
+  created_at_in: [DateTime!]
+  created_at_not_in: [DateTime!]
+  created_at_lt: DateTime
+  created_at_lte: DateTime
+  created_at_gt: DateTime
+  created_at_gte: DateTime
+  updated_at: DateTime
+  updated_at_not: DateTime
+  updated_at_in: [DateTime!]
+  updated_at_not_in: [DateTime!]
+  updated_at_lt: DateTime
+  updated_at_lte: DateTime
+  updated_at_gt: DateTime
+  updated_at_gte: DateTime
   discourseId: Int
   discourseId_not: Int
   discourseId_in: [Int!]
@@ -2520,7 +2817,6 @@ input UserWhereInput {
   goals_every: GoalWhereInput
   goals_some: GoalWhereInput
   goals_none: GoalWhereInput
-  userInfo: FormDataWhereInput
   journal_every: JournalEntryWhereInput
   journal_some: JournalEntryWhereInput
   journal_none: JournalEntryWhereInput
@@ -2567,6 +2863,35 @@ input UserWhereInput {
   refreshToken_not_starts_with: String
   refreshToken_ends_with: String
   refreshToken_not_ends_with: String
+  latestMessage: ReactionWhereInput
+  leavingFrom: String
+  leavingFrom_not: String
+  leavingFrom_in: [String!]
+  leavingFrom_not_in: [String!]
+  leavingFrom_lt: String
+  leavingFrom_lte: String
+  leavingFrom_gt: String
+  leavingFrom_gte: String
+  leavingFrom_contains: String
+  leavingFrom_not_contains: String
+  leavingFrom_starts_with: String
+  leavingFrom_not_starts_with: String
+  leavingFrom_ends_with: String
+  leavingFrom_not_ends_with: String
+  leavingTo: String
+  leavingTo_not: String
+  leavingTo_in: [String!]
+  leavingTo_not_in: [String!]
+  leavingTo_lt: String
+  leavingTo_lte: String
+  leavingTo_gt: String
+  leavingTo_gte: String
+  leavingTo_contains: String
+  leavingTo_not_contains: String
+  leavingTo_starts_with: String
+  leavingTo_not_starts_with: String
+  leavingTo_ends_with: String
+  leavingTo_not_ends_with: String
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

@@ -14,6 +14,9 @@ const User = {
   eblID: ({ id }, args, context) => {
     return context.prisma.user({ id }).eblID();
   },
+  status: ({ id }, args, context) => {
+    return context.prisma.user({ id }).status();
+  },
 };
 module.exports = {
   User,

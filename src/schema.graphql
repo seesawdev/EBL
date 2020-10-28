@@ -15,11 +15,12 @@ enum CacheControlScope {
     scope: CacheControlScope
   ) on FIELD_DEFINITION | OBJECT | INTERFACE
 type Query {
+  status(filter: String): User!
   bulletinPostHistory: [Post!]! @isAuthenticated
   feed(filter: String): [Post!]!
   drafts: [Post!]! @isAuthenticated
   post(id: ID!): Post @isOwnerOrHasRole(type: "Post", roles: ["ADMIN"] )
-  me: User @isAuthenticated
+  me: User! @isAuthenticated
   users(id: ID, nickname: String): [User!]!
   friends(nickname: String!): String!
   followers: Int
@@ -44,13 +45,15 @@ input ProfileInput {
 input PostCreateInput {
   published: Boolean
   title: String
-  info: String
+  description: String
   content: String
   author: UserCreateOneWithoutPostsInput
 
 }
 type Mutation {
-  signup(email: String!, password: String!, username: String!, metaData: [String], avatar: String): SignUpPayload!
+  logout: User 
+  createUserFromFormData(email: String!, password: String!, username: String!, metadata: [String], avatar: String, leavingTo: String, leavingFrom: String, updated_at: String,  auth0Id: String, eblID: String, status: String): SignUpPayload!
+  signup(email: String!, password: String!, username: String!, metadata: [String], avatar: String, leavingTo: String, leavingFrom: String, created_at: String, updated_at: String,  auth0Id: String, eblID: String, status: String): SignUpPayload!
   login(email: String!, password: String!): AuthPayload!
   authenticate(access_token: String!, id_token: String): AuthPayload!
   createDraft(title: String!, content: String!): Post @isAuthenticated
@@ -92,10 +95,9 @@ type AuthPayload {
 
 type User @cacheControl(maxAge: 120){
   id: ID!
-  auth0Id: String!
+  auth0Id: String
   discourseId: Int
-  eblID: String!
-  metaData: String
+  eblID: String
   identity: String!
   avatar: String @cacheControl(maxAge: 240)
   email: String @isOwner(type: "User")
@@ -113,6 +115,8 @@ type User @cacheControl(maxAge: 120){
   profileStatus: ProfileStatus
   tier: TIER!
   refreshToken: String
+  leavingFrom: String
+  leavingTo: String
 }
 enum ProfileStatus {
   PUBLIC
@@ -148,9 +152,12 @@ type Goal {
 type Post {
   id: ID!
   published: Boolean!
-  title: String!
-  info: String
+  title: String
+  createdAt: String
+  updatedAt: String
+  description: String
   content: String
+  image: String
   author: User!
 }
 type JournalEntry {
@@ -161,10 +168,12 @@ type JournalEntry {
   author: User!
 }
 
-type FormData {
-  id: ID!  
-  Q1: String
-  Q2: String
+input FormData {
+  username: String!
+  email: String!
+  password: String!
+  leavingFrom: String!
+  leavingTo: String!
   Q3: String
 }
 

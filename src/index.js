@@ -67,12 +67,32 @@ app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
 app.use(compression());
 app.use(cookieParser(process.env.APP_SECRET));
+// app.use(cookieParser());
+
 
 const schema = makeExecutableSchema({
   typeDefs: importSchema("./src/schema.graphql"),
   resolvers,
   authDirectiveResolvers,
 });
+const getMe = async (context) => {
+  const Authorization = await context.req.get("Authorization");
+  if (Authorization) {
+        const token = await context.req.headers.authorization.split("Bearer ")[1]
+        const decodedToken =  await verifyToken(token);
+        const metadata = await decodedToken["https://everybodyleave.com/claims/user_metadata"]
+        const userId = metadata.userId     
+        console.log("userId: ", userId)
+        return userId
+      } 
+ const checkCookie = await context.req.cookie("Authorization");
+ console.log("cookie", checkCookie)
+ if(checkCookie) {
+    const { userId } = jwt.verify(checkCookie, `${process.env.APP_SECRET}`) 
+    return userId
+ }
+   throw new AuthError()
+} 
 
 const server = new ApolloServer({
   schema,
@@ -86,18 +106,31 @@ const server = new ApolloServer({
     },
   context: async ({ req, res }) => {
     //this will be used for resolver level security / directives
+    let me;
     if (req) {
+      try{
       const token = req.headers.authorization.split("Bearer ")[1]
       const decodedToken =  await verifyToken(token);
       const metadata = await decodedToken["https://everybodyleave.com/claims/user_metadata"];
-      const me = await metadata.userId;
-     // console.log("me: ", me)   
-       return {
+      me = await metadata.userId;
+      console.log("me: ", me) 
+       return await {
         req,
         res,
         me,
         prisma,
+       }
+      } catch (err) {
+        console.log("user is not authenticated")
       }
+      // const me =  getMe(context)
+      // console.log("me", me)
+      return await {
+        me,
+        req,
+        res,
+        prisma,
+       }
     };
   }
 });
