@@ -124,6 +124,7 @@ type User @cacheControl(maxAge: 120){
 }
 type Group {
   id: ID! 
+  groupId: String!
   name: String!
   users: [User] 
 }

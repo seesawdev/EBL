@@ -9,6 +9,31 @@ const { getAuth0User,  createAuth0User, createUserData, loginAfterSignup, update
 const { config } = require('../../helpers/auth0Config')
 const { getUserId } = require('../../utils')
 
+async function newGroups(from, to, userId, context) {
+  const checkTo = await context.prisma.$exists.group({ to })
+  const checkFrom = await context.prisma.$exists.group({ from })
+  if(!checkTo) {
+     await context.prisma.createGroup({ name: to })
+  }
+  if (!checkFrom) {
+    await context.prisma.createGroup({ name: from })
+  }
+  const joinGroups = [
+    {
+      groupTo: await context.prisma.updateGroup({
+        where: { name: to },
+        data: { users: { connect: { id: userId }}}
+      }),
+      groupFrom: await context.prisma.updateGroup({
+        where: { name: from },
+        data: { users: { connect: { id: userId }}}
+      })
+    }
+  ]
+  const groupTo = joinGroups[0].groupTo;
+  const groupFrom = joinGroups[0].groupFrom;
+  return `user added to group: ${groupTo.name} and group ${groupFrom.name}`
+}
 async function createUserFromFormData(context, data) { 
   const hashedPassword = await bcrypt.hash(data.password, 10);
   
@@ -95,14 +120,15 @@ async function createUserFromFormData(context, data) {
         eblID: fromString(auth0User.user_id.split("|")[1]),
         status: "ONLINE",
         refreshToken: refreshToken
-
         }
     })
+    const addUserToGroups = await newGroups(data.leavingFrom, data.leavingTo, user.id, context)
     return await {
-    token: prismaToken,
-        updateUserAfterAuth0,
-        // refreshCookie,
-        user,
+      token: prismaToken,
+      updateUserAfterAuth0,
+      addUserToGroups,
+          // refreshCookie,
+      user,
     }
   }
 async function createPrismaUser(context, decodedToken) {

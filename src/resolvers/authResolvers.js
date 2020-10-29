@@ -19,8 +19,8 @@ async function isOwner(parent, { id }, { prisma, me }) {
 //will skip if args.username is not in friend list
 async function isFriend(parent, args, { me, prisma }) {
   // const userId = await getUserId(context);
-  console.log("context.me, ", me)
-  console.log("args.nickname: ", args.nickname)
+  // console.log("context.me, ", me)
+  // console.log("args.nickname: ", args.nickname)
   const isUserInFriendList = await prisma
     .usersConnection({
           where: {
@@ -35,7 +35,7 @@ async function isFriend(parent, args, { me, prisma }) {
   // const test = __type.enumValues.data
   // console.log(test)
   // console.log(userId, isUserInFriendList, info) <Select> </Select>
-  console.log("isUserInFriendList: ", isUserInFriendList)
+  // console.log("isUserInFriendList: ", isUserInFriendList)
   return isUserInFriendList !== 0
     ? `You are already friends with ${args.nickname}`
     : skip;

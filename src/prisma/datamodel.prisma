@@ -60,7 +60,8 @@ type Goal {
 }
 type Group {
   id: ID! @id
-  name: String!
+  name: String! @unique
+  groupId: String @unique
   users: [User] @relation(name: "UserToGroups", link: TABLE)
 }
 enum UserStatus {

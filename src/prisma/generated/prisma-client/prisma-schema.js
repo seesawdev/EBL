@@ -514,6 +514,7 @@ input GoalWhereUniqueInput {
 type Group {
   id: ID!
   name: String!
+  groupId: String
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
@@ -526,6 +527,7 @@ type GroupConnection {
 input GroupCreateInput {
   id: ID
   name: String!
+  groupId: String
   users: UserCreateManyWithoutGroupsInput
 }
 
@@ -537,6 +539,7 @@ input GroupCreateManyWithoutUsersInput {
 input GroupCreateWithoutUsersInput {
   id: ID
   name: String!
+  groupId: String
 }
 
 type GroupEdge {
@@ -549,11 +552,14 @@ enum GroupOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  groupId_ASC
+  groupId_DESC
 }
 
 type GroupPreviousValues {
   id: ID!
   name: String!
+  groupId: String
 }
 
 input GroupScalarWhereInput {
@@ -585,6 +591,20 @@ input GroupScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  groupId: String
+  groupId_not: String
+  groupId_in: [String!]
+  groupId_not_in: [String!]
+  groupId_lt: String
+  groupId_lte: String
+  groupId_gt: String
+  groupId_gte: String
+  groupId_contains: String
+  groupId_not_contains: String
+  groupId_starts_with: String
+  groupId_not_starts_with: String
+  groupId_ends_with: String
+  groupId_not_ends_with: String
   AND: [GroupScalarWhereInput!]
   OR: [GroupScalarWhereInput!]
   NOT: [GroupScalarWhereInput!]
@@ -610,15 +630,18 @@ input GroupSubscriptionWhereInput {
 
 input GroupUpdateInput {
   name: String
+  groupId: String
   users: UserUpdateManyWithoutGroupsInput
 }
 
 input GroupUpdateManyDataInput {
   name: String
+  groupId: String
 }
 
 input GroupUpdateManyMutationInput {
   name: String
+  groupId: String
 }
 
 input GroupUpdateManyWithoutUsersInput {
@@ -640,6 +663,7 @@ input GroupUpdateManyWithWhereNestedInput {
 
 input GroupUpdateWithoutUsersDataInput {
   name: String
+  groupId: String
 }
 
 input GroupUpdateWithWhereUniqueWithoutUsersInput {
@@ -682,6 +706,20 @@ input GroupWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  groupId: String
+  groupId_not: String
+  groupId_in: [String!]
+  groupId_not_in: [String!]
+  groupId_lt: String
+  groupId_lte: String
+  groupId_gt: String
+  groupId_gte: String
+  groupId_contains: String
+  groupId_not_contains: String
+  groupId_starts_with: String
+  groupId_not_starts_with: String
+  groupId_ends_with: String
+  groupId_not_ends_with: String
   users_every: UserWhereInput
   users_some: UserWhereInput
   users_none: UserWhereInput
@@ -692,6 +730,8 @@ input GroupWhereInput {
 
 input GroupWhereUniqueInput {
   id: ID
+  name: String
+  groupId: String
 }
 
 type JournalEntry {

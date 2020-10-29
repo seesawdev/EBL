@@ -396,7 +396,13 @@ export type TIER = "FREE" | "CONTRIBUTER" | "PREMIUM";
 
 export type Role = "ADMIN" | "USER";
 
-export type GroupOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
+export type GroupOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "groupId_ASC"
+  | "groupId_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -557,6 +563,20 @@ export interface GroupWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  groupId?: Maybe<String>;
+  groupId_not?: Maybe<String>;
+  groupId_in?: Maybe<String[] | String>;
+  groupId_not_in?: Maybe<String[] | String>;
+  groupId_lt?: Maybe<String>;
+  groupId_lte?: Maybe<String>;
+  groupId_gt?: Maybe<String>;
+  groupId_gte?: Maybe<String>;
+  groupId_contains?: Maybe<String>;
+  groupId_not_contains?: Maybe<String>;
+  groupId_starts_with?: Maybe<String>;
+  groupId_not_starts_with?: Maybe<String>;
+  groupId_ends_with?: Maybe<String>;
+  groupId_not_ends_with?: Maybe<String>;
   users_every?: Maybe<UserWhereInput>;
   users_some?: Maybe<UserWhereInput>;
   users_none?: Maybe<UserWhereInput>;
@@ -1251,6 +1271,8 @@ export type GoalWhereUniqueInput = AtLeastOne<{
 
 export type GroupWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  groupId?: Maybe<String>;
 }>;
 
 export type JournalEntryWhereUniqueInput = AtLeastOne<{
@@ -1327,6 +1349,7 @@ export interface GroupCreateManyWithoutUsersInput {
 export interface GroupCreateWithoutUsersInput {
   id?: Maybe<ID_Input>;
   name: String;
+  groupId?: Maybe<String>;
 }
 
 export interface GoalCreateManyWithoutAuthorInput {
@@ -1542,6 +1565,7 @@ export interface GroupUpdateWithWhereUniqueWithoutUsersInput {
 
 export interface GroupUpdateWithoutUsersDataInput {
   name?: Maybe<String>;
+  groupId?: Maybe<String>;
 }
 
 export interface GroupUpsertWithWhereUniqueWithoutUsersInput {
@@ -1579,6 +1603,20 @@ export interface GroupScalarWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  groupId?: Maybe<String>;
+  groupId_not?: Maybe<String>;
+  groupId_in?: Maybe<String[] | String>;
+  groupId_not_in?: Maybe<String[] | String>;
+  groupId_lt?: Maybe<String>;
+  groupId_lte?: Maybe<String>;
+  groupId_gt?: Maybe<String>;
+  groupId_gte?: Maybe<String>;
+  groupId_contains?: Maybe<String>;
+  groupId_not_contains?: Maybe<String>;
+  groupId_starts_with?: Maybe<String>;
+  groupId_not_starts_with?: Maybe<String>;
+  groupId_ends_with?: Maybe<String>;
+  groupId_not_ends_with?: Maybe<String>;
   AND?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
   OR?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
   NOT?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
@@ -1591,6 +1629,7 @@ export interface GroupUpdateManyWithWhereNestedInput {
 
 export interface GroupUpdateManyDataInput {
   name?: Maybe<String>;
+  groupId?: Maybe<String>;
 }
 
 export interface GoalUpdateManyWithoutAuthorInput {
@@ -2575,6 +2614,7 @@ export interface GoalUpdateManyMutationInput {
 export interface GroupCreateInput {
   id?: Maybe<ID_Input>;
   name: String;
+  groupId?: Maybe<String>;
   users?: Maybe<UserCreateManyWithoutGroupsInput>;
 }
 
@@ -2615,6 +2655,7 @@ export interface UserCreateWithoutGroupsInput {
 
 export interface GroupUpdateInput {
   name?: Maybe<String>;
+  groupId?: Maybe<String>;
   users?: Maybe<UserUpdateManyWithoutGroupsInput>;
 }
 
@@ -2680,6 +2721,7 @@ export interface UserUpsertWithWhereUniqueWithoutGroupsInput {
 
 export interface GroupUpdateManyMutationInput {
   name?: Maybe<String>;
+  groupId?: Maybe<String>;
 }
 
 export interface JournalEntryCreateInput {
@@ -3563,11 +3605,13 @@ export interface UserNullablePromise
 export interface Group {
   id: ID_Output;
   name: String;
+  groupId?: String;
 }
 
 export interface GroupPromise extends Promise<Group>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  groupId: () => Promise<String>;
   users: <T = FragmentableArray<User>>(args?: {
     where?: UserWhereInput;
     orderBy?: UserOrderByInput;
@@ -3584,6 +3628,7 @@ export interface GroupSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  groupId: () => Promise<AsyncIterator<String>>;
   users: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
     where?: UserWhereInput;
     orderBy?: UserOrderByInput;
@@ -3600,6 +3645,7 @@ export interface GroupNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  groupId: () => Promise<String>;
   users: <T = FragmentableArray<User>>(args?: {
     where?: UserWhereInput;
     orderBy?: UserOrderByInput;
@@ -4469,6 +4515,7 @@ export interface GroupSubscriptionPayloadSubscription
 export interface GroupPreviousValues {
   id: ID_Output;
   name: String;
+  groupId?: String;
 }
 
 export interface GroupPreviousValuesPromise
@@ -4476,6 +4523,7 @@ export interface GroupPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  groupId: () => Promise<String>;
 }
 
 export interface GroupPreviousValuesSubscription
@@ -4483,6 +4531,7 @@ export interface GroupPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  groupId: () => Promise<AsyncIterator<String>>;
 }
 
 export interface JournalEntrySubscriptionPayload {
