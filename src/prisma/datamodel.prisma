@@ -11,6 +11,7 @@ type Post {
 }
 type User {
   id: ID! @id
+  groups: [Group] @relation(name: "UserToGroups", delete: CASCADE)
   created_at: DateTime! @createdAt
   updated_at: DateTime! @updatedAt
   discourseId: Int
@@ -20,7 +21,8 @@ type User {
   email: String @unique
   name: String
   password: String
-  nickname: String 
+  nickname: String @unique
+  friendId: String 
   guestCheckIns: Int @default(value: 0)
   eblID: String @unique
   profileStatus: ProfileStatus @default(value: PUBLIC)
@@ -56,7 +58,11 @@ type Goal {
   description: String!
   author: User! @relation(name: "UserToGoals", link: INLINE)
 }
-
+type Group {
+  id: ID! @id
+  name: String!
+  users: [User] @relation(name: "UserToGroups", link: TABLE)
+}
 enum UserStatus {
   ONLINE
   UNAVAILABLE

@@ -11,6 +11,10 @@ type AggregateGoal {
   count: Int!
 }
 
+type AggregateGroup {
+  count: Int!
+}
+
 type AggregateJournalEntry {
   count: Int!
 }
@@ -507,6 +511,189 @@ input GoalWhereUniqueInput {
   id: ID
 }
 
+type Group {
+  id: ID!
+  name: String!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+type GroupConnection {
+  pageInfo: PageInfo!
+  edges: [GroupEdge]!
+  aggregate: AggregateGroup!
+}
+
+input GroupCreateInput {
+  id: ID
+  name: String!
+  users: UserCreateManyWithoutGroupsInput
+}
+
+input GroupCreateManyWithoutUsersInput {
+  create: [GroupCreateWithoutUsersInput!]
+  connect: [GroupWhereUniqueInput!]
+}
+
+input GroupCreateWithoutUsersInput {
+  id: ID
+  name: String!
+}
+
+type GroupEdge {
+  node: Group!
+  cursor: String!
+}
+
+enum GroupOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+type GroupPreviousValues {
+  id: ID!
+  name: String!
+}
+
+input GroupScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [GroupScalarWhereInput!]
+  OR: [GroupScalarWhereInput!]
+  NOT: [GroupScalarWhereInput!]
+}
+
+type GroupSubscriptionPayload {
+  mutation: MutationType!
+  node: Group
+  updatedFields: [String!]
+  previousValues: GroupPreviousValues
+}
+
+input GroupSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GroupWhereInput
+  AND: [GroupSubscriptionWhereInput!]
+  OR: [GroupSubscriptionWhereInput!]
+  NOT: [GroupSubscriptionWhereInput!]
+}
+
+input GroupUpdateInput {
+  name: String
+  users: UserUpdateManyWithoutGroupsInput
+}
+
+input GroupUpdateManyDataInput {
+  name: String
+}
+
+input GroupUpdateManyMutationInput {
+  name: String
+}
+
+input GroupUpdateManyWithoutUsersInput {
+  create: [GroupCreateWithoutUsersInput!]
+  delete: [GroupWhereUniqueInput!]
+  connect: [GroupWhereUniqueInput!]
+  set: [GroupWhereUniqueInput!]
+  disconnect: [GroupWhereUniqueInput!]
+  update: [GroupUpdateWithWhereUniqueWithoutUsersInput!]
+  upsert: [GroupUpsertWithWhereUniqueWithoutUsersInput!]
+  deleteMany: [GroupScalarWhereInput!]
+  updateMany: [GroupUpdateManyWithWhereNestedInput!]
+}
+
+input GroupUpdateManyWithWhereNestedInput {
+  where: GroupScalarWhereInput!
+  data: GroupUpdateManyDataInput!
+}
+
+input GroupUpdateWithoutUsersDataInput {
+  name: String
+}
+
+input GroupUpdateWithWhereUniqueWithoutUsersInput {
+  where: GroupWhereUniqueInput!
+  data: GroupUpdateWithoutUsersDataInput!
+}
+
+input GroupUpsertWithWhereUniqueWithoutUsersInput {
+  where: GroupWhereUniqueInput!
+  update: GroupUpdateWithoutUsersDataInput!
+  create: GroupCreateWithoutUsersInput!
+}
+
+input GroupWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
+  AND: [GroupWhereInput!]
+  OR: [GroupWhereInput!]
+  NOT: [GroupWhereInput!]
+}
+
+input GroupWhereUniqueInput {
+  id: ID
+}
+
 type JournalEntry {
   id: ID!
   createdAt: DateTime!
@@ -962,6 +1149,12 @@ type Mutation {
   upsertGoal(where: GoalWhereUniqueInput!, create: GoalCreateInput!, update: GoalUpdateInput!): Goal!
   deleteGoal(where: GoalWhereUniqueInput!): Goal
   deleteManyGoals(where: GoalWhereInput): BatchPayload!
+  createGroup(data: GroupCreateInput!): Group!
+  updateGroup(data: GroupUpdateInput!, where: GroupWhereUniqueInput!): Group
+  updateManyGroups(data: GroupUpdateManyMutationInput!, where: GroupWhereInput): BatchPayload!
+  upsertGroup(where: GroupWhereUniqueInput!, create: GroupCreateInput!, update: GroupUpdateInput!): Group!
+  deleteGroup(where: GroupWhereUniqueInput!): Group
+  deleteManyGroups(where: GroupWhereInput): BatchPayload!
   createJournalEntry(data: JournalEntryCreateInput!): JournalEntry!
   updateJournalEntry(data: JournalEntryUpdateInput!, where: JournalEntryWhereUniqueInput!): JournalEntry
   updateManyJournalEntries(data: JournalEntryUpdateManyMutationInput!, where: JournalEntryWhereInput): BatchPayload!
@@ -1374,6 +1567,9 @@ type Query {
   goal(where: GoalWhereUniqueInput!): Goal
   goals(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Goal]!
   goalsConnection(where: GoalWhereInput, orderBy: GoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GoalConnection!
+  group(where: GroupWhereUniqueInput!): Group
+  groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group]!
+  groupsConnection(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroupConnection!
   journalEntry(where: JournalEntryWhereUniqueInput!): JournalEntry
   journalEntries(where: JournalEntryWhereInput, orderBy: JournalEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JournalEntry]!
   journalEntriesConnection(where: JournalEntryWhereInput, orderBy: JournalEntryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JournalEntryConnection!
@@ -1637,6 +1833,7 @@ enum Role {
 type Subscription {
   authPayload(where: AuthPayloadSubscriptionWhereInput): AuthPayloadSubscriptionPayload
   goal(where: GoalSubscriptionWhereInput): GoalSubscriptionPayload
+  group(where: GroupSubscriptionWhereInput): GroupSubscriptionPayload
   journalEntry(where: JournalEntrySubscriptionWhereInput): JournalEntrySubscriptionPayload
   message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
@@ -1652,6 +1849,7 @@ enum TIER {
 
 type User {
   id: ID!
+  groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group!]
   created_at: DateTime!
   updated_at: DateTime!
   discourseId: Int
@@ -1662,6 +1860,7 @@ type User {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -1689,6 +1888,7 @@ type UserConnection {
 
 input UserCreateInput {
   id: ID
+  groups: GroupCreateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1697,6 +1897,7 @@ input UserCreateInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -1723,6 +1924,11 @@ input UserCreateManyWithoutFollowingInput {
 
 input UserCreateManyWithoutFriendsInput {
   create: [UserCreateWithoutFriendsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutGroupsInput {
+  create: [UserCreateWithoutGroupsInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -1753,6 +1959,7 @@ input UserCreateOneWithoutPostsInput {
 
 input UserCreateWithoutFollowingInput {
   id: ID
+  groups: GroupCreateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1761,6 +1968,7 @@ input UserCreateWithoutFollowingInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -1781,6 +1989,7 @@ input UserCreateWithoutFollowingInput {
 
 input UserCreateWithoutFriendsInput {
   id: ID
+  groups: GroupCreateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1789,6 +1998,7 @@ input UserCreateWithoutFriendsInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -1809,6 +2019,7 @@ input UserCreateWithoutFriendsInput {
 
 input UserCreateWithoutGoalsInput {
   id: ID
+  groups: GroupCreateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1817,6 +2028,7 @@ input UserCreateWithoutGoalsInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -1835,7 +2047,7 @@ input UserCreateWithoutGoalsInput {
   leavingTo: String
 }
 
-input UserCreateWithoutJournalInput {
+input UserCreateWithoutGroupsInput {
   id: ID
   discourseId: Int
   auth0Id: String
@@ -1845,6 +2057,38 @@ input UserCreateWithoutJournalInput {
   name: String
   password: String
   nickname: String
+  friendId: String
+  guestCheckIns: Int
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
+  goals: GoalCreateManyWithoutAuthorInput
+  journal: JournalEntryCreateManyWithoutAuthorInput
+  points: Int
+  friends: UserCreateManyWithoutFriendsInput
+  status: UserStatus
+  posts: PostCreateManyWithoutAuthorInput
+  following: UserCreateManyWithoutFollowingInput
+  tier: TIER
+  role: Role
+  refreshToken: String
+  latestMessage: ReactionCreateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
+}
+
+input UserCreateWithoutJournalInput {
+  id: ID
+  groups: GroupCreateManyWithoutUsersInput
+  discourseId: Int
+  auth0Id: String
+  metaData: String
+  identity: String
+  email: String
+  name: String
+  password: String
+  nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -1865,6 +2109,7 @@ input UserCreateWithoutJournalInput {
 
 input UserCreateWithoutLatestMessageInput {
   id: ID
+  groups: GroupCreateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1873,6 +2118,7 @@ input UserCreateWithoutLatestMessageInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -1893,6 +2139,7 @@ input UserCreateWithoutLatestMessageInput {
 
 input UserCreateWithoutPostsInput {
   id: ID
+  groups: GroupCreateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -1901,6 +2148,7 @@ input UserCreateWithoutPostsInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -1947,6 +2195,8 @@ enum UserOrderByInput {
   password_DESC
   nickname_ASC
   nickname_DESC
+  friendId_ASC
+  friendId_DESC
   guestCheckIns_ASC
   guestCheckIns_DESC
   eblID_ASC
@@ -1983,6 +2233,7 @@ type UserPreviousValues {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2133,6 +2384,20 @@ input UserScalarWhereInput {
   nickname_not_starts_with: String
   nickname_ends_with: String
   nickname_not_ends_with: String
+  friendId: String
+  friendId_not: String
+  friendId_in: [String!]
+  friendId_not_in: [String!]
+  friendId_lt: String
+  friendId_lte: String
+  friendId_gt: String
+  friendId_gte: String
+  friendId_contains: String
+  friendId_not_contains: String
+  friendId_starts_with: String
+  friendId_not_starts_with: String
+  friendId_ends_with: String
+  friendId_not_ends_with: String
   guestCheckIns: Int
   guestCheckIns_not: Int
   guestCheckIns_in: [Int!]
@@ -2265,6 +2530,7 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateDataInput {
+  groups: GroupUpdateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2273,6 +2539,7 @@ input UserUpdateDataInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2293,6 +2560,7 @@ input UserUpdateDataInput {
 }
 
 input UserUpdateInput {
+  groups: GroupUpdateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2301,6 +2569,7 @@ input UserUpdateInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2329,6 +2598,7 @@ input UserUpdateManyDataInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2351,6 +2621,7 @@ input UserUpdateManyMutationInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2384,6 +2655,18 @@ input UserUpdateManyWithoutFriendsInput {
   disconnect: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutFriendsInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutFriendsInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithoutGroupsInput {
+  create: [UserCreateWithoutGroupsInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutGroupsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutGroupsInput!]
   deleteMany: [UserScalarWhereInput!]
   updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
@@ -2429,6 +2712,7 @@ input UserUpdateOneRequiredWithoutPostsInput {
 }
 
 input UserUpdateWithoutFollowingDataInput {
+  groups: GroupUpdateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2437,6 +2721,7 @@ input UserUpdateWithoutFollowingDataInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2456,6 +2741,7 @@ input UserUpdateWithoutFollowingDataInput {
 }
 
 input UserUpdateWithoutFriendsDataInput {
+  groups: GroupUpdateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2464,6 +2750,7 @@ input UserUpdateWithoutFriendsDataInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2483,6 +2770,7 @@ input UserUpdateWithoutFriendsDataInput {
 }
 
 input UserUpdateWithoutGoalsDataInput {
+  groups: GroupUpdateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2491,6 +2779,7 @@ input UserUpdateWithoutGoalsDataInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2509,7 +2798,7 @@ input UserUpdateWithoutGoalsDataInput {
   leavingTo: String
 }
 
-input UserUpdateWithoutJournalDataInput {
+input UserUpdateWithoutGroupsDataInput {
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2518,6 +2807,37 @@ input UserUpdateWithoutJournalDataInput {
   name: String
   password: String
   nickname: String
+  friendId: String
+  guestCheckIns: Int
+  eblID: String
+  profileStatus: ProfileStatus
+  avatar: String
+  goals: GoalUpdateManyWithoutAuthorInput
+  journal: JournalEntryUpdateManyWithoutAuthorInput
+  points: Int
+  friends: UserUpdateManyWithoutFriendsInput
+  status: UserStatus
+  posts: PostUpdateManyWithoutAuthorInput
+  following: UserUpdateManyWithoutFollowingInput
+  tier: TIER
+  role: Role
+  refreshToken: String
+  latestMessage: ReactionUpdateOneWithoutUserInput
+  leavingFrom: String
+  leavingTo: String
+}
+
+input UserUpdateWithoutJournalDataInput {
+  groups: GroupUpdateManyWithoutUsersInput
+  discourseId: Int
+  auth0Id: String
+  metaData: String
+  identity: String
+  email: String
+  name: String
+  password: String
+  nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2537,6 +2857,7 @@ input UserUpdateWithoutJournalDataInput {
 }
 
 input UserUpdateWithoutLatestMessageDataInput {
+  groups: GroupUpdateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2545,6 +2866,7 @@ input UserUpdateWithoutLatestMessageDataInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2564,6 +2886,7 @@ input UserUpdateWithoutLatestMessageDataInput {
 }
 
 input UserUpdateWithoutPostsDataInput {
+  groups: GroupUpdateManyWithoutUsersInput
   discourseId: Int
   auth0Id: String
   metaData: String
@@ -2572,6 +2895,7 @@ input UserUpdateWithoutPostsDataInput {
   name: String
   password: String
   nickname: String
+  friendId: String
   guestCheckIns: Int
   eblID: String
   profileStatus: ProfileStatus
@@ -2598,6 +2922,11 @@ input UserUpdateWithWhereUniqueWithoutFollowingInput {
 input UserUpdateWithWhereUniqueWithoutFriendsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutFriendsDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutGroupsDataInput!
 }
 
 input UserUpsertNestedInput {
@@ -2637,6 +2966,12 @@ input UserUpsertWithWhereUniqueWithoutFriendsInput {
   create: UserCreateWithoutFriendsInput!
 }
 
+input UserUpsertWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutGroupsDataInput!
+  create: UserCreateWithoutGroupsInput!
+}
+
 input UserWhereInput {
   id: ID
   id_not: ID
@@ -2652,6 +2987,9 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  groups_every: GroupWhereInput
+  groups_some: GroupWhereInput
+  groups_none: GroupWhereInput
   created_at: DateTime
   created_at_not: DateTime
   created_at_in: [DateTime!]
@@ -2774,6 +3112,20 @@ input UserWhereInput {
   nickname_not_starts_with: String
   nickname_ends_with: String
   nickname_not_ends_with: String
+  friendId: String
+  friendId_not: String
+  friendId_in: [String!]
+  friendId_not_in: [String!]
+  friendId_lt: String
+  friendId_lte: String
+  friendId_gt: String
+  friendId_gte: String
+  friendId_contains: String
+  friendId_not_contains: String
+  friendId_starts_with: String
+  friendId_not_starts_with: String
+  friendId_ends_with: String
+  friendId_not_ends_with: String
   guestCheckIns: Int
   guestCheckIns_not: Int
   guestCheckIns_in: [Int!]
@@ -2901,6 +3253,7 @@ input UserWhereUniqueInput {
   id: ID
   auth0Id: String
   email: String
+  nickname: String
   eblID: String
 }
 `

@@ -18,27 +18,31 @@ const user = {
   
   addUserToFriendlist: combineResolvers(
     isFriend,
-    async (parent, { nickname, auth0Id }, context, info) => {
-      const userId = getUserId(context);
-      const currentNickname = await context.prisma
-        .user({ id: userId })
-        .nickname();
+    async (parent, { nickname }, context, info) => {
+      const userId = await getUserId(context);
+      const currentAuth0Id = await context.prisma.user({ id: userId }).auth0Id();
+      console.log("currentAuth0Id: ", currentAuth0Id)
+      const userEblId = await fromString(currentAuth0Id)
+      const friend = await context.prisma.user({nickname: nickname}).auth0Id()
+      const friendEblId = await fromString(friend)
+      console.log("friendEblId: ", friendEblId)
       const addFriends = [
         {
           user1: await context.prisma.updateUser({
-            where: { nickname: currentNickname },
+            where: { eblID: userEblId },
             data: {
-              friends: { connect: [{ eblID: fromString(auth0Id) }] }
+              friends: { connect: { eblID: friendEblId } }
             }
           }),
           user2: await context.prisma.updateUser({
-            where: { nickname: nickname },
+            where: { eblID: friendEblId },
             data: {
-              friends: { connect: [{ eblID: fromString(currentNickname) }] }
+              friends: { connect: { eblID: userEblId } }
             }
           })
         }
-      ];
+      ]
+      
       const user1 = addFriends[0].user1;
       const user2 = addFriends[0].user2;
       return `${user1.nickname} and ${user2.nickname} are now friends`;

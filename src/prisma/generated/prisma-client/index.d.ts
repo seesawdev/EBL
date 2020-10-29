@@ -18,6 +18,7 @@ export type Maybe<T> = T | undefined | null;
 export interface Exists {
   authPayload: (where?: AuthPayloadWhereInput) => Promise<boolean>;
   goal: (where?: GoalWhereInput) => Promise<boolean>;
+  group: (where?: GroupWhereInput) => Promise<boolean>;
   journalEntry: (where?: JournalEntryWhereInput) => Promise<boolean>;
   message: (where?: MessageWhereInput) => Promise<boolean>;
   post: (where?: PostWhereInput) => Promise<boolean>;
@@ -84,6 +85,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => GoalConnectionPromise;
+  group: (where: GroupWhereUniqueInput) => GroupNullablePromise;
+  groups: (args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Group>;
+  groupsConnection: (args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => GroupConnectionPromise;
   journalEntry: (
     where: JournalEntryWhereUniqueInput
   ) => JournalEntryNullablePromise;
@@ -221,6 +241,22 @@ export interface Prisma {
   }) => GoalPromise;
   deleteGoal: (where: GoalWhereUniqueInput) => GoalPromise;
   deleteManyGoals: (where?: GoalWhereInput) => BatchPayloadPromise;
+  createGroup: (data: GroupCreateInput) => GroupPromise;
+  updateGroup: (args: {
+    data: GroupUpdateInput;
+    where: GroupWhereUniqueInput;
+  }) => GroupPromise;
+  updateManyGroups: (args: {
+    data: GroupUpdateManyMutationInput;
+    where?: GroupWhereInput;
+  }) => BatchPayloadPromise;
+  upsertGroup: (args: {
+    where: GroupWhereUniqueInput;
+    create: GroupCreateInput;
+    update: GroupUpdateInput;
+  }) => GroupPromise;
+  deleteGroup: (where: GroupWhereUniqueInput) => GroupPromise;
+  deleteManyGroups: (where?: GroupWhereInput) => BatchPayloadPromise;
   createJournalEntry: (data: JournalEntryCreateInput) => JournalEntryPromise;
   updateJournalEntry: (args: {
     data: JournalEntryUpdateInput;
@@ -320,6 +356,9 @@ export interface Subscription {
   goal: (
     where?: GoalSubscriptionWhereInput
   ) => GoalSubscriptionPayloadSubscription;
+  group: (
+    where?: GroupSubscriptionWhereInput
+  ) => GroupSubscriptionPayloadSubscription;
   journalEntry: (
     where?: JournalEntrySubscriptionWhereInput
   ) => JournalEntrySubscriptionPayloadSubscription;
@@ -357,6 +396,56 @@ export type TIER = "FREE" | "CONTRIBUTER" | "PREMIUM";
 
 export type Role = "ADMIN" | "USER";
 
+export type GroupOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
+
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "created_at_ASC"
+  | "created_at_DESC"
+  | "updated_at_ASC"
+  | "updated_at_DESC"
+  | "discourseId_ASC"
+  | "discourseId_DESC"
+  | "auth0Id_ASC"
+  | "auth0Id_DESC"
+  | "metaData_ASC"
+  | "metaData_DESC"
+  | "identity_ASC"
+  | "identity_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "nickname_ASC"
+  | "nickname_DESC"
+  | "friendId_ASC"
+  | "friendId_DESC"
+  | "guestCheckIns_ASC"
+  | "guestCheckIns_DESC"
+  | "eblID_ASC"
+  | "eblID_DESC"
+  | "profileStatus_ASC"
+  | "profileStatus_DESC"
+  | "avatar_ASC"
+  | "avatar_DESC"
+  | "points_ASC"
+  | "points_DESC"
+  | "status_ASC"
+  | "status_DESC"
+  | "tier_ASC"
+  | "tier_DESC"
+  | "role_ASC"
+  | "role_DESC"
+  | "refreshToken_ASC"
+  | "refreshToken_DESC"
+  | "leavingFrom_ASC"
+  | "leavingFrom_DESC"
+  | "leavingTo_ASC"
+  | "leavingTo_DESC";
+
 export type GoalOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -388,52 +477,6 @@ export type JournalEntryOrderByInput =
   | "shared_DESC"
   | "content_ASC"
   | "content_DESC";
-
-export type UserOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "created_at_ASC"
-  | "created_at_DESC"
-  | "updated_at_ASC"
-  | "updated_at_DESC"
-  | "discourseId_ASC"
-  | "discourseId_DESC"
-  | "auth0Id_ASC"
-  | "auth0Id_DESC"
-  | "metaData_ASC"
-  | "metaData_DESC"
-  | "identity_ASC"
-  | "identity_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "password_ASC"
-  | "password_DESC"
-  | "nickname_ASC"
-  | "nickname_DESC"
-  | "guestCheckIns_ASC"
-  | "guestCheckIns_DESC"
-  | "eblID_ASC"
-  | "eblID_DESC"
-  | "profileStatus_ASC"
-  | "profileStatus_DESC"
-  | "avatar_ASC"
-  | "avatar_DESC"
-  | "points_ASC"
-  | "points_DESC"
-  | "status_ASC"
-  | "status_DESC"
-  | "tier_ASC"
-  | "tier_DESC"
-  | "role_ASC"
-  | "role_DESC"
-  | "refreshToken_ASC"
-  | "refreshToken_DESC"
-  | "leavingFrom_ASC"
-  | "leavingFrom_DESC"
-  | "leavingTo_ASC"
-  | "leavingTo_DESC";
 
 export type PostOrderByInput =
   | "id_ASC"
@@ -485,7 +528,7 @@ export type AuthPayloadWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
-export interface GoalWhereInput {
+export interface GroupWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -500,86 +543,26 @@ export interface GoalWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  title?: Maybe<String>;
-  title_not?: Maybe<String>;
-  title_in?: Maybe<String[] | String>;
-  title_not_in?: Maybe<String[] | String>;
-  title_lt?: Maybe<String>;
-  title_lte?: Maybe<String>;
-  title_gt?: Maybe<String>;
-  title_gte?: Maybe<String>;
-  title_contains?: Maybe<String>;
-  title_not_contains?: Maybe<String>;
-  title_starts_with?: Maybe<String>;
-  title_not_starts_with?: Maybe<String>;
-  title_ends_with?: Maybe<String>;
-  title_not_ends_with?: Maybe<String>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  projectedCompletionDate?: Maybe<DateTimeInput>;
-  projectedCompletionDate_not?: Maybe<DateTimeInput>;
-  projectedCompletionDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  projectedCompletionDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  projectedCompletionDate_lt?: Maybe<DateTimeInput>;
-  projectedCompletionDate_lte?: Maybe<DateTimeInput>;
-  projectedCompletionDate_gt?: Maybe<DateTimeInput>;
-  projectedCompletionDate_gte?: Maybe<DateTimeInput>;
-  actualCompletionDate?: Maybe<DateTimeInput>;
-  actualCompletionDate_not?: Maybe<DateTimeInput>;
-  actualCompletionDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  actualCompletionDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  actualCompletionDate_lt?: Maybe<DateTimeInput>;
-  actualCompletionDate_lte?: Maybe<DateTimeInput>;
-  actualCompletionDate_gt?: Maybe<DateTimeInput>;
-  actualCompletionDate_gte?: Maybe<DateTimeInput>;
-  pointsWorth?: Maybe<Int>;
-  pointsWorth_not?: Maybe<Int>;
-  pointsWorth_in?: Maybe<Int[] | Int>;
-  pointsWorth_not_in?: Maybe<Int[] | Int>;
-  pointsWorth_lt?: Maybe<Int>;
-  pointsWorth_lte?: Maybe<Int>;
-  pointsWorth_gt?: Maybe<Int>;
-  pointsWorth_gte?: Maybe<Int>;
-  pointsEarned?: Maybe<Int>;
-  pointsEarned_not?: Maybe<Int>;
-  pointsEarned_in?: Maybe<Int[] | Int>;
-  pointsEarned_not_in?: Maybe<Int[] | Int>;
-  pointsEarned_lt?: Maybe<Int>;
-  pointsEarned_lte?: Maybe<Int>;
-  pointsEarned_gt?: Maybe<Int>;
-  pointsEarned_gte?: Maybe<Int>;
-  pointsDeducted?: Maybe<Int>;
-  pointsDeducted_not?: Maybe<Int>;
-  pointsDeducted_in?: Maybe<Int[] | Int>;
-  pointsDeducted_not_in?: Maybe<Int[] | Int>;
-  pointsDeducted_lt?: Maybe<Int>;
-  pointsDeducted_lte?: Maybe<Int>;
-  pointsDeducted_gt?: Maybe<Int>;
-  pointsDeducted_gte?: Maybe<Int>;
-  description?: Maybe<String>;
-  description_not?: Maybe<String>;
-  description_in?: Maybe<String[] | String>;
-  description_not_in?: Maybe<String[] | String>;
-  description_lt?: Maybe<String>;
-  description_lte?: Maybe<String>;
-  description_gt?: Maybe<String>;
-  description_gte?: Maybe<String>;
-  description_contains?: Maybe<String>;
-  description_not_contains?: Maybe<String>;
-  description_starts_with?: Maybe<String>;
-  description_not_starts_with?: Maybe<String>;
-  description_ends_with?: Maybe<String>;
-  description_not_ends_with?: Maybe<String>;
-  author?: Maybe<UserWhereInput>;
-  AND?: Maybe<GoalWhereInput[] | GoalWhereInput>;
-  OR?: Maybe<GoalWhereInput[] | GoalWhereInput>;
-  NOT?: Maybe<GoalWhereInput[] | GoalWhereInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  users_every?: Maybe<UserWhereInput>;
+  users_some?: Maybe<UserWhereInput>;
+  users_none?: Maybe<UserWhereInput>;
+  AND?: Maybe<GroupWhereInput[] | GroupWhereInput>;
+  OR?: Maybe<GroupWhereInput[] | GroupWhereInput>;
+  NOT?: Maybe<GroupWhereInput[] | GroupWhereInput>;
 }
 
 export interface UserWhereInput {
@@ -597,6 +580,9 @@ export interface UserWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  groups_every?: Maybe<GroupWhereInput>;
+  groups_some?: Maybe<GroupWhereInput>;
+  groups_none?: Maybe<GroupWhereInput>;
   created_at?: Maybe<DateTimeInput>;
   created_at_not?: Maybe<DateTimeInput>;
   created_at_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -719,6 +705,20 @@ export interface UserWhereInput {
   nickname_not_starts_with?: Maybe<String>;
   nickname_ends_with?: Maybe<String>;
   nickname_not_ends_with?: Maybe<String>;
+  friendId?: Maybe<String>;
+  friendId_not?: Maybe<String>;
+  friendId_in?: Maybe<String[] | String>;
+  friendId_not_in?: Maybe<String[] | String>;
+  friendId_lt?: Maybe<String>;
+  friendId_lte?: Maybe<String>;
+  friendId_gt?: Maybe<String>;
+  friendId_gte?: Maybe<String>;
+  friendId_contains?: Maybe<String>;
+  friendId_not_contains?: Maybe<String>;
+  friendId_starts_with?: Maybe<String>;
+  friendId_not_starts_with?: Maybe<String>;
+  friendId_ends_with?: Maybe<String>;
+  friendId_not_ends_with?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   guestCheckIns_not?: Maybe<Int>;
   guestCheckIns_in?: Maybe<Int[] | Int>;
@@ -840,6 +840,103 @@ export interface UserWhereInput {
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
+
+export interface GoalWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  projectedCompletionDate?: Maybe<DateTimeInput>;
+  projectedCompletionDate_not?: Maybe<DateTimeInput>;
+  projectedCompletionDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  projectedCompletionDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  projectedCompletionDate_lt?: Maybe<DateTimeInput>;
+  projectedCompletionDate_lte?: Maybe<DateTimeInput>;
+  projectedCompletionDate_gt?: Maybe<DateTimeInput>;
+  projectedCompletionDate_gte?: Maybe<DateTimeInput>;
+  actualCompletionDate?: Maybe<DateTimeInput>;
+  actualCompletionDate_not?: Maybe<DateTimeInput>;
+  actualCompletionDate_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  actualCompletionDate_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  actualCompletionDate_lt?: Maybe<DateTimeInput>;
+  actualCompletionDate_lte?: Maybe<DateTimeInput>;
+  actualCompletionDate_gt?: Maybe<DateTimeInput>;
+  actualCompletionDate_gte?: Maybe<DateTimeInput>;
+  pointsWorth?: Maybe<Int>;
+  pointsWorth_not?: Maybe<Int>;
+  pointsWorth_in?: Maybe<Int[] | Int>;
+  pointsWorth_not_in?: Maybe<Int[] | Int>;
+  pointsWorth_lt?: Maybe<Int>;
+  pointsWorth_lte?: Maybe<Int>;
+  pointsWorth_gt?: Maybe<Int>;
+  pointsWorth_gte?: Maybe<Int>;
+  pointsEarned?: Maybe<Int>;
+  pointsEarned_not?: Maybe<Int>;
+  pointsEarned_in?: Maybe<Int[] | Int>;
+  pointsEarned_not_in?: Maybe<Int[] | Int>;
+  pointsEarned_lt?: Maybe<Int>;
+  pointsEarned_lte?: Maybe<Int>;
+  pointsEarned_gt?: Maybe<Int>;
+  pointsEarned_gte?: Maybe<Int>;
+  pointsDeducted?: Maybe<Int>;
+  pointsDeducted_not?: Maybe<Int>;
+  pointsDeducted_in?: Maybe<Int[] | Int>;
+  pointsDeducted_not_in?: Maybe<Int[] | Int>;
+  pointsDeducted_lt?: Maybe<Int>;
+  pointsDeducted_lte?: Maybe<Int>;
+  pointsDeducted_gt?: Maybe<Int>;
+  pointsDeducted_gte?: Maybe<Int>;
+  description?: Maybe<String>;
+  description_not?: Maybe<String>;
+  description_in?: Maybe<String[] | String>;
+  description_not_in?: Maybe<String[] | String>;
+  description_lt?: Maybe<String>;
+  description_lte?: Maybe<String>;
+  description_gt?: Maybe<String>;
+  description_gte?: Maybe<String>;
+  description_contains?: Maybe<String>;
+  description_not_contains?: Maybe<String>;
+  description_starts_with?: Maybe<String>;
+  description_not_starts_with?: Maybe<String>;
+  description_ends_with?: Maybe<String>;
+  description_not_ends_with?: Maybe<String>;
+  author?: Maybe<UserWhereInput>;
+  AND?: Maybe<GoalWhereInput[] | GoalWhereInput>;
+  OR?: Maybe<GoalWhereInput[] | GoalWhereInput>;
+  NOT?: Maybe<GoalWhereInput[] | GoalWhereInput>;
 }
 
 export interface JournalEntryWhereInput {
@@ -1152,6 +1249,10 @@ export type GoalWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
+export type GroupWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
 export type JournalEntryWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
@@ -1172,6 +1273,7 @@ export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   auth0Id?: Maybe<String>;
   email?: Maybe<String>;
+  nickname?: Maybe<String>;
   eblID?: Maybe<String>;
 }>;
 
@@ -1188,6 +1290,7 @@ export interface UserCreateOneInput {
 
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
+  groups?: Maybe<GroupCreateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -1196,6 +1299,7 @@ export interface UserCreateInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -1213,6 +1317,16 @@ export interface UserCreateInput {
   latestMessage?: Maybe<ReactionCreateOneWithoutUserInput>;
   leavingFrom?: Maybe<String>;
   leavingTo?: Maybe<String>;
+}
+
+export interface GroupCreateManyWithoutUsersInput {
+  create?: Maybe<GroupCreateWithoutUsersInput[] | GroupCreateWithoutUsersInput>;
+  connect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+}
+
+export interface GroupCreateWithoutUsersInput {
+  id?: Maybe<ID_Input>;
+  name: String;
 }
 
 export interface GoalCreateManyWithoutAuthorInput {
@@ -1257,6 +1371,7 @@ export interface UserCreateManyWithoutFriendsInput {
 
 export interface UserCreateWithoutFriendsInput {
   id?: Maybe<ID_Input>;
+  groups?: Maybe<GroupCreateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -1265,6 +1380,7 @@ export interface UserCreateWithoutFriendsInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -1306,6 +1422,7 @@ export interface UserCreateManyWithoutFollowingInput {
 
 export interface UserCreateWithoutFollowingInput {
   id?: Maybe<ID_Input>;
+  groups?: Maybe<GroupCreateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -1314,6 +1431,7 @@ export interface UserCreateWithoutFollowingInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -1368,6 +1486,7 @@ export interface UserUpdateOneRequiredInput {
 }
 
 export interface UserUpdateDataInput {
+  groups?: Maybe<GroupUpdateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -1376,6 +1495,7 @@ export interface UserUpdateDataInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -1393,6 +1513,84 @@ export interface UserUpdateDataInput {
   latestMessage?: Maybe<ReactionUpdateOneWithoutUserInput>;
   leavingFrom?: Maybe<String>;
   leavingTo?: Maybe<String>;
+}
+
+export interface GroupUpdateManyWithoutUsersInput {
+  create?: Maybe<GroupCreateWithoutUsersInput[] | GroupCreateWithoutUsersInput>;
+  delete?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  connect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  set?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  disconnect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  update?: Maybe<
+    | GroupUpdateWithWhereUniqueWithoutUsersInput[]
+    | GroupUpdateWithWhereUniqueWithoutUsersInput
+  >;
+  upsert?: Maybe<
+    | GroupUpsertWithWhereUniqueWithoutUsersInput[]
+    | GroupUpsertWithWhereUniqueWithoutUsersInput
+  >;
+  deleteMany?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+  updateMany?: Maybe<
+    GroupUpdateManyWithWhereNestedInput[] | GroupUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface GroupUpdateWithWhereUniqueWithoutUsersInput {
+  where: GroupWhereUniqueInput;
+  data: GroupUpdateWithoutUsersDataInput;
+}
+
+export interface GroupUpdateWithoutUsersDataInput {
+  name?: Maybe<String>;
+}
+
+export interface GroupUpsertWithWhereUniqueWithoutUsersInput {
+  where: GroupWhereUniqueInput;
+  update: GroupUpdateWithoutUsersDataInput;
+  create: GroupCreateWithoutUsersInput;
+}
+
+export interface GroupScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  AND?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+  OR?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+  NOT?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+}
+
+export interface GroupUpdateManyWithWhereNestedInput {
+  where: GroupScalarWhereInput;
+  data: GroupUpdateManyDataInput;
+}
+
+export interface GroupUpdateManyDataInput {
+  name?: Maybe<String>;
 }
 
 export interface GoalUpdateManyWithoutAuthorInput {
@@ -1691,6 +1889,7 @@ export interface UserUpdateWithWhereUniqueWithoutFriendsInput {
 }
 
 export interface UserUpdateWithoutFriendsDataInput {
+  groups?: Maybe<GroupUpdateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -1699,6 +1898,7 @@ export interface UserUpdateWithoutFriendsDataInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -1891,6 +2091,7 @@ export interface UserUpdateWithWhereUniqueWithoutFollowingInput {
 }
 
 export interface UserUpdateWithoutFollowingDataInput {
+  groups?: Maybe<GroupUpdateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -1899,6 +2100,7 @@ export interface UserUpdateWithoutFollowingDataInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2097,6 +2299,20 @@ export interface UserScalarWhereInput {
   nickname_not_starts_with?: Maybe<String>;
   nickname_ends_with?: Maybe<String>;
   nickname_not_ends_with?: Maybe<String>;
+  friendId?: Maybe<String>;
+  friendId_not?: Maybe<String>;
+  friendId_in?: Maybe<String[] | String>;
+  friendId_not_in?: Maybe<String[] | String>;
+  friendId_lt?: Maybe<String>;
+  friendId_lte?: Maybe<String>;
+  friendId_gt?: Maybe<String>;
+  friendId_gte?: Maybe<String>;
+  friendId_contains?: Maybe<String>;
+  friendId_not_contains?: Maybe<String>;
+  friendId_starts_with?: Maybe<String>;
+  friendId_not_starts_with?: Maybe<String>;
+  friendId_ends_with?: Maybe<String>;
+  friendId_not_ends_with?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   guestCheckIns_not?: Maybe<Int>;
   guestCheckIns_in?: Maybe<Int[] | Int>;
@@ -2218,6 +2434,7 @@ export interface UserUpdateManyDataInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2265,6 +2482,7 @@ export interface UserCreateOneWithoutGoalsInput {
 
 export interface UserCreateWithoutGoalsInput {
   id?: Maybe<ID_Input>;
+  groups?: Maybe<GroupCreateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -2273,6 +2491,7 @@ export interface UserCreateWithoutGoalsInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2310,6 +2529,7 @@ export interface UserUpdateOneRequiredWithoutGoalsInput {
 }
 
 export interface UserUpdateWithoutGoalsDataInput {
+  groups?: Maybe<GroupUpdateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -2318,6 +2538,7 @@ export interface UserUpdateWithoutGoalsDataInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2351,6 +2572,116 @@ export interface GoalUpdateManyMutationInput {
   description?: Maybe<String>;
 }
 
+export interface GroupCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  users?: Maybe<UserCreateManyWithoutGroupsInput>;
+}
+
+export interface UserCreateManyWithoutGroupsInput {
+  create?: Maybe<UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput>;
+  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutGroupsInput {
+  id?: Maybe<ID_Input>;
+  discourseId?: Maybe<Int>;
+  auth0Id?: Maybe<String>;
+  metaData?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  password?: Maybe<String>;
+  nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
+  goals?: Maybe<GoalCreateManyWithoutAuthorInput>;
+  journal?: Maybe<JournalEntryCreateManyWithoutAuthorInput>;
+  points?: Maybe<Int>;
+  friends?: Maybe<UserCreateManyWithoutFriendsInput>;
+  status?: Maybe<UserStatus>;
+  posts?: Maybe<PostCreateManyWithoutAuthorInput>;
+  following?: Maybe<UserCreateManyWithoutFollowingInput>;
+  tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
+  latestMessage?: Maybe<ReactionCreateOneWithoutUserInput>;
+  leavingFrom?: Maybe<String>;
+  leavingTo?: Maybe<String>;
+}
+
+export interface GroupUpdateInput {
+  name?: Maybe<String>;
+  users?: Maybe<UserUpdateManyWithoutGroupsInput>;
+}
+
+export interface UserUpdateManyWithoutGroupsInput {
+  create?: Maybe<UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput>;
+  delete?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  set?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  disconnect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  update?: Maybe<
+    | UserUpdateWithWhereUniqueWithoutGroupsInput[]
+    | UserUpdateWithWhereUniqueWithoutGroupsInput
+  >;
+  upsert?: Maybe<
+    | UserUpsertWithWhereUniqueWithoutGroupsInput[]
+    | UserUpsertWithWhereUniqueWithoutGroupsInput
+  >;
+  deleteMany?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  updateMany?: Maybe<
+    UserUpdateManyWithWhereNestedInput[] | UserUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutGroupsDataInput;
+}
+
+export interface UserUpdateWithoutGroupsDataInput {
+  discourseId?: Maybe<Int>;
+  auth0Id?: Maybe<String>;
+  metaData?: Maybe<String>;
+  identity?: Maybe<String>;
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  password?: Maybe<String>;
+  nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
+  guestCheckIns?: Maybe<Int>;
+  eblID?: Maybe<String>;
+  profileStatus?: Maybe<ProfileStatus>;
+  avatar?: Maybe<String>;
+  goals?: Maybe<GoalUpdateManyWithoutAuthorInput>;
+  journal?: Maybe<JournalEntryUpdateManyWithoutAuthorInput>;
+  points?: Maybe<Int>;
+  friends?: Maybe<UserUpdateManyWithoutFriendsInput>;
+  status?: Maybe<UserStatus>;
+  posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
+  following?: Maybe<UserUpdateManyWithoutFollowingInput>;
+  tier?: Maybe<TIER>;
+  role?: Maybe<Role>;
+  refreshToken?: Maybe<String>;
+  latestMessage?: Maybe<ReactionUpdateOneWithoutUserInput>;
+  leavingFrom?: Maybe<String>;
+  leavingTo?: Maybe<String>;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutGroupsDataInput;
+  create: UserCreateWithoutGroupsInput;
+}
+
+export interface GroupUpdateManyMutationInput {
+  name?: Maybe<String>;
+}
+
 export interface JournalEntryCreateInput {
   id?: Maybe<ID_Input>;
   title: String;
@@ -2366,6 +2697,7 @@ export interface UserCreateOneWithoutJournalInput {
 
 export interface UserCreateWithoutJournalInput {
   id?: Maybe<ID_Input>;
+  groups?: Maybe<GroupCreateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -2374,6 +2706,7 @@ export interface UserCreateWithoutJournalInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2407,6 +2740,7 @@ export interface UserUpdateOneRequiredWithoutJournalInput {
 }
 
 export interface UserUpdateWithoutJournalDataInput {
+  groups?: Maybe<GroupUpdateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -2415,6 +2749,7 @@ export interface UserUpdateWithoutJournalDataInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2472,6 +2807,7 @@ export interface UserCreateOneWithoutLatestMessageInput {
 
 export interface UserCreateWithoutLatestMessageInput {
   id?: Maybe<ID_Input>;
+  groups?: Maybe<GroupCreateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -2480,6 +2816,7 @@ export interface UserCreateWithoutLatestMessageInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2546,6 +2883,7 @@ export interface UserUpdateOneRequiredWithoutLatestMessageInput {
 }
 
 export interface UserUpdateWithoutLatestMessageDataInput {
+  groups?: Maybe<GroupUpdateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -2554,6 +2892,7 @@ export interface UserUpdateWithoutLatestMessageDataInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2657,6 +2996,7 @@ export interface UserCreateOneWithoutPostsInput {
 
 export interface UserCreateWithoutPostsInput {
   id?: Maybe<ID_Input>;
+  groups?: Maybe<GroupCreateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -2665,6 +3005,7 @@ export interface UserCreateWithoutPostsInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2700,6 +3041,7 @@ export interface UserUpdateOneRequiredWithoutPostsInput {
 }
 
 export interface UserUpdateWithoutPostsDataInput {
+  groups?: Maybe<GroupUpdateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -2708,6 +3050,7 @@ export interface UserUpdateWithoutPostsDataInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2757,6 +3100,7 @@ export interface ReactionUpdateManyMutationInput {
 }
 
 export interface UserUpdateInput {
+  groups?: Maybe<GroupUpdateManyWithoutUsersInput>;
   discourseId?: Maybe<Int>;
   auth0Id?: Maybe<String>;
   metaData?: Maybe<String>;
@@ -2765,6 +3109,7 @@ export interface UserUpdateInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2793,6 +3138,7 @@ export interface UserUpdateManyMutationInput {
   name?: Maybe<String>;
   password?: Maybe<String>;
   nickname?: Maybe<String>;
+  friendId?: Maybe<String>;
   guestCheckIns?: Maybe<Int>;
   eblID?: Maybe<String>;
   profileStatus?: Maybe<ProfileStatus>;
@@ -2832,6 +3178,17 @@ export interface GoalSubscriptionWhereInput {
   AND?: Maybe<GoalSubscriptionWhereInput[] | GoalSubscriptionWhereInput>;
   OR?: Maybe<GoalSubscriptionWhereInput[] | GoalSubscriptionWhereInput>;
   NOT?: Maybe<GoalSubscriptionWhereInput[] | GoalSubscriptionWhereInput>;
+}
+
+export interface GroupSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<GroupWhereInput>;
+  AND?: Maybe<GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput>;
+  OR?: Maybe<GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput>;
+  NOT?: Maybe<GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput>;
 }
 
 export interface JournalEntrySubscriptionWhereInput {
@@ -2942,6 +3299,7 @@ export interface User {
   name?: String;
   password?: String;
   nickname?: String;
+  friendId?: String;
   guestCheckIns?: Int;
   eblID?: String;
   profileStatus?: ProfileStatus;
@@ -2957,6 +3315,15 @@ export interface User {
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
+  groups: <T = FragmentableArray<Group>>(args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   created_at: () => Promise<DateTimeOutput>;
   updated_at: () => Promise<DateTimeOutput>;
   discourseId: () => Promise<Int>;
@@ -2967,6 +3334,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   name: () => Promise<String>;
   password: () => Promise<String>;
   nickname: () => Promise<String>;
+  friendId: () => Promise<String>;
   guestCheckIns: () => Promise<Int>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
@@ -3030,6 +3398,15 @@ export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  groups: <T = Promise<AsyncIterator<GroupSubscription>>>(args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   created_at: () => Promise<AsyncIterator<DateTimeOutput>>;
   updated_at: () => Promise<AsyncIterator<DateTimeOutput>>;
   discourseId: () => Promise<AsyncIterator<Int>>;
@@ -3040,6 +3417,7 @@ export interface UserSubscription
   name: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   nickname: () => Promise<AsyncIterator<String>>;
+  friendId: () => Promise<AsyncIterator<String>>;
   guestCheckIns: () => Promise<AsyncIterator<Int>>;
   eblID: () => Promise<AsyncIterator<String>>;
   profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
@@ -3103,6 +3481,15 @@ export interface UserNullablePromise
   extends Promise<User | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  groups: <T = FragmentableArray<Group>>(args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   created_at: () => Promise<DateTimeOutput>;
   updated_at: () => Promise<DateTimeOutput>;
   discourseId: () => Promise<Int>;
@@ -3113,6 +3500,7 @@ export interface UserNullablePromise
   name: () => Promise<String>;
   password: () => Promise<String>;
   nickname: () => Promise<String>;
+  friendId: () => Promise<String>;
   guestCheckIns: () => Promise<Int>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
@@ -3170,6 +3558,57 @@ export interface UserNullablePromise
   latestMessage: <T = ReactionPromise>() => T;
   leavingFrom: () => Promise<String>;
   leavingTo: () => Promise<String>;
+}
+
+export interface Group {
+  id: ID_Output;
+  name: String;
+}
+
+export interface GroupPromise extends Promise<Group>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  users: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface GroupSubscription
+  extends Promise<AsyncIterator<Group>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  users: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface GroupNullablePromise
+  extends Promise<Group | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  users: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface Goal {
@@ -3545,6 +3984,60 @@ export interface AggregateGoalPromise
 
 export interface AggregateGoalSubscription
   extends Promise<AsyncIterator<AggregateGoal>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GroupConnection {
+  pageInfo: PageInfo;
+  edges: GroupEdge[];
+}
+
+export interface GroupConnectionPromise
+  extends Promise<GroupConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GroupEdge>>() => T;
+  aggregate: <T = AggregateGroupPromise>() => T;
+}
+
+export interface GroupConnectionSubscription
+  extends Promise<AsyncIterator<GroupConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GroupEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGroupSubscription>() => T;
+}
+
+export interface GroupEdge {
+  node: Group;
+  cursor: String;
+}
+
+export interface GroupEdgePromise extends Promise<GroupEdge>, Fragmentable {
+  node: <T = GroupPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface GroupEdgeSubscription
+  extends Promise<AsyncIterator<GroupEdge>>,
+    Fragmentable {
+  node: <T = GroupSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateGroup {
+  count: Int;
+}
+
+export interface AggregateGroupPromise
+  extends Promise<AggregateGroup>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGroupSubscription
+  extends Promise<AsyncIterator<AggregateGroup>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -3948,6 +4441,50 @@ export interface GoalPreviousValuesSubscription
   description: () => Promise<AsyncIterator<String>>;
 }
 
+export interface GroupSubscriptionPayload {
+  mutation: MutationType;
+  node: Group;
+  updatedFields: String[];
+  previousValues: GroupPreviousValues;
+}
+
+export interface GroupSubscriptionPayloadPromise
+  extends Promise<GroupSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GroupPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GroupPreviousValuesPromise>() => T;
+}
+
+export interface GroupSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GroupSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GroupSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GroupPreviousValuesSubscription>() => T;
+}
+
+export interface GroupPreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface GroupPreviousValuesPromise
+  extends Promise<GroupPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface GroupPreviousValuesSubscription
+  extends Promise<AsyncIterator<GroupPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
 export interface JournalEntrySubscriptionPayload {
   mutation: MutationType;
   node: JournalEntry;
@@ -4200,6 +4737,7 @@ export interface UserPreviousValues {
   name?: String;
   password?: String;
   nickname?: String;
+  friendId?: String;
   guestCheckIns?: Int;
   eblID?: String;
   profileStatus?: ProfileStatus;
@@ -4227,6 +4765,7 @@ export interface UserPreviousValuesPromise
   name: () => Promise<String>;
   password: () => Promise<String>;
   nickname: () => Promise<String>;
+  friendId: () => Promise<String>;
   guestCheckIns: () => Promise<Int>;
   eblID: () => Promise<String>;
   profileStatus: () => Promise<ProfileStatus>;
@@ -4254,6 +4793,7 @@ export interface UserPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   nickname: () => Promise<AsyncIterator<String>>;
+  friendId: () => Promise<AsyncIterator<String>>;
   guestCheckIns: () => Promise<AsyncIterator<Int>>;
   eblID: () => Promise<AsyncIterator<String>>;
   profileStatus: () => Promise<AsyncIterator<ProfileStatus>>;
@@ -4319,6 +4859,10 @@ export const models: Model[] = [
   },
   {
     name: "Goal",
+    embedded: false
+  },
+  {
+    name: "Group",
     embedded: false
   },
   {

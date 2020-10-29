@@ -7,7 +7,8 @@ const { Subscription } = require('./Subscription')
 const { User } = require('./User')
 const { user } = require("./Mutation/user");
 const { Post } = require('./Post')
-
+const { Group } = require('./Group')
+const { group } = require('./Mutation/group')
 module.exports = {
   Query,
   Mutation: {
@@ -15,9 +16,11 @@ module.exports = {
     ...post,
     ...user,
     ...goal,
+    ...group
   },
   Subscription,
   User,
   Post,
   Goal,
+  Group
 }

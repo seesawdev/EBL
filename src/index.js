@@ -76,7 +76,7 @@ const schema = makeExecutableSchema({
   authDirectiveResolvers,
 });
 const getMe = async (context) => {
-  const Authorization = await context.req.get("Authorization");
+  const Authorization =  context.req.get["Authorization"];
   if (Authorization) {
         const token = await context.req.headers.authorization.split("Bearer ")[1]
         const decodedToken =  await verifyToken(token);
@@ -105,6 +105,16 @@ const server = new ApolloServer({
       calculateCacheControlHeaders: true,
     },
   context: async ({ req, res }) => {
+  //   if (req) {
+  //   const me = await getMe(req)
+  //   console.log("me: ", me)
+  //   return {
+  //     req,
+  //     res,
+  //     me,
+  //     prisma
+  //   };
+  // }
     //this will be used for resolver level security / directives
     let me;
     if (req) {

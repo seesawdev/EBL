@@ -11,7 +11,6 @@ const { getUserId } = require('../../utils')
 
 async function createUserFromFormData(context, data) { 
   const hashedPassword = await bcrypt.hash(data.password, 10);
-  // const { username, email, password, leavingFrom, leavingTo } = data
   
   const userFormData = { 
     name: data.username, 
@@ -89,11 +88,14 @@ async function createUserFromFormData(context, data) {
         // created_at: auth0User.created_at,
         nickname: auth0User.nickname,
         avatar: auth0User.picture,
+        friendId: fromString(auth0User.nickname),
         // updated_at: auth0User.updated_at,
         auth0Id: auth0User.user_id.split("|")[1],
         // metaData: auth0User.user_metadata,
         eblID: fromString(auth0User.user_id.split("|")[1]),
-        status: "ONLINE" 
+        status: "ONLINE",
+        refreshToken: refreshToken
+
         }
     })
     return await {

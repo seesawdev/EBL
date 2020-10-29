@@ -17,17 +17,17 @@ async function isOwner(parent, { id }, { prisma, me }) {
   skip;
 }
 //will skip if args.username is not in friend list
-async function isFriend(parent, args, { prisma, me }) {
-  // const userId = getUserId(context);
+async function isFriend(parent, args, { me, prisma }) {
+  // const userId = await getUserId(context);
   const isUserInFriendList = await prisma
     .usersConnection({
-      where: {
-        AND: [
-          { id: me },
-          { friends_some: { eblID_in: fromString(args.username) } }
-        ]
-      }
-    })
+          where: {
+            AND: [
+              { id: me },
+              { friends_some: { eblID_in: fromString(args.nickname) } }
+            ]
+          }
+        })
     .aggregate()
     .count();
   // const test = __type.enumValues.data

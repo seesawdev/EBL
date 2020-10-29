@@ -51,8 +51,10 @@ input PostCreateInput {
 
 }
 type Mutation {
+  joinGroup(name: [String!]): [Group!]!
   logout: User 
-  createUserFromFormData(email: String!, password: String!, username: String!, metadata: [String], avatar: String, leavingTo: String, leavingFrom: String, updated_at: String,  auth0Id: String, eblID: String, status: String): SignUpPayload!
+
+  createUserFromFormData(email: String!, password: String!, username: String!, metadata: [String], avatar: String, leavingTo: String, leavingFrom: String, updated_at: String,  auth0Id: String, eblID: String, status: String, friendId: String): SignUpPayload!
   signup(email: String!, password: String!, username: String!, metadata: [String], avatar: String, leavingTo: String, leavingFrom: String, created_at: String, updated_at: String,  auth0Id: String, eblID: String, status: String): SignUpPayload!
   login(email: String!, password: String!): AuthPayload!
   authenticate(access_token: String!, id_token: String): AuthPayload!
@@ -96,6 +98,8 @@ type AuthPayload {
 type User @cacheControl(maxAge: 120){
   id: ID!
   auth0Id: String
+  friendId: String
+  groups: [Group]
   discourseId: Int
   eblID: String
   identity: String!
@@ -117,6 +121,11 @@ type User @cacheControl(maxAge: 120){
   refreshToken: String
   leavingFrom: String
   leavingTo: String
+}
+type Group {
+  id: ID! 
+  name: String!
+  users: [User] 
 }
 enum ProfileStatus {
   PUBLIC

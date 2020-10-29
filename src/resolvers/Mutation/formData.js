@@ -3,7 +3,6 @@ const { getUserId } = require("../../utils");
 const { isAuthenticated, isOwner } = require("../authResolvers");
 
 const formData = {
-//publishes a movie without creating a draft first
 saveFormData: combineResolvers(
   isAuthenticated,
   async (parent, args, context, info) => {
@@ -16,8 +15,8 @@ saveFormData: combineResolvers(
     },
       info
     )
-    return await newGoal
+    return await newFormData
   }
  ),
 }
-module.exports = { goal } 
+module.exports = { saveFormData} 
