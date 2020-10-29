@@ -10,8 +10,9 @@ const { config } = require('../../helpers/auth0Config')
 const { getUserId } = require('../../utils')
 
 async function newGroups(from, to, userId, context) {
-  const checkTo = await context.prisma.$exists.group({ to })
-  const checkFrom = await context.prisma.$exists.group({ from })
+  const checkTo = await context.prisma.$exists.group({ name: to })
+  console.log("checkTo: ", checkTo)
+  const checkFrom = await context.prisma.$exists.group({ name: from })
   if(!checkTo) {
      await context.prisma.createGroup({ name: to })
   }
